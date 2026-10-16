@@ -1,516 +1,604 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#090d18">
-<title>NEXYRON — Trading lernen</title>
+<meta name="theme-color" content="#080d18">
+<title>NEXYRON — Trading Simulator</title>
 <style>
-:root{color-scheme:dark;--bg:#090d18;--panel:#111827;--panel2:#172033;--line:#263248;--text:#f2f5ff;--muted:#92a0b9;--blue:#8b9cff;--cyan:#56e0d0;--green:#45dda0;--red:#ff718b;--radius:18px}
+:root{
+  --bg:#080d18;--panel:#101827;--panel2:#141f31;--border:#243249;
+  --text:#edf3ff;--muted:#8797b2;--green:#32e6a1;--red:#ff617b;
+  --blue:#718cff;--purple:#a58bff;--radius:18px;
+}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 80% -15%,#27356855,transparent 38%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{margin:0;background:radial-gradient(ellipse at 50% -15%,#1b2b50 0,transparent 48%),var(--bg);color:var(--text);font:14px/1.5 Inter,system-ui,-apple-system,sans-serif}
 button,input,select{font:inherit}
-button{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:12px;padding:10px 14px;font-weight:750;transition:transform .12s,border-color .12s}
-button:hover{border-color:var(--blue)}
-button:active{transform:scale(.98)}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
-input,select{width:100%;min-width:0;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:11px;padding:12px}
-.primary{background:linear-gradient(135deg,#7d8cff,#6976f5);border-color:transparent;color:white}
-.buy{background:#123b35;color:#79f0c0;border-color:#236457}
-.sell{background:#421f2b;color:#ff9bb0;border-color:#733044}
-.muted{color:var(--muted)}.green{color:var(--green)}.red{color:var(--red)}.tiny{font-size:12px}
-.tag{display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border:1px solid var(--line);border-radius:99px;font-size:11px;color:var(--muted);font-weight:800}
-.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px #45dda099}
-.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px clamp(14px,3vw,34px);background:#090d18ef;backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:950;letter-spacing:.12em}
-.brandmark{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:linear-gradient(140deg,var(--blue),var(--cyan));color:#10172b;letter-spacing:0}
-.brand b{color:var(--cyan)}.topright{display:flex;align-items:center;gap:8px}
-.layout{display:grid;grid-template-columns:210px minmax(0,1fr);min-height:calc(100vh - 65px)}
-aside{padding:18px 12px;border-right:1px solid var(--line);background:#0d1320;display:flex;flex-direction:column;gap:5px}
-.nav{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;border-color:transparent;color:var(--muted)}
-.nav.active{background:#202946;color:white;border-color:#34426c}
-.nav span{width:23px;text-align:center;font-size:17px}
-.aside-note{margin-top:auto;border:1px solid var(--line);background:var(--panel);padding:13px;border-radius:14px;font-size:12px;color:var(--muted)}
-main{min-width:0;width:100%;max-width:1500px;margin:auto;padding:clamp(14px,3vw,30px)}
-.page{display:none}.page.active{display:block;animation:appear .18s ease}
-@keyframes appear{from{opacity:.6;transform:translateY(3px)}to{opacity:1;transform:none}}
-.heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:19px}
-.heading h1{font-size:clamp(27px,4vw,40px);letter-spacing:-.05em;line-height:1.12;margin:5px 0 8px}
-.heading p{margin:0;color:var(--muted)}
-.eyebrow{color:var(--cyan);font-size:10px;letter-spacing:.18em;font-weight:900}
-.hero{border:1px solid #35446a;border-radius:24px;padding:clamp(22px,4vw,40px);background:radial-gradient(ellipse at 90% 0%,#788cff35,transparent 43%),linear-gradient(135deg,#151d33,#101625);position:relative;overflow:hidden}
-.hero h1{font-size:clamp(32px,5vw,53px);line-height:1.05;letter-spacing:-.06em;margin:12px 0}
-.hero p{max-width:620px;color:#aebbd2;font-size:16px}
-.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:21px}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:15px 0}
-.stat,.card{background:linear-gradient(145deg,#121a2a,#101624);border:1px solid var(--line);border-radius:var(--radius);padding:17px;min-width:0}
-.stat label{display:block;color:var(--muted);font-size:12px;font-weight:700}
-.stat strong{display:block;font-size:clamp(19px,2.6vw,28px);letter-spacing:-.04em;overflow-wrap:anywhere;margin:5px 0}
-.stat small{color:var(--muted);font-size:11px}
-.sectiontitle{font-size:18px;margin:0}
-.cardhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:13px}
-.coinlist{display:grid;gap:8px}
-.coinrow{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(90px,1fr) auto;gap:12px;align-items:center;width:100%;text-align:left;background:#0e1523;border:1px solid var(--line);padding:12px;border-radius:14px}
-.coininfo{display:flex;align-items:center;gap:10px;min-width:0}
-.coinlogo{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#242e4a;color:var(--cyan);font-weight:900;flex:0 0 auto}
-.coininfo strong,.coininfo small{display:block}
-.coininfo small{color:var(--muted);font-size:11px}
-.coinprice{text-align:right}.coinprice strong,.coinprice small{display:block}.coinprice small{font-size:11px}
-.grid2{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.8fr);gap:14px;align-items:start}
-.chartcard{padding:16px}
-.charttitle{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.charttitle h2{margin:0;font-size:20px}
-.pricebig{font-size:30px;font-weight:900;letter-spacing:-.05em;margin-top:13px}
-.chart{width:100%;height:340px;display:block;margin-top:7px}
-.chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
-.tradeside{display:grid;gap:13px}
-.tradebox{display:grid;gap:13px}
-.switch{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:13px;padding:5px}
-.switch button{border:0;background:transparent}
-.switch .onbuy{background:#174237;color:#80f1c3}
-.switch .onsell{background:#49212e;color:#ff9eb1}
-.field{display:grid;gap:6px}
-.field label{font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-.quick{display:flex;gap:6px;flex-wrap:wrap}
-.quick button{font-size:11px;padding:7px 10px}
-.totalrow{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:13px}
-.notice{border:1px solid #34466a;background:#151f34;border-radius:12px;padding:12px;color:#b5c3de;font-size:12px}
-.learn-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.lesson{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:17px}
-.lesson .num{display:grid;place-items:center;width:35px;height:35px;border-radius:11px;background:#273052;color:var(--cyan);font-weight:900}
-.lesson h3{margin:13px 0 7px}
-.lesson p{color:var(--muted);font-size:13px;min-height:58px}
-.lesson .example{border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:12px;font-size:12px;margin:12px 0}
-.lesson .example strong{display:block;margin-bottom:4px}
-.quiz{margin-top:15px;padding-top:15px;border-top:1px solid var(--line)}
-.answers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.answers button{text-align:left;min-height:44px}
-.feedback{margin-top:10px;padding:11px;border-radius:11px;background:#172f2b;color:#9cf1ce;font-size:13px;display:none}
-.feedback.show{display:block}
-.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;white-space:nowrap}
-th,td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--line);font-size:12px}
-th{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
-tr:last-child td{border-bottom:0}
-.settings{max-width:650px;display:grid;gap:15px}
-.settingrow{display:flex;align-items:center;justify-content:space-between;gap:15px}
-.settingrow select{max-width:240px}
-.empty{text-align:center;padding:30px;color:var(--muted)}
-footer{text-align:center;color:#75829b;font-size:12px;padding:28px 12px 10px}
-.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#e8fff8;color:#0a3028;padding:12px 17px;border-radius:12px;font-weight:800;box-shadow:0 10px 40px #0005;transition:.18s;z-index:99;max-width:calc(100vw - 30px)}
+button{cursor:pointer;color:inherit;border:1px solid var(--border);background:#18243a;border-radius:10px;padding:9px 12px;transition:.18s}
+button:hover{border-color:var(--blue);transform:translateY(-1px)}
+button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+input,select{color:var(--text);background:#0b1321;border:1px solid var(--border);border-radius:10px;padding:11px;width:100%;outline:none}
+input:focus,select:focus{border-color:var(--blue)}
+header{height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 4%;border-bottom:1px solid var(--border);background:#080d18e8;position:sticky;top:0;z-index:10;backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:2px;font-size:19px}
+.logo{width:35px;height:35px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,#8a9cff,#5c54df);color:white;font-weight:1000;box-shadow:0 0 24px #718cff44}
+.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:2.5px}
+.header-right{display:flex;align-items:center;gap:12px}
+.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);margin-right:6px}
+.layout{max-width:1600px;margin:auto;padding:24px 3%;display:grid;grid-template-columns:220px minmax(0,1fr);gap:22px}
+.sidebar{align-self:start;position:sticky;top:92px}
+.side-label{color:var(--muted);font-size:10px;font-weight:800;letter-spacing:1.8px;padding:18px 12px 8px}
+.nav{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin:3px 0;background:transparent;border-color:transparent;color:var(--muted)}
+.nav.active{background:linear-gradient(90deg,#718cff26,transparent);color:var(--text);border-color:#718cff55}
+.nav .ico{width:22px;text-align:center;font-size:16px}
+.sidebar-note{margin-top:24px;border:1px solid var(--border);border-radius:15px;padding:14px;color:var(--muted);font-size:12px}
+main{min-width:0}
+.page{display:none}.page.active{display:block}
+.page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+h1{font-size:25px;margin:0;letter-spacing:-.7px}
+h2{font-size:17px;margin:0 0 15px}
+h3{font-size:14px;margin:0 0 8px}
+.sub{color:var(--muted);margin-top:5px;font-size:12px}
+.eyebrow{font-size:10px;color:var(--muted);font-weight:800;letter-spacing:1.7px;text-transform:uppercase}
+.grid{display:grid;gap:15px}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}
+.card{background:linear-gradient(145deg,#131e30,#0e1726);border:1px solid var(--border);border-radius:var(--radius);padding:18px;min-width:0;box-shadow:0 10px 32px #00000013}
+.stat-value{font-size:clamp(18px,2vw,26px);font-weight:850;letter-spacing:-.7px;margin-top:8px;overflow-wrap:anywhere}
+.positive{color:var(--green)}.negative{color:var(--red)}.muted{color:var(--muted)}
+.small{font-size:11px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pill{display:inline-flex;align-items:center;gap:5px;background:#18243a;border:1px solid var(--border);border-radius:99px;padding:5px 9px;font-size:11px;color:var(--muted)}
+.trade-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.chart-card{padding:0;overflow:hidden}
+.chart-top{padding:18px 18px 13px;border-bottom:1px solid var(--border)}
+.coin-title{display:flex;align-items:center;gap:11px}
+.coin-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;background:#1c2940;font-weight:900;font-size:17px;flex-shrink:0}
+.coin-name{font-weight:800;font-size:16px}.coin-symbol{font-size:11px;color:var(--muted)}
+.price-big{font-size:27px;font-weight:850;letter-spacing:-1px;margin-top:13px}
+.chart-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:15px}
+.chart-controls button{font-size:11px;padding:7px 9px}
+.chart-controls button.selected{background:#718cff2b;border-color:var(--blue);color:#b8c5ff}
+.chart-tools{display:flex;gap:6px;margin-left:auto}
+.chart-wrap{height:350px;position:relative;background:linear-gradient(#101827,#0c1421)}
+canvas{width:100%;height:100%;display:block;touch-action:pan-y}
+.chart-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
+.pattern-strip{padding:13px 17px;border-top:1px solid var(--border)}
+.pattern-result{display:flex;gap:10px;align-items:center;font-size:12px}
+.pattern-icon{width:32px;height:32px;border-radius:10px;background:#718cff20;display:grid;place-items:center;font-size:17px}
+.trade-panel{position:sticky;top:92px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;background:#09111e;border-radius:12px;margin:14px 0}
+.tabs button{border:0;background:transparent;color:var(--muted)}
+.tabs button.active.buy{background:#123e35;color:var(--green)}
+.tabs button.active.sell{background:#421d2b;color:var(--red)}
+.field{margin:13px 0}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:7px}
+.input-wrap{position:relative}.input-wrap input{padding-right:55px;font-size:17px;font-weight:700}
+.input-suffix{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--muted)}
+.quick-values{display:flex;gap:6px;margin-top:7px}.quick-values button{flex:1;padding:6px 2px;font-size:10px}
+.trade-summary{padding:12px;background:#0a1321;border-radius:12px;margin:15px 0;font-size:12px}
+.trade-summary div{display:flex;justify-content:space-between;gap:8px;margin:6px 0}
+.action-btn{width:100%;padding:13px;font-size:14px;font-weight:850;border:0}
+.action-btn.buy{background:linear-gradient(135deg,#2be1a0,#1cae86);color:#04170f}
+.action-btn.sell{background:linear-gradient(135deg,#ff7c91,#e94c6d);color:#25070d}
+.action-btn.primary{background:linear-gradient(135deg,#8ca0ff,#655cf0);color:white}
+.asset-list{display:grid;gap:8px}
+.asset-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:11px;border:1px solid var(--border);border-radius:13px;background:#101a2a;text-align:left;width:100%}
+.asset-row.active{border-color:var(--blue);background:#182541}
+.asset-left{display:flex;gap:10px;align-items:center;min-width:0}
+.asset-meta{min-width:0}.asset-meta strong{display:block}.asset-meta small{color:var(--muted)}
+.asset-price{text-align:right;font-weight:750}.asset-change{font-size:11px;text-align:right}
+.market-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.coin-market{cursor:pointer}.coin-market:hover{border-color:var(--blue)}
+.coin-market .stat-value{font-size:20px}
+.two-col{grid-template-columns:repeat(2,minmax(0,1fr))}
+.section-gap{margin-top:18px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+th,td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px}
+.empty{text-align:center;color:var(--muted);padding:30px}
+.search{max-width:260px}
+.lesson-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.lesson{display:flex;flex-direction:column;gap:9px}
+.lesson .emoji{font-size:25px}
+.lesson p{color:var(--muted);font-size:12px;margin:0}
+.lesson button{margin-top:auto}
+.quiz-option{width:100%;text-align:left;margin:5px 0;background:#0c1524}
+.quiz-option.correct{border-color:var(--green);color:var(--green)}
+.quiz-option.wrong{border-color:var(--red);color:var(--red)}
+.pattern-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pattern-card p{color:var(--muted);font-size:12px}
+.candle-demo{height:75px;background:repeating-linear-gradient(0deg,transparent,transparent 23px,#26364c66 24px);border-radius:10px;display:flex;align-items:center;justify-content:center;gap:18px;margin:12px 0}
+.candle{height:34px;width:12px;background:var(--green);position:relative;border-radius:2px}
+.candle:before{content:"";position:absolute;left:5px;top:-15px;height:65px;width:2px;background:inherit}
+.candle.red{background:var(--red)}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:30px 15px 38px;border-top:1px solid var(--border);margin-top:24px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:#1b2940;border:1px solid #415578;padding:12px 18px;border-radius:12px;z-index:100;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 12px 35px #0008;max-width:90vw}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:900px){
-.layout{grid-template-columns:1fr}
-aside{position:sticky;top:64px;z-index:4;flex-direction:row;overflow:auto;padding:8px;border-right:0;border-bottom:1px solid var(--line);background:#0d1320}
-.nav{width:auto;flex:0 0 auto;white-space:nowrap;padding:9px 12px}
-.nav span{width:auto}.aside-note{display:none}
-.grid2{grid-template-columns:1fr}.learn-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:600px){
-.top{padding:11px 13px}.brand{font-size:16px}.brandmark{width:32px;height:32px}
-.topright .tag{display:none}.layout{min-height:calc(100vh - 58px)}main{padding:14px}
-.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.stat{padding:13px}.stat strong{font-size:22px}
-.hero{padding:22px}.hero p{font-size:14px}
-.coinrow{grid-template-columns:minmax(0,1fr) auto;gap:7px}
-.coinrow .coinchange{display:none}
-.chart{height:275px}.learn-grid{grid-template-columns:1fr}
-.lesson p{min-height:0}.answers{grid-template-columns:1fr}
-.settingrow{align-items:flex-start;flex-direction:column}
-.settingrow select{max-width:none}.heading h1{font-size:29px}
-}
+.hidden{display:none!important}
+.watch-star{border:0;background:transparent;padding:4px;color:#f5c96b}
+@media(max-width:1100px){.layout{grid-template-columns:1fr}.sidebar{position:static;display:flex;gap:5px;overflow-x:auto}.side-label,.sidebar-note{display:none}.nav{white-space:nowrap;width:auto;flex-shrink:0}.trade-layout{grid-template-columns:minmax(0,1fr) 280px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){header{padding:0 4%;height:60px}.header-right .pill{display:none}.layout{padding:15px 3%;gap:13px}.trade-layout{grid-template-columns:1fr}.trade-panel{position:static}.chart-wrap{height:290px}.market-grid,.lesson-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{gap:9px}.card{padding:14px}.stat-value{font-size:20px}.chart-top{padding:14px}.price-big{font-size:24px}.two-col{grid-template-columns:1fr}.pattern-grid{grid-template-columns:1fr}.page-head h1{font-size:22px}}
+@media(max-width:420px){.market-grid,.lesson-grid{grid-template-columns:1fr}.nav{padding:8px}.nav .ico{display:none}.chart-tools{margin-left:0}.chart-controls{gap:4px}.chart-controls button{padding:7px}.stats .card{padding:12px}.asset-row{gap:6px;padding:9px}}
 </style>
 </head>
 <body>
-<header class="top">
-  <div class="brand"><span class="brandmark">N</span><span>NEXY<b>RON</b></span></div>
-  <div class="topright">
-    <span class="tag"><i class="live-dot"></i><span id="status">SIMULATION · LIVE-TAKT</span></span>
-    <button id="topTrade" class="primary">Trading öffnen ↗</button>
-  </div>
+<header>
+  <div class="brand"><div class="logo">N</div><div>NEXYRON<small>TRADING ACADEMY</small></div></div>
+  <div class="header-right"><span class="pill"><span class="live-dot"></span>SIMULATION AKTIV</span><button id="resetBtn" title="Simulation zurücksetzen">↻ Reset</button></div>
 </header>
 
 <div class="layout">
-<aside aria-label="Navigation">
-  <button class="nav active" data-page="home"><span>⌂</span> Übersicht</button>
-  <button class="nav" data-page="trade"><span>⌁</span> Trading</button>
-  <button class="nav" data-page="learn"><span>✳</span> Lernen</button>
-  <button class="nav" data-page="history"><span>↺</span> Verlauf</button>
-  <button class="nav" data-page="settings"><span>⚙</span> Einstellungen</button>
-  <div class="aside-note">🧪 <b>Übungsmodus</b><br><br>Kein echtes Geld. Die Kurse werden lokal simuliert und sind keine Börsenkurse.</div>
-</aside>
+  <aside class="sidebar">
+    <div class="side-label">WORKSPACE</div>
+    <button class="nav active" data-page="dashboard"><span class="ico">▦</span>Übersicht</button>
+    <button class="nav" data-page="trade"><span class="ico">◈</span>Trading Terminal</button>
+    <button class="nav" data-page="markets"><span class="ico">⌁</span>Alle Coins</button>
+    <div class="side-label">ACADEMY</div>
+    <button class="nav" data-page="patterns"><span class="ico">◉</span>Chart-Muster</button>
+    <button class="nav" data-page="learn"><span class="ico">▤</span>Lernzentrum</button>
+    <div class="side-label">PORTFOLIO</div>
+    <button class="nav" data-page="history"><span class="ico">↗</span>Trade-Historie</button>
+    <button class="nav" data-page="journal"><span class="ico">✎</span>Trading-Journal</button>
+    <div class="sidebar-note"><strong style="color:var(--text)">Lernen ohne Risiko</strong><p>Alle Kurse, Guthaben und Trades sind virtuell. Keine echten Orders oder Einzahlungen.</p><span class="pill">PAPER TRADING</span></div>
+  </aside>
 
-<main>
-<section class="page active" id="page-home">
-  <div class="hero">
-    <span class="eyebrow">DEIN TRADING-TRAINER</span>
-    <h1>Verstehe den Markt.<br><span style="color:var(--cyan)">Übe ohne Risiko.</span></h1>
-    <p>Lerne die Grundlagen, beobachte schnelle Kursbewegungen und teste deine Entscheidungen mit virtuellem Geld.</p>
-    <div class="actions">
-      <button class="primary" data-go="trade">Jetzt üben ↗</button>
-      <button data-go="learn">Trading lernen →</button>
-    </div>
-  </div>
-  <div class="stats">
-    <div class="stat"><label>Virtuelles Guthaben</label><strong id="cashStat">€10.000,00</strong><small>Dein verfügbares Geld</small></div>
-    <div class="stat"><label>Portfolio-Wert</label><strong id="portfolioStat">€0,00</strong><small>Aktueller simulierter Wert</small></div>
-    <div class="stat"><label>Gesamtwert</label><strong id="totalStat">€10.000,00</strong><small>Guthaben + Bestand</small></div>
-    <div class="stat"><label>Abgeschlossene Trades</label><strong id="tradeCountStat">0</strong><small>Dein Lernverlauf</small></div>
-  </div>
-  <div class="card">
-    <div class="cardhead"><h2 class="sectiontitle">Märkte im Blick</h2><span class="tag"><i class="live-dot"></i> Schnelle Simulation</span></div>
-    <div class="coinlist" id="homeCoins"></div>
-  </div>
-</section>
+  <main>
+    <section id="page-dashboard" class="page active">
+      <div class="page-head"><div><h1>Dein Dashboard</h1><div class="sub">Märkte beobachten. Strategien üben. Wissen aufbauen.</div></div><button class="primary" onclick="showPage('trade')">Terminal öffnen ↗</button></div>
+      <div class="grid stats">
+        <div class="card"><div class="eyebrow">Virtuelles Guthaben</div><div class="stat-value" id="dashCash">€10.000,00</div><div class="sub">Nicht echtes Geld</div></div>
+        <div class="card"><div class="eyebrow">Portfolio-Wert</div><div class="stat-value" id="dashPortfolio">€10.000,00</div><div class="sub">Cash + Coin-Bestände</div></div>
+        <div class="card"><div class="eyebrow">Gesamtergebnis</div><div class="stat-value" id="dashPnl">€0,00</div><div class="sub">Gegenüber Startguthaben</div></div>
+        <div class="card"><div class="eyebrow">Ausgeführte Trades</div><div class="stat-value" id="dashTrades">0</div><div class="sub">Virtuelle Transaktionen</div></div>
+      </div>
+      <div class="grid two-col">
+        <div class="card"><div class="row"><h2>Deine Watchlist</h2><button onclick="showPage('markets')">Alle ansehen →</button></div><div id="watchList" class="asset-list"></div></div>
+        <div class="card"><div class="row"><h2>Letzte Trades</h2><button onclick="showPage('history')">Historie →</button></div><div id="recentTrades"></div></div>
+      </div>
+      <div class="card section-gap"><div class="row"><div><h2>Marktüberblick</h2><div class="sub">Virtuelle Kurse ändern sich laufend</div></div><span class="pill"><span class="live-dot"></span>LIVE-SIMULATION</span></div><div id="dashboardMarkets" class="grid market-grid"></div></div>
+    </section>
 
-<section class="page" id="page-trade">
-  <div class="heading">
-    <div><span class="eyebrow">PRAKTISCH ÜBEN</span><h1>Trading</h1><p>Kurs beobachten. Menge eingeben. Sofort simuliert kaufen oder verkaufen.</p></div>
-    <span class="tag"><i class="live-dot"></i> <span id="tickStatus">Kurs aktualisiert</span></span>
-  </div>
-  <div class="grid2">
-    <div class="card chartcard" id="chartCard">
-      <div class="charttitle">
-        <div class="coininfo"><span class="coinlogo" id="assetLogo">₿</span><div><h2 id="assetName">Bitcoin</h2><span class="muted tiny" id="assetSymbol">BTC / EUR</span></div></div>
-        <select id="assetSelect" aria-label="Coin wählen" style="width:auto;max-width:160px">
-          <option value="BTC">Bitcoin · BTC</option><option value="ETH">Ethereum · ETH</option><option value="SOL">Solana · SOL</option>
-        </select>
+    <section id="page-trade" class="page">
+      <div class="page-head"><div><h1>Trading Terminal</h1><div class="sub">Chart analysieren und virtuelle Orders ausprobieren.</div></div><span class="pill">PAPER TRADING</span></div>
+      <div class="trade-layout">
+        <div>
+          <div class="card chart-card">
+            <div class="chart-top">
+              <div class="row" style="align-items:flex-start;flex-wrap:wrap">
+                <div class="coin-title"><div class="coin-icon" id="chartIcon">₿</div><div><div class="coin-name" id="chartName">Bitcoin</div><div class="coin-symbol" id="chartSymbol">BTC / EUR</div></div></div>
+                <button id="watchToggle" class="watch-star" title="Watchlist umschalten">☆ Watchlist</button>
+              </div>
+              <div class="row" style="align-items:flex-end;flex-wrap:wrap"><div><div class="price-big" id="chartPrice">€60.000,00</div><div id="chartChange" class="positive small">+0,00%</div></div><span class="pill">Simulierter Markt</span></div>
+              <div class="chart-controls">
+                <button data-range="5m">5 Min</button><button data-range="15m">15 Min</button><button data-range="1h">1 Std</button><button data-range="4h">4 Std</button><button data-range="1d" class="selected">1 Tag</button><button data-range="7d">7 Tage</button><button data-range="30d">30 Tage</button>
+                <div class="chart-tools"><button id="zoomOut" title="Herauszoomen">−</button><button id="zoomIn" title="Hineinzoomen">＋</button><button id="resetZoom" title="Zoom zurücksetzen">⤢</button></div>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="chart" aria-label="Simulierter Kerzenchart"></canvas></div>
+            <div class="chart-footer"><span id="chartInfo">Kerzenchart · simulierte Daten</span><span>Zoom: Mausrad oder − / ＋</span></div>
+            <div class="pattern-strip"><div class="pattern-result"><div class="pattern-icon">◉</div><div><strong id="patternName">Musteranalyse wird geladen</strong><div class="muted small" id="patternDescription">Chart-Muster sind Hinweise, keine sicheren Vorhersagen.</div></div></div></div>
+          </div>
+          <div class="card section-gap"><div class="row"><h2>Coins auswählen</h2><input id="coinSearchTerminal" class="search" placeholder="Coin suchen…"></div><div id="terminalCoins" class="asset-list"></div></div>
+        </div>
+        <div class="trade-panel card">
+          <div class="row"><h2>Order platzieren</h2><span class="pill">SIM</span></div>
+          <div class="tabs"><button id="buyTab" class="active buy">Kaufen</button><button id="sellTab">Verkaufen</button></div>
+          <div class="field"><label>Coin</label><select id="tradeCoin"></select></div>
+          <div class="field"><label id="amountLabel">Investitionsbetrag</label><div class="input-wrap"><input id="tradeAmount" type="number" min="0" step="any" value="100"><span class="input-suffix">EUR</span></div><div class="quick-values"><button data-amount="25">€25</button><button data-amount="100">€100</button><button data-amount="250">€250</button><button data-amount="500">€500</button></div></div>
+          <div class="field"><label>Dein Bestand</label><div class="row"><strong id="tradeHolding">0 BTC</strong><button id="sellAllBtn">Alles verkaufen</button></div></div>
+          <div class="trade-summary"><div><span class="muted">Coin-Preis</span><strong id="summaryPrice">€0</strong></div><div><span class="muted">Geschätzte Menge</span><strong id="summaryQty">0</strong></div><div><span class="muted">Virtuelles Guthaben</span><strong id="summaryCash">€10.000</strong></div><div><span class="muted">Simulierte Gebühr (0,1%)</span><strong id="summaryFee">€0,00</strong></div></div>
+          <button id="tradeAction" class="action-btn buy">BTC kaufen</button>
+          <p class="muted small">Nur zum Üben. Kein echtes Geld, keine echten Börsenorders.</p>
+        </div>
       </div>
-      <div class="pricebig" id="tradePrice">€65.000,00</div>
-      <div class="tiny muted" id="tradeChange">Simulierter Kurs</div>
-      <canvas class="chart" id="chart" aria-label="Simulierter Kerzenchart"></canvas>
-      <div class="chart-foot"><span>● Grün = Kurs steigt · ● Rot = Kurs fällt</span><span id="chartTime">Kerzen aktualisieren laufend</span></div>
-      <div class="chart-foot" style="margin-top:9px"><span>Deine Trades erscheinen als Marker im Chart.</span><button id="pauseBtn" class="tiny">Ⅱ Pause</button></div>
-    </div>
-    <div class="tradeside">
-      <div class="card tradebox">
-        <div class="cardhead"><h2 class="sectiontitle">Dein Trade</h2><span class="tag">VIRTUELL</span></div>
-        <div class="switch"><button id="buyTab" class="onbuy">Kaufen</button><button id="sellTab">Verkaufen</button></div>
-        <div class="field"><label for="qty">Menge (<span id="qtySymbol">BTC</span>)</label><input id="qty" type="number" min="0" step="any" value="0.01" inputmode="decimal"></div>
-        <div class="quick"><button data-pct="25">25 % Guthaben</button><button data-pct="50">50 %</button><button data-pct="100">Max.</button></div>
-        <div class="totalrow"><span class="muted">Geschätzter Gesamtbetrag</span><strong id="estimate">€650,00</strong></div>
-        <div class="totalrow"><span class="muted">Verfügbares Guthaben</span><strong id="available">€10.000,00</strong></div>
-        <button id="execute" class="buy full">Kaufen</button>
-        <button id="sellAll" class="sell full">Alles verkaufen</button>
-        <div id="tradeMessage" class="notice">Tipp: Starte mit einer kleinen Menge. Dies ist nur eine Übung.</div>
-      </div>
-      <div class="card">
-        <div class="cardhead"><h2 class="sectiontitle">Dein Bestand</h2></div>
-        <div class="totalrow"><span class="muted">Menge</span><strong id="holding">0 BTC</strong></div>
-        <div class="totalrow"><span class="muted">Marktwert</span><strong id="holdingValue">€0,00</strong></div>
-        <div class="totalrow"><span class="muted">Ø Kaufpreis</span><strong id="avgPrice">—</strong></div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section class="page" id="page-learn">
-  <div class="heading"><div><span class="eyebrow">KLEINE SCHRITTE · KLAR ERKLÄRT</span><h1>Trading lernen</h1><p>Erst verstehen, dann eine kurze Aufgabe lösen.</p></div></div>
-  <div class="learn-grid">
-    <article class="lesson">
-      <span class="num">01</span><h3>Was ist ein Kurs?</h3>
-      <p>Ein Kurs zeigt den Preis, zu dem ein Vermögenswert gerade gehandelt wird. Er bewegt sich, wenn sich Angebot und Nachfrage verändern.</p>
-      <div class="example"><strong>Beispiel</strong>Wenn ein Coin 100 € kostet und auf 110 € steigt, ist er um 10 € beziehungsweise 10 % gestiegen.</div>
-      <div class="quiz"><b>Mini-Aufgabe</b><p>Ein Coin steigt von 50 € auf 55 €. Wie viel Prozent sind das?</p>
-        <div class="answers"><button data-answer="wrong" data-feedback="Nicht ganz: 5 € geteilt durch 50 € sind 10 %.">5 %</button><button data-answer="right" data-feedback="Richtig! 5 € Gewinn geteilt durch 50 € Startpreis = 10 %.">10 %</button></div><div class="feedback"></div>
-      </div>
-    </article>
-    <article class="lesson">
-      <span class="num">02</span><h3>Kerzen verstehen</h3>
-      <p>Jede Kerze fasst Preisbewegungen in einem Zeitabschnitt zusammen. Der Körper zeigt Eröffnung und Schluss, die dünnen Linien Hoch und Tief.</p>
-      <div class="example"><strong>Grün</strong>Der Schlusskurs liegt über dem Eröffnungskurs.<br><strong>Rot</strong>Der Schlusskurs liegt darunter.</div>
-      <div class="quiz"><b>Mini-Aufgabe</b><p>Eine grüne Kerze bedeutet normalerweise …</p>
-        <div class="answers"><button data-answer="right" data-feedback="Genau: Der Kurs hat in diesem Abschnitt höher geschlossen als er geöffnet hat.">höher geschlossen</button><button data-answer="wrong" data-feedback="Nicht genau: Rot zeigt normalerweise einen niedrigeren Schlusskurs als Eröffnungskurs.">tiefer geschlossen</button></div><div class="feedback"></div>
-      </div>
-    </article>
-    <article class="lesson">
-      <span class="num">03</span><h3>Risiko begrenzen</h3>
-      <p>Kurse können schnell in beide Richtungen gehen. Niemand kann den nächsten Schritt sicher vorhersagen. Setze nicht alles auf einen Trade.</p>
-      <div class="example"><strong>Merke</strong>Nutze kleine Übungsbeträge, vergleiche Chancen und Risiken und entscheide nicht nur aus Angst etwas zu verpassen.</div>
-      <div class="quiz"><b>Mini-Aufgabe</b><p>Der Kurs steigt schnell. Was ist die vernünftigste Reaktion?</p>
-        <div class="answers"><button data-answer="wrong" data-feedback="Alles auf einmal zu kaufen erhöht das Risiko. Ein schneller Anstieg garantiert keinen weiteren Anstieg.">Alles sofort kaufen</button><button data-answer="right" data-feedback="Richtig: Erst prüfen, einen Plan haben und das Risiko begrenzen. Ein Trade muss nicht erzwungen werden.">Erst prüfen und planen</button></div><div class="feedback"></div>
-      </div>
-    </article>
-  </div>
-</section>
+    <section id="page-markets" class="page">
+      <div class="page-head"><div><h1>Alle Coins</h1><div class="sub">Wähle einen Coin, um ihn im Terminal zu analysieren.</div></div><input id="marketSearch" class="search" placeholder="Coin oder Symbol suchen…"></div>
+      <div id="allMarkets" class="grid market-grid"></div>
+    </section>
 
-<section class="page" id="page-history">
-  <div class="heading"><div><span class="eyebrow">DEINE AKTIVITÄT</span><h1>Trade-Verlauf</h1><p>Deine simulierten Käufe und Verkäufe bleiben in diesem Browser gespeichert.</p></div><button id="exportBtn">CSV exportieren ↓</button></div>
-  <div class="card"><div class="tablewrap"><table><thead><tr><th>Zeit</th><th>Aktion</th><th>Coin</th><th>Menge</th><th>Preis</th><th>Gesamt</th></tr></thead><tbody id="historyRows"></tbody></table></div><div id="historyEmpty" class="empty">Noch keine Trades. Öffne Trading und probiere es aus.</div></div>
-</section>
+    <section id="page-patterns" class="page">
+      <div class="page-head"><div><h1>Chart-Muster</h1><div class="sub">Lerne, wie Kerzenformationen aussehen und was sie bedeuten können.</div></div></div>
+      <div class="card" style="margin-bottom:16px"><strong>Wichtig:</strong> Muster zeigen mögliche Szenarien, keine Gewissheit. Aussagekraft hängt vom Kontext, Trend und Volumen ab. In diesem Simulator ist die Mustererkennung nur eine Lernhilfe.</div>
+      <div id="patternsGrid" class="grid pattern-grid"></div>
+    </section>
 
-<section class="page" id="page-settings">
-  <div class="heading"><div><span class="eyebrow">DEIN KONTO</span><h1>Einstellungen</h1><p>Einfach halten: Sprache, Fortschritt und virtuelles Konto.</p></div></div>
-  <div class="settings">
-    <div class="card settingrow"><div><b>Sprache</b><div class="muted tiny">Die Spracheinstellung wird gespeichert.</div></div><select id="language"><option value="de">Deutsch</option><option value="en">English</option><option value="fr">Français</option><option value="ru">Русский</option><option value="tg">Тоҷикӣ</option></select></div>
-    <div class="card"><h3 style="margin-top:0">Übungsdaten zurücksetzen</h3><p class="muted tiny">Setzt dein virtuelles Guthaben, deinen Bestand und den Trade-Verlauf auf den Anfang zurück.</p><button id="reset" class="sell">Übung zurücksetzen</button></div>
-    <div class="notice">Wichtig: Alle Kurse auf dieser Seite sind künstlich simuliert. Es gibt keine Verbindung zu einer Börse und keine echten Käufe oder Verkäufe.</div>
-  </div>
-</section>
+    <section id="page-learn" class="page">
+      <div class="page-head"><div><h1>Lernzentrum</h1><div class="sub">Von Kerzen-Grundlagen bis zum Risikomanagement.</div></div><span class="pill" id="progressPill">0 / 8 abgeschlossen</span></div>
+      <div class="grid lesson-grid" id="lessonGrid"></div>
+      <div class="card section-gap" id="quizCard"><div class="eyebrow">WISSENSCHECK</div><h2 style="margin-top:8px">Mini-Quiz</h2><div id="quizQuestion"></div><div id="quizOptions"></div><div id="quizFeedback" class="sub"></div><button id="nextQuiz" class="primary" style="margin-top:12px">Nächste Frage →</button></div>
+    </section>
 
-<footer>Zum Lernen gebaut · Kein echtes Geld · <b>Creator Yusuf</b></footer>
-</main>
+    <section id="page-history" class="page">
+      <div class="page-head"><div><h1>Trade-Historie</h1><div class="sub">Alle Transaktionen deiner lokalen Simulation.</div></div><button id="exportCsv">CSV exportieren ↓</button></div>
+      <div class="card"><div class="table-wrap"><table><thead><tr><th>Zeit</th><th>Aktion</th><th>Coin</th><th>Menge</th><th>Preis</th><th>Gesamt</th></tr></thead><tbody id="historyBody"></tbody></table></div><div id="historyEmpty" class="empty">Noch keine Trades. Öffne das Terminal und probiere eine virtuelle Order aus.</div></div>
+    </section>
+
+    <section id="page-journal" class="page">
+      <div class="page-head"><div><h1>Trading-Journal</h1><div class="sub">Notiere deine Gedanken, bevor du eine Entscheidung triffst.</div></div></div>
+      <div class="grid two-col">
+        <div class="card"><h2>Neuen Eintrag erstellen</h2><div class="field"><label>Coin</label><select id="journalCoin"></select></div><div class="field"><label>Meine Beobachtung</label><textarea id="journalNote" rows="5" placeholder="Welchen Trend siehst du? Was spricht für oder gegen deine Idee?"></textarea></div><div class="field"><label>Was möchte ich lernen?</label><select id="journalMood"><option>Ich übe die Chartanalyse</option><option>Ich prüfe mein Risikomanagement</option><option>Ich warte auf mehr Bestätigung</option><option>Ich überprüfe einen vergangenen Trade</option></select></div><button id="saveJournal" class="action-btn primary">Eintrag speichern</button></div>
+        <div class="card"><h2>Deine Notizen</h2><div id="journalEntries"></div></div>
+      </div>
+    </section>
+    <footer>NEXYRON · Trading Academy · Erst lernen, dann entscheiden.<br><br>Erstellt von Yusuf · Ausschließlich Simulation, keine Finanzberatung.</footer>
+  </main>
 </div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="toast" class="toast"></div>
 
 <script>
-'use strict';
-const $=id=>document.getElementById(id);
-const defaults={cash:10000,positions:{BTC:{qty:0,cost:0},ETH:{qty:0,cost:0},SOL:{qty:0,cost:0}},history:[],lang:'de'};
-let state=loadState(),selected='BTC',side='buy',paused=false,lastPrice={BTC:65000,ETH:3200,SOL:145},candles={},markers={},tickCount=0,toastTimer;
-const assets={BTC:{name:'Bitcoin',logo:'₿',initial:65000},ETH:{name:'Ethereum',logo:'◆',initial:3200},SOL:{name:'Solana',logo:'◎',initial:145}};
-
-const fmt=n=>new Intl.NumberFormat(state.lang==='en'?'en-GB':state.lang==='fr'?'fr-FR':state.lang==='ru'?'ru-RU':state.lang==='tg'?'tg-TJ':'de-DE',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(Number.isFinite(n)?n:0);
-const qtyFmt=n=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:8});
-
-function loadState(){
-  try{
-    const saved=JSON.parse(localStorage.getItem('nexyron-simple-v1')||'null');
-    if(saved)return {...structuredClone(defaults),...saved,positions:{...structuredClone(defaults.positions),...(saved.positions||{})},history:Array.isArray(saved.history)?saved.history:[]};
-  }catch(e){console.warn('Saved data could not be read',e)}
-  return structuredClone(defaults);
-}
-function save(){try{localStorage.setItem('nexyron-simple-v1',JSON.stringify(state))}catch(e){console.warn('Could not save locally',e)}}
-function pos(sym=selected){return state.positions[sym]||(state.positions[sym]={qty:0,cost:0})}
-function portfolioValue(){return Object.keys(assets).reduce((s,k)=>s+pos(k).qty*lastPrice[k],0)}
-function totalValue(){return state.cash+portfolioValue()}
-function notify(msg){
-  const el=$('toast');el.textContent=msg;el.classList.add('show');
-  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2100);
-}
-
-function navigate(page){
-  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
-  document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
-  if(page==='trade'){drawChart();renderTrade()}
-  if(page==='history')renderHistory();
-  if(page==='home')renderHome();
-  if(page==='settings')$('language').value=state.lang;
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
-document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.go)));
-$('topTrade').addEventListener('click',()=>navigate('trade'));
-
-function renderHome(){
-  $('cashStat').textContent=fmt(state.cash);
-  $('portfolioStat').textContent=fmt(portfolioValue());
-  $('totalStat').textContent=fmt(totalValue());
-  $('tradeCountStat').textContent=state.history.length;
-  $('homeCoins').innerHTML=Object.keys(assets).map(k=>`
-    <button class="coinrow" data-coin="${k}">
-      <span class="coininfo"><span class="coinlogo">${assets[k].logo}</span><span><strong>${assets[k].name}</strong><small>${k} / EUR</small></span></span>
-      <span class="coinprice"><strong>${fmt(lastPrice[k])}</strong><small class="${lastPrice[k]>=assets[k].initial?'green':'red'}">${((lastPrice[k]/assets[k].initial-1)*100).toFixed(2)}%</small></span>
-      <span class="coinchange muted">Öffnen ↗</span>
-    </button>`).join('');
-  document.querySelectorAll('[data-coin]').forEach(b=>b.addEventListener('click',()=>{
-    selected=b.dataset.coin;$('assetSelect').value=selected;navigate('trade');
-  }));
-}
-
-function renderTrade(){
-  const a=assets[selected],p=pos();
-  $('assetLogo').textContent=a.logo;
-  $('assetName').textContent=a.name;
-  $('assetSymbol').textContent=selected+' / EUR';
-  $('qtySymbol').textContent=selected;
-  $('tradePrice').textContent=fmt(lastPrice[selected]);
-  const change=(lastPrice[selected]/a.initial-1)*100;
-  $('tradeChange').textContent=(change>=0?'+':'')+change.toFixed(3)+' % · simulierter Kurs';
-  $('available').textContent=fmt(state.cash);
-  $('holding').textContent=qtyFmt(p.qty)+' '+selected;
-  $('holdingValue').textContent=fmt(p.qty*lastPrice[selected]);
-  $('avgPrice').textContent=p.qty>0?fmt(p.cost/p.qty):'—';
-  $('buyTab').className=side==='buy'?'onbuy':'';
-  $('sellTab').className=side==='sell'?'onsell':'';
-  $('execute').textContent=side==='buy'?'Kaufen · '+selected:'Verkaufen · '+selected;
-  $('execute').className=(side==='buy'?'buy':'sell')+' full';
-  $('sellAll').style.display=side==='sell'?'block':'none';
-  updateEstimate();
-}
-function updateEstimate(){
-  const q=Math.max(0,Number($('qty').value)||0),v=q*lastPrice[selected];
-  $('estimate').textContent=fmt(v);
-  $('execute').disabled=q<=0||(side==='buy'&&v>state.cash+1e-8)||(side==='sell'&&q>pos().qty+1e-10);
-  $('execute').title=$('execute').disabled?'Menge oder Guthaben prüfen':'';
-}
-$('assetSelect').addEventListener('change',e=>{selected=e.target.value;renderTrade();drawChart()});
-$('qty').addEventListener('input',updateEstimate);
-$('buyTab').addEventListener('click',()=>{side='buy';renderTrade()});
-$('sellTab').addEventListener('click',()=>{side='sell';$('qty').value=qtyFmt(pos().qty);renderTrade()});
-document.querySelectorAll('[data-pct]').forEach(b=>b.addEventListener('click',()=>{
-  const pct=Number(b.dataset.pct)/100;
-  const q=side==='buy'?state.cash*pct/lastPrice[selected]:pos().qty*pct;
-  $('qty').value=qtyFmt(q);updateEstimate();
-}));
-
-function trade(action=side,forceQty=null){
-  const q=forceQty===null?Number($('qty').value):forceQty;
-  const price=lastPrice[selected],value=q*price,p=pos();
-  if(!Number.isFinite(q)||q<=0){notify('Bitte eine gültige Menge eingeben.');return false}
-  if(action==='buy'){
-    if(value>state.cash+1e-8){notify('Nicht genug virtuelles Guthaben.');return false}
-    state.cash-=value;p.qty+=q;p.cost+=value;
-  }else{
-    if(q>p.qty+1e-10){notify('Du hast nicht genug Coins.');return false}
-    const avg=p.qty?p.cost/p.qty:0;
-    state.cash+=value;p.qty=Math.max(0,p.qty-q);p.cost=Math.max(0,p.cost-avg*q);
-    if(p.qty<1e-10){p.qty=0;p.cost=0}
-  }
-  const rec={id:Date.now()+Math.random(),time:new Date().toISOString(),action,coin:selected,qty:q,price,total:value};
-  state.history.unshift(rec);state.history=state.history.slice(0,500);
-  markers[selected].push({price,time:Date.now(),action,qty:q});
-  markers[selected]=markers[selected].slice(-25);
-  save();renderTrade();renderHome();drawChart();renderHistory();
-  $('tradeMessage').textContent=(action==='buy'?'Kauf':'Verkauf')+' simuliert: '+qtyFmt(q)+' '+selected+' für '+fmt(value)+'.';
-  notify((action==='buy'?'Kauf':'Verkauf')+' ausgeführt · '+fmt(value));
-  return true;
-}
-$('execute').addEventListener('click',()=>trade());
-$('sellAll').addEventListener('click',()=>{
-  if(pos().qty>0)trade('sell',pos().qty);
-  else notify('Du hast keine Coins zum Verkaufen.');
+"use strict";
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const money=n=>new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR",maximumFractionDigits:2}).format(Number(n)||0);
+const number=(n,d=6)=>new Intl.NumberFormat("de-DE",{maximumFractionDigits:d}).format(Number(n)||0);
+const shortMoney=n=>new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR",notation:"compact",maximumFractionDigits:2}).format(n||0);
+const coinData=[
+ {id:"BTC",name:"Bitcoin",icon:"₿",price:61000,color:"#f4a340",vol:.0018},
+ {id:"ETH",name:"Ethereum",icon:"◆",price:3100,color:"#8294ff",vol:.0025},
+ {id:"SOL",name:"Solana",icon:"◎",price:145,color:"#a68cff",vol:.0032},
+ {id:"XRP",name:"XRP",icon:"✕",price:.54,color:"#dce6f6",vol:.0030},
+ {id:"BNB",name:"BNB",icon:"◆",price:520,color:"#f0c44f",vol:.0020},
+ {id:"DOGE",name:"Dogecoin",icon:"Ð",price:.14,color:"#c8b15b",vol:.0040},
+ {id:"ADA",name:"Cardano",icon:"₳",price:.43,color:"#4b91ff",vol:.0030},
+ {id:"AVAX",name:"Avalanche",icon:"▲",price:35,color:"#f26d7d",vol:.0034},
+ {id:"LINK",name:"Chainlink",icon:"⬡",price:14,color:"#5a91ff",vol:.0028},
+ {id:"DOT",name:"Polkadot",icon:"●",price:6.5,color:"#ff6fa7",vol:.0030},
+ {id:"LTC",name:"Litecoin",icon:"Ł",price:82,color:"#9baac1",vol:.0023},
+ {id:"TRX",name:"TRON",icon:"◈",price:.12,color:"#ff626f",vol:.0022},
+ {id:"BCH",name:"Bitcoin Cash",icon:"Ƀ",price:390,color:"#74d4a4",vol:.0028},
+ {id:"XLM",name:"Stellar",icon:"✦",price:.11,color:"#b9c5da",vol:.0031},
+ {id:"UNI",name:"Uniswap",icon:"🦄",price:9,color:"#ff7bb3",vol:.0035},
+ {id:"ATOM",name:"Cosmos",icon:"✺",price:8.5,color:"#9b9cff",vol:.0033},
+ {id:"NEAR",name:"NEAR Protocol",icon:"N",price:5.4,color:"#d8e6ed",vol:.0036},
+ {id:"ETC",name:"Ethereum Classic",icon:"Ξ",price:25,color:"#83cda5",vol:.0030}
+];
+const KEY="nexyron_full_sim_v1";
+let saved={};
+try{saved=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){}
+let state={
+ cash:Number.isFinite(saved.cash)?saved.cash:10000,
+ holdings:saved.holdings||{},history:Array.isArray(saved.history)?saved.history:[],
+ journal:Array.isArray(saved.journal)?saved.journal:[],done:Array.isArray(saved.done)?saved.done:[],
+ watch:Array.isArray(saved.watch)?saved.watch:["BTC","ETH","SOL"],
+ prices:{},candles:{},selected:"BTC",range:"1d",zoom:1,tradeMode:"buy",quizIndex:0,
+ quizScore:0,quizAnswered:false,initialCash:10000
+};
+coinData.forEach(c=>{
+ const initial=Number(saved.prices&&saved.prices[c.id])||c.price;
+ state.prices[c.id]=initial;
+ state.holdings[c.id]=Number(state.holdings[c.id])||0;
+ state.candles[c.id]=makeCandles(initial,c.vol,260);
 });
-
-function seedCandles(sym){
-  let p=assets[sym].initial,arr=[];
-  for(let i=0;i<70;i++){
-    let o=p,c=o*(1+(Math.random()-.49)*.006);
-    let h=Math.max(o,c)*(1+Math.random()*.002),l=Math.min(o,c)*(1-Math.random()*.002);
-    arr.push({open:o,close:c,high:h,low:l,time:Date.now()-(70-i)*1200});p=c;
-  }
-  lastPrice[sym]=p;candles[sym]=arr;markers[sym]=[];
+function persist(){try{localStorage.setItem(KEY,JSON.stringify({cash:state.cash,holdings:state.holdings,history:state.history,journal:state.journal,done:state.done,watch:state.watch,prices:state.prices}))}catch(e){}}
+function makeCandles(price,vol,count){
+ const arr=[];let p=price;
+ const now=Date.now();
+ for(let i=count-1;i>=0;i--){
+  let o=p;let move=(Math.random()-.49)*vol*2.8;
+  let c=Math.max(price*.03,o*(1+move));
+  let wiggle=Math.abs(c-o)*(.25+Math.random()*1.7)+o*vol*Math.random()*.8;
+  arr.push({t:now-i*60000,o,h:Math.max(o,c)+wiggle,l:Math.max(.000001,Math.min(o,c)-wiggle),c});
+  p=c;
+ }
+ const ratio=price/p;
+ arr.forEach(k=>{k.o*=ratio;k.h*=ratio;k.l*=ratio;k.c*=ratio});
+ return arr;
 }
-Object.keys(assets).forEach(seedCandles);
+function coin(id){return coinData.find(c=>c.id===id)||coinData[0]}
+function price(id){return state.prices[id]||coin(id).price}
+function portfolio(){return state.cash+coinData.reduce((s,c)=>s+price(c.id)*(state.holdings[c.id]||0),0)}
+function pnl(){return portfolio()-state.initialCash}
+function pctClass(v){return v>=0?"positive":"negative"}
+function fmtChange(v){return (v>=0?"+":"")+v.toFixed(2)+"%"}
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove("show"),2600)}
+function showPage(page){
+ $$(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+page));
+ $$(".nav").forEach(n=>n.classList.toggle("active",n.dataset.page===page));
+ if(page==="trade")renderTerminal();
+ if(page==="dashboard")renderDashboard();
+ if(page==="markets")renderMarkets();
+ if(page==="history")renderHistory();
+ if(page==="journal")renderJournal();
+ if(page==="learn")renderLessons();
+ if(page==="patterns")renderPatterns();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+$$(".nav").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+function selectCoin(id){
+ state.selected=id;$("#tradeCoin").value=id;
+ renderTerminal();renderCoinLists();
+}
+function fillCoinSelects(){
+ const opts=coinData.map(c=>`<option value="${c.id}">${c.name} (${c.id})</option>`).join("");
+ $("#tradeCoin").innerHTML=opts;$("#journalCoin").innerHTML=opts;
+}
+function cardHTML(c){
+ const arr=state.candles[c.id],first=arr[Math.max(0,arr.length-30)].o,last=price(c.id);
+ const ch=(last-first)/first*100;
+ return `<div class="card coin-market" data-coin="${c.id}" role="button" tabindex="0">
+ <div class="row"><div class="coin-title"><div class="coin-icon" style="color:${c.color}">${c.icon}</div><div><strong>${c.name}</strong><div class="coin-symbol">${c.id}/EUR</div></div></div><button class="watch-star" data-watch="${c.id}" title="Watchlist umschalten">${state.watch.includes(c.id)?"★":"☆"}</button></div>
+ <div class="stat-value">${money(last)}</div><div class="row"><span class="muted small">Simulierter Kurs</span><span class="${pctClass(ch)} small">${fmtChange(ch)}</span></div></div>`;
+}
+function renderMarkets(){
+ const q=($("#marketSearch").value||"").toLowerCase();
+ $("#allMarkets").innerHTML=coinData.filter(c=>(c.name+" "+c.id).toLowerCase().includes(q)).map(cardHTML).join("");
+}
+function renderDashboard(){
+ $("#dashCash").textContent=money(state.cash);
+ $("#dashPortfolio").textContent=money(portfolio());
+ const p=pnl();$("#dashPnl").textContent=money(p);$("#dashPnl").className="stat-value "+pctClass(p);
+ $("#dashTrades").textContent=state.history.length;
+ $("#watchList").innerHTML=state.watch.length?state.watch.map(id=>assetRow(coin(id))).join(""):'<div class="empty">Deine Watchlist ist noch leer.</div>';
+ $("#recentTrades").innerHTML=state.history.length?state.history.slice(-4).reverse().map(t=>`<div class="row" style="padding:11px 0;border-bottom:1px solid var(--border)"><div><strong class="${t.side==="buy"?"positive":"negative"}">${t.side==="buy"?"Kauf":"Verkauf"} · ${t.id}</strong><div class="muted small">${new Date(t.time).toLocaleString("de-DE")}</div></div><strong>${money(t.total)}</strong></div>`).join(""):'<div class="empty">Noch keine Trades.</div>';
+ $("#dashboardMarkets").innerHTML=coinData.slice(0,6).map(cardHTML).join("");
+}
+function assetRow(c){
+ const ch=(price(c.id)-state.candles[c.id][Math.max(0,state.candles[c.id].length-30)].o)/state.candles[c.id][Math.max(0,state.candles[c.id].length-30)].o*100;
+ return `<button class="asset-row" data-coin="${c.id}"><div class="asset-left"><div class="coin-icon" style="color:${c.color};width:34px;height:34px">${c.icon}</div><div class="asset-meta"><strong>${c.name}</strong><small>${c.id}</small></div></div><div class="asset-price">${money(price(c.id))}</div><div class="asset-change ${pctClass(ch)}">${fmtChange(ch)}</div></button>`;
+}
+function renderCoinLists(){
+ const q=($("#coinSearchTerminal").value||"").toLowerCase();
+ $("#terminalCoins").innerHTML=coinData.filter(c=>(c.id+" "+c.name).toLowerCase().includes(q)).map(assetRow).join("");
+}
+function renderTerminal(){
+ const c=coin(state.selected);
+ $("#chartIcon").textContent=c.icon;$("#chartIcon").style.color=c.color;
+ $("#chartName").textContent=c.name;$("#chartSymbol").textContent=c.id+" / EUR";
+ $("#chartPrice").textContent=money(price(c.id));
+ const arr=state.candles[c.id],start=arr[Math.max(0,arr.length-30)].o,ch=(price(c.id)-start)/start*100;
+ $("#chartChange").textContent=fmtChange(ch);$("#chartChange").className=pctClass(ch)+" small";
+ $("#watchToggle").textContent=(state.watch.includes(c.id)?"★ Watchlist":"☆ Watchlist");
+ $("#tradeCoin").value=state.selected;
+ $("#tradeHolding").textContent=number(state.holdings[c.id]||0,8)+" "+c.id;
+ $$(".chart-controls [data-range]").forEach(b=>b.classList.toggle("selected",b.dataset.range===state.range));
+ updateTradeSummary();drawChart();updatePattern();
+ renderCoinLists();
+}
+function updateTradeSummary(){
+ const id=$("#tradeCoin").value||state.selected,c=coin(id),amount=Math.max(0,Number($("#tradeAmount").value)||0),p=price(id);
+ const qty=amount/p,fee=amount*.001;
+ $("#summaryPrice").textContent=money(p);
+ $("#summaryQty").textContent=number(qty,8)+" "+id;
+ $("#summaryCash").textContent=money(state.cash);
+ $("#summaryFee").textContent=money(fee);
+ $("#tradeHolding").textContent=number(state.holdings[id]||0,8)+" "+id;
+ $("#amountLabel").textContent=state.tradeMode==="buy"?"Investitionsbetrag":"Verkaufswert";
+ $("#tradeAction").textContent=(state.tradeMode==="buy"?"Kaufen ":"Verkaufen ")+id;
+ $("#tradeAction").className="action-btn "+state.tradeMode;
+ $("#buyTab").classList.toggle("active",state.tradeMode==="buy");
+ $("#sellTab").classList.toggle("active",state.tradeMode==="sell");
+ $("#sellTab").classList.toggle("sell",state.tradeMode==="sell");
+}
+$("#tradeCoin").addEventListener("change",e=>{state.selected=e.target.value;renderTerminal()});
+$("#tradeAmount").addEventListener("input",updateTradeSummary);
+$("#buyTab").addEventListener("click",()=>{state.tradeMode="buy";updateTradeSummary()});
+$("#sellTab").addEventListener("click",()=>{state.tradeMode="sell";updateTradeSummary()});
+$$("[data-amount]").forEach(b=>b.addEventListener("click",()=>{$("#tradeAmount").value=b.dataset.amount;updateTradeSummary()}));
+$("#tradeAction").addEventListener("click",()=>{
+ const id=$("#tradeCoin").value,c=coin(id),amount=Number($("#tradeAmount").value),p=price(id);
+ if(!Number.isFinite(amount)||amount<=0){toast("Bitte gib einen Betrag größer als null ein.");return}
+ if(state.tradeMode==="buy"){
+  const total=amount*1.001;
+  if(total>state.cash){toast("Nicht genug virtuelles Guthaben.");return}
+  const qty=amount/p;state.cash-=total;state.holdings[id]=(state.holdings[id]||0)+qty;
+  state.history.push({time:Date.now(),side:"buy",id,qty,price:p,total:total});
+  toast("Virtueller Kauf ausgeführt: "+number(qty,6)+" "+id);
+ }else{
+  const qty=amount/p,holding=state.holdings[id]||0;
+  if(qty>holding){toast("Dein Bestand reicht dafür nicht aus.");return}
+  const proceeds=amount*.999;state.holdings[id]=holding-qty;state.cash+=proceeds;
+  state.history.push({time:Date.now(),side:"sell",id,qty,price:p,total:proceeds});
+  toast("Virtueller Verkauf ausgeführt: "+number(qty,6)+" "+id);
+ }
+ persist();renderTerminal();renderDashboard();
+});
+$("#sellAllBtn").addEventListener("click",()=>{
+ const id=$("#tradeCoin").value,qty=state.holdings[id]||0;
+ if(qty<=0){toast("Du hast keinen Bestand dieses Coins.");return}
+ const p=price(id),total=qty*p*.999;
+ state.cash+=total;state.holdings[id]=0;
+ state.history.push({time:Date.now(),side:"sell",id,qty,price:p,total});
+ persist();renderTerminal();renderDashboard();toast("Gesamter virtueller Bestand verkauft.");
+});
+$("#watchToggle").addEventListener("click",()=>toggleWatch(state.selected));
+function toggleWatch(id){
+ state.watch=state.watch.includes(id)?state.watch.filter(x=>x!==id):[...state.watch,id];
+ persist();renderDashboard();renderMarkets();renderTerminal();
+}
+function renderHistory(){
+ $("#historyBody").innerHTML=state.history.slice().reverse().map(t=>`<tr><td>${new Date(t.time).toLocaleString("de-DE")}</td><td class="${t.side==="buy"?"positive":"negative"}">${t.side==="buy"?"Kauf":"Verkauf"}</td><td>${t.id}</td><td>${number(t.qty,8)}</td><td>${money(t.price)}</td><td>${money(t.total)}</td></tr>`).join("");
+ $("#historyEmpty").classList.toggle("hidden",state.history.length>0);
+}
+$("#exportCsv").addEventListener("click",()=>{
+ if(!state.history.length){toast("Noch keine Trades zum Exportieren.");return}
+ const rows=[["Zeit","Aktion","Coin","Menge","Preis EUR","Gesamt EUR"],...state.history.map(t=>[new Date(t.time).toISOString(),t.side,t.id,t.qty,t.price,t.total])];
+ const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\r\n");
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));a.download="nexyron-trade-historie.csv";a.click();URL.revokeObjectURL(a.href);
+});
+$("#resetBtn").addEventListener("click",()=>{
+ if(!confirm("Simulation wirklich zurücksetzen? Guthaben, Bestände, Historie und Notizen werden gelöscht."))return;
+ localStorage.removeItem(KEY);location.reload();
+});
+$("#marketSearch").addEventListener("input",renderMarkets);
+$("#coinSearchTerminal").addEventListener("input",renderCoinLists);
+document.addEventListener("click",e=>{
+ const watch=e.target.closest("[data-watch]");
+ if(watch){e.stopPropagation();toggleWatch(watch.dataset.watch);return}
+ const item=e.target.closest("[data-coin]");
+ if(item){selectCoin(item.dataset.coin);showPage("trade")}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.matches(".coin-market")){selectCoin(e.target.dataset.coin);showPage("trade")}});
+$$("[data-range]").forEach(b=>b.addEventListener("click",()=>{state.range=b.dataset.range;state.zoom=1;renderTerminal()}));
+$("#zoomIn").addEventListener("click",()=>{state.zoom=Math.min(5,state.zoom*1.35);drawChart()});
+$("#zoomOut").addEventListener("click",()=>{state.zoom=Math.max(.5,state.zoom/1.35);drawChart()});
+$("#resetZoom").addEventListener("click",()=>{state.zoom=1;drawChart()});
 
+const canvas=$("#chart"),ctx=canvas.getContext("2d");
+let hoverX=null;
+function visibleCandles(){
+ const arr=state.candles[state.selected]||[];
+ const count=Math.max(12,Math.min(arr.length,Math.round(75/state.zoom)));
+ return arr.slice(-count);
+}
 function drawChart(){
-  const canvas=$('chart');
-  if(!canvas||!canvas.getContext)return;
-  const rect=canvas.getBoundingClientRect();if(rect.width<10)return;
-  const dpr=Math.min(window.devicePixelRatio||1,2),w=rect.width,h=rect.height;
-  canvas.width=Math.floor(w*dpr);canvas.height=Math.floor(h*dpr);
-  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);
-  const arr=candles[selected]||[];if(!arr.length)return;
-  const pad={l:8,r:65,t:18,b:24},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
-  const start=Math.max(0,arr.length-58),visible=arr.slice(start);
-  let min=Math.min(...visible.map(c=>c.low)),max=Math.max(...visible.map(c=>c.high));
-  const range=Math.max(max-min,max*.0007);min-=range*.1;max+=range*.1;
-  const y=v=>pad.t+(max-v)/(max-min)*ch;
-  ctx.font='10px system-ui';ctx.lineWidth=1;
-  for(let i=0;i<5;i++){
-    const yy=pad.t+i*ch/4;
-    ctx.strokeStyle='#273248';ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r+5,yy);ctx.stroke();
-    ctx.fillStyle='#92a0b9';ctx.fillText(fmt(max-i*(max-min)/4),w-pad.r+8,yy+3);
-  }
-  const step=cw/visible.length,bw=Math.max(2,Math.min(9,step*.58));
-  visible.forEach((c,i)=>{
-    const x=pad.l+i*step+step/2,up=c.close>=c.open,color=up?'#45dda0':'#ff718b';
-    ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=1.2;
-    ctx.beginPath();ctx.moveTo(x,y(c.high));ctx.lineTo(x,y(c.low));ctx.stroke();
-    const top=y(Math.max(c.open,c.close)),bottom=y(Math.min(c.open,c.close));
-    ctx.fillRect(x-bw/2,top,bw,Math.max(1,bottom-top));
-  });
-  const current=arr[arr.length-1].close,yy=y(current);
-  ctx.setLineDash([4,4]);ctx.strokeStyle='#8b9cff';ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r+3,yy);ctx.stroke();ctx.setLineDash([]);
-  ctx.fillStyle='#8b9cff';ctx.fillRect(w-pad.r+5,yy-9,pad.r-7,18);
-  ctx.fillStyle='#10172b';ctx.fillText(fmt(current),w-pad.r+8,yy+3);
-  (markers[selected]||[]).forEach(m=>{
-    let idx=visible.findIndex(c=>c.time>=m.time);if(idx<0)idx=visible.length-1;
-    const x=pad.l+idx*step+step/2,my=y(m.price);
-    ctx.fillStyle=m.action==='buy'?'#45dda0':'#ff718b';
-    ctx.beginPath();ctx.arc(x,my,4,0,Math.PI*2);ctx.fill();
-    ctx.font='bold 10px system-ui';
-    ctx.fillText(m.action==='buy'?'K':'V',Math.min(w-pad.r-8,x+4),Math.max(12,my-7));
-  });
-  ctx.fillStyle='#92a0b9';ctx.fillText('älter',pad.l,h-6);ctx.fillText('jetzt',w-pad.r-22,h-6);
+ if(!ctx)return;
+ const rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
+ if(!rect.width||!rect.height)return;
+ canvas.width=Math.round(rect.width*dpr);canvas.height=Math.round(rect.height*dpr);
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ const w=rect.width,h=rect.height;
+ ctx.clearRect(0,0,w,h);
+ const data=visibleCandles();if(!data.length)return;
+ const pad={l:10,r:70,t:16,b:25},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
+ const max=Math.max(...data.map(k=>k.h)),min=Math.min(...data.map(k=>k.l));
+ const spread=max-min||1,top=max+spread*.08,bottom=min-spread*.08;
+ const y=p=>pad.t+(top-p)/(top-bottom)*ch;
+ ctx.font="10px system-ui";ctx.textBaseline="middle";
+ for(let i=0;i<=5;i++){
+  const val=top-(top-bottom)*i/5,yy=y(val);
+  ctx.strokeStyle="#243249";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r+4,yy);ctx.stroke();
+  ctx.fillStyle="#8797b2";ctx.textAlign="left";ctx.fillText(shortMoney(val),w-pad.r+8,yy);
+ }
+ const step=cw/data.length,bodyW=Math.max(2,Math.min(11,step*.58));
+ data.forEach((k,i)=>{
+  const x=pad.l+step*i+step/2,up=k.c>=k.o,col=up?"#32e6a1":"#ff617b";
+  ctx.strokeStyle=col;ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(x,y(k.h));ctx.lineTo(x,y(k.l));ctx.stroke();
+  const yy=Math.min(y(k.o),y(k.c)),bh=Math.max(1.4,Math.abs(y(k.o)-y(k.c)));
+  ctx.fillStyle=col;ctx.fillRect(x-bodyW/2,yy,bodyW,bh);
+ });
+ const last=data[data.length-1].c,ly=y(last);
+ ctx.setLineDash([4,4]);ctx.strokeStyle="#718cffaa";ctx.beginPath();ctx.moveTo(pad.l,ly);ctx.lineTo(w-pad.r,ly);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle="#718cff";ctx.fillRect(w-pad.r+3,ly-9,pad.r-5,18);
+ ctx.fillStyle="#fff";ctx.textAlign="left";ctx.fillText(shortMoney(last),w-pad.r+7,ly);
+ const labels=5;
+ for(let i=0;i<labels;i++){
+  const idx=Math.min(data.length-1,Math.round(i*(data.length-1)/(labels-1))),x=pad.l+step*idx+step/2;
+  const d=new Date(data[idx].t);
+  const label=state.range==="5m"||state.range==="15m"||state.range==="1h"?d.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"}):d.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit"});
+  ctx.fillStyle="#8797b2";ctx.textAlign="center";ctx.fillText(label,x,h-10);
+ }
+ if(hoverX!==null&&hoverX>=pad.l&&hoverX<w-pad.r){
+  ctx.strokeStyle="#8797b266";ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(hoverX,pad.t);ctx.lineTo(hoverX,h-pad.b);ctx.stroke();ctx.setLineDash([]);
+ }
 }
+canvas.addEventListener("mousemove",e=>{const r=canvas.getBoundingClientRect();hoverX=e.clientX-r.left;drawChart()});
+canvas.addEventListener("mouseleave",()=>{hoverX=null;drawChart()});
+canvas.addEventListener("wheel",e=>{e.preventDefault();state.zoom=Math.max(.5,Math.min(5,state.zoom*(e.deltaY<0?1.15:.87)));drawChart()},{passive:false});
+window.addEventListener("resize",drawChart);
 
-$('pauseBtn').addEventListener('click',()=>{
-  paused=!paused;$('pauseBtn').textContent=paused?'▶ Weiter':'Ⅱ Pause';
-  $('tickStatus').textContent=paused?'Pausiert':'Kurs aktualisiert';
+const patternData=[
+ {name:"Doji",emoji:"✣",type:"Neutral",color:"var(--purple)",desc:"Eröffnung und Schluss liegen nah beieinander. Das kann Unentschlossenheit zeigen; allein ist es kein Kaufsignal.",tip:"Achte auf den vorherigen Trend und die folgenden Kerzen."},
+ {name:"Hammer",emoji:"⌁",type:"Möglicherweise bullisch",color:"var(--green)",desc:"Kleiner Kerzenkörper, langer unterer Schatten und kleiner oberer Schatten. Nach einem Rückgang kann das auf zurückgewiesene tiefere Kurse hindeuten.",tip:"Eine Bestätigung durch nachfolgende Kursbewegung ist wichtig."},
+ {name:"Shooting Star",emoji:"↟",type:"Möglicherweise bärisch",color:"var(--red)",desc:"Kleiner Körper mit langem oberen Schatten. Nach einem Anstieg kann das auf zurückgewiesene höhere Kurse hindeuten.",tip:"Das Muster allein sagt nicht zuverlässig voraus, wohin der Kurs geht."},
+ {name:"Bullish Engulfing",emoji:"⬆",type:"Möglicherweise bullisch",color:"var(--green)",desc:"Eine größere aufwärts gerichtete Kerze umschließt den Körper der vorherigen Abwärtskerze.",tip:"Kontext, Trend und Bestätigung beachten."},
+ {name:"Bearish Engulfing",emoji:"⬇",type:"Möglicherweise bärisch",color:"var(--red)",desc:"Eine größere abwärts gerichtete Kerze umschließt den Körper der vorherigen Aufwärtskerze.",tip:"Ein Muster ist keine Garantie für einen Kursrückgang."},
+ {name:"Morning Star",emoji:"🌅",type:"Möglicherweise bullisch",color:"var(--green)",desc:"Dreiteilige Formation nach einem Rückgang: starke Abwärtskerze, kleiner Körper und danach eine kräftige Aufwärtskerze.",tip:"Die mittlere Kerze zeigt häufig nachlassenden Verkaufsdruck."},
+ {name:"Evening Star",emoji:"🌆",type:"Möglicherweise bärisch",color:"var(--red)",desc:"Dreiteilige Formation nach einem Anstieg: starke Aufwärtskerze, kleiner Körper und danach eine kräftige Abwärtskerze.",tip:"Beobachte, ob der Markt den Richtungswechsel bestätigt."},
+ {name:"Long-Legged Doji",emoji:"✳",type:"Neutral",color:"var(--purple)",desc:"Lange obere und untere Schatten bei kleinem Körper. Käufer und Verkäufer haben den Kurs in beide Richtungen bewegt.",tip:"Die Formation braucht Kontext und ist allein nicht eindeutig."}
+];
+function renderPatterns(){
+ $("#patternsGrid").innerHTML=patternData.map((p,i)=>`<div class="card pattern-card"><div class="row"><h2>${p.name}</h2><span class="pill">${p.type}</span></div><div class="candle-demo">${patternDrawing(i)}</div><p>${p.desc}</p><div class="sub"><strong>Merke:</strong> ${p.tip}</div><button data-pattern-lesson="${i}" style="margin-top:12px">Im Terminal üben →</button></div>`).join("");
+}
+function patternDrawing(i){
+ if(i===0)return '<div class="candle" style="height:7px"></div>';
+ if(i===1)return '<div style="height:70px;position:relative"><div style="position:absolute;left:14px;top:0;height:15px;width:2px;background:var(--green)"></div><div style="position:absolute;left:9px;top:15px;height:13px;width:12px;background:var(--green)"></div><div style="position:absolute;left:14px;top:28px;height:42px;width:2px;background:var(--green)"></div></div>';
+ if(i===2)return '<div style="height:70px;position:relative"><div style="position:absolute;left:14px;top:0;height:43px;width:2px;background:var(--red)"></div><div style="position:absolute;left:9px;top:43px;height:12px;width:12px;background:var(--red)"></div><div style="position:absolute;left:14px;top:55px;height:15px;width:2px;background:var(--red)"></div></div>';
+ if(i===3)return '<div class="candle red"></div><div class="candle" style="height:50px"></div>';
+ if(i===4)return '<div class="candle"></div><div class="candle red" style="height:50px"></div>';
+ if(i===5)return '<div class="candle red"></div><div class="candle" style="height:8px"></div><div class="candle"></div>';
+ if(i===6)return '<div class="candle"></div><div class="candle" style="height:8px;background:var(--purple)"></div><div class="candle red"></div>';
+ return '<div style="display:flex;gap:12px"><div class="candle" style="height:5px"></div><div class="candle red" style="height:6px"></div></div>';
+}
+function detectPattern(arr){
+ const a=arr[arr.length-1],b=arr[arr.length-2];if(!a||!b)return patternData[0];
+ const body=Math.abs(a.c-a.o),range=Math.max(.0000001,a.h-a.l),lower=Math.min(a.o,a.c)-a.l,upper=a.h-Math.max(a.o,a.c);
+ if(body/range<.09)return patternData[0];
+ if(lower>body*2.2&&upper<body*.7)return patternData[1];
+ if(upper>body*2.2&&lower<body*.7)return patternData[2];
+ if(b.c<b.o&&a.c>a.o&&a.o<=b.c&&a.c>=b.o)return patternData[3];
+ if(b.c>b.o&&a.c<a.o&&a.o>=b.c&&a.c<=b.o)return patternData[4];
+ return patternData[0];
+}
+function updatePattern(){
+ const p=detectPattern(state.candles[state.selected]);
+ $("#patternName").textContent="Erkannte Formation: "+p.name;
+ $("#patternDescription").textContent=p.type+" · "+p.tip;
+}
+$("#patternsGrid").addEventListener("click",e=>{const b=e.target.closest("[data-pattern-lesson]");if(b){selectCoin(state.selected);showPage("trade");toast("Beobachte die Kerzen im Chart und prüfe den Kontext.")}});
+
+const lessons=[
+ {id:"candles",emoji:"🕯️",title:"Kerzen verstehen",text:"Jede Kerze zeigt Eröffnung, Schluss, Hoch und Tief für einen bestimmten Zeitraum. Der Körper zeigt den Abstand zwischen Eröffnung und Schluss; die Schatten zeigen Extremkurse.",quiz:"Was zeigen die Schatten einer Kerze?",opts:["Nur den Schlusskurs","Hoch und Tief des Zeitraums","Das Handelsguthaben"],correct:1},
+ {id:"timeframes",emoji:"⏱️",title:"Zeiträume & Zoom",text:"Kurze Zeiträume zeigen mehr kurzfristige Schwankungen. Lange Zeiträume zeigen größere Bewegungen. Ein Wechsel des Zeitraums verändert, wie du Marktbewegungen einordnest.",quiz:"Wofür ist ein längerer Zeitraum nützlich?",opts:["Für den Blick auf größere Bewegungen","Er garantiert Gewinn","Er macht Risiken unsichtbar"],correct:0},
+ {id:"trends",emoji:"📈",title:"Trends erkennen",text:"Ein Aufwärtstrend bildet häufig höhere Hochs und höhere Tiefs. Ein Abwärtstrend zeigt oft tiefere Hochs und tiefere Tiefs. Seitwärtsphasen bewegen sich innerhalb einer Spanne.",quiz:"Was kennzeichnet häufig einen Aufwärtstrend?",opts:["Höhere Hochs und höhere Tiefs","Jeder Kurs fällt","Keine Kursschwankungen"],correct:0},
+ {id:"patterns",emoji:"🔎",title:"Kerzenmuster",text:"Doji, Hammer und Engulfing können auf Unentschlossenheit oder einen möglichen Richtungswechsel hinweisen. Kein Muster funktioniert zuverlässig in jedem Markt.",quiz:"Sind Chart-Muster sichere Vorhersagen?",opts:["Ja, immer","Nur bei Bitcoin","Nein, sie brauchen Kontext"],correct:2},
+ {id:"support",emoji:"🧱",title:"Support & Resistance",text:"Support ist eine Preiszone, in der zuvor Nachfrage auftrat. Resistance ist eine Zone, in der zuvor Verkaufsdruck auftrat. Solche Zonen können brechen und sind keine festen Grenzen.",quiz:"Was ist Resistance?",opts:["Eine mögliche Widerstandszone","Eine garantierte Kursobergrenze","Eine Gebühr"],correct:0},
+ {id:"risk",emoji:"🛡️",title:"Risikomanagement",text:"Lege vor einer Übung fest, welches Risiko du akzeptierst. Vermeide, dein gesamtes Guthaben auf eine Idee zu setzen. Ein Stop-Loss kann Verluste begrenzen, bietet aber keine absolute Garantie.",quiz:"Was ist eine vernünftige Lernregel?",opts:["Alles auf einen Coin setzen","Risiken vorab begrenzen","Verluste immer ignorieren"],correct:1},
+ {id:"volume",emoji:"📊",title:"Volumen & Momentum",text:"Volumen beschreibt, wie viel gehandelt wurde. Momentum beschreibt die Stärke oder Geschwindigkeit einer Bewegung. Beides kann beim Einordnen helfen, ist aber kein alleiniger Beweis.",quiz:"Was beschreibt Volumen?",opts:["Handelsaktivität bzw. gehandelte Menge","Dein Kontostand","Den nächsten sicheren Kurs"],correct:0},
+ {id:"journal",emoji:"✍️",title:"Trading-Journal",text:"Notiere deine Idee, die Gründe dafür, das mögliche Risiko und das Ergebnis. Bewerte anschließend, ob du deinen Plan befolgt hast – nicht nur, ob ein Trade zufällig positiv ausging.",quiz:"Was gehört in ein Lernjournal?",opts:["Nur Gewinne","Idee, Begründung und Rückblick","Geheime Gewinnformeln"],correct:1}
+];
+function renderLessons(){
+ $("#progressPill").textContent=state.done.length+" / "+lessons.length+" abgeschlossen";
+ $("#lessonGrid").innerHTML=lessons.map(l=>`<div class="card lesson"><div class="row"><span class="emoji">${l.emoji}</span><span class="pill">${state.done.includes(l.id)?"✓ Erledigt":"Lernmodul"}</span></div><h2>${l.title}</h2><p>${l.text}</p><button data-lesson="${l.id}">${state.done.includes(l.id)?"Wiederholen":"Lektion abschließen"}</button></div>`).join("");
+ renderQuiz();
+}
+$("#lessonGrid").addEventListener("click",e=>{
+ const b=e.target.closest("[data-lesson]");if(!b)return;
+ const l=lessons.find(x=>x.id===b.dataset.lesson);
+ if(l){alert(l.title+"\n\n"+l.text);if(!state.done.includes(l.id))state.done.push(l.id);persist();renderLessons()}
+});
+function renderQuiz(){
+ const l=lessons[state.quizIndex%lessons.length];
+ $("#quizQuestion").innerHTML=`<strong>${l.quiz}</strong>`;
+ $("#quizOptions").innerHTML=l.opts.map((o,i)=>`<button class="quiz-option" data-answer="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join("");
+ $("#quizFeedback").textContent="Frage "+(state.quizIndex%lessons.length+1)+" von "+lessons.length;
+ state.quizAnswered=false;
+}
+$("#quizOptions").addEventListener("click",e=>{
+ const b=e.target.closest("[data-answer]");if(!b||state.quizAnswered)return;
+ state.quizAnswered=true;
+ const l=lessons[state.quizIndex%lessons.length],ans=Number(b.dataset.answer);
+ $$("#quizOptions button").forEach((x,i)=>{if(i===l.correct)x.classList.add("correct");if(i===ans&&ans!==l.correct)x.classList.add("wrong")});
+ $("#quizFeedback").textContent=ans===l.correct?"Richtig! Gute Arbeit.":"Noch nicht ganz. Lies die passende Lektion und versuche es erneut.";
+ if(ans===l.correct)state.quizScore++;
+});
+$("#nextQuiz").addEventListener("click",()=>{state.quizIndex=(state.quizIndex+1)%lessons.length;renderQuiz()});
+
+function renderJournal(){
+ $("#journalEntries").innerHTML=state.journal.length?state.journal.slice().reverse().map(j=>`<div style="padding:13px 0;border-bottom:1px solid var(--border)"><div class="row"><strong>${j.coin} · ${j.mood}</strong><span class="muted small">${new Date(j.time).toLocaleDateString("de-DE")}</span></div><p class="muted" style="white-space:pre-wrap">${escapeHTML(j.note)}</p><button data-delete-journal="${j.id}">Löschen</button></div>`).join(""):'<div class="empty">Noch keine Notizen. Halte deine Beobachtungen fest.</div>';
+}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+$("#saveJournal").addEventListener("click",()=>{
+ const note=$("#journalNote").value.trim();if(!note){toast("Schreibe zuerst eine Beobachtung.");return}
+ state.journal.push({id:Date.now(),time:Date.now(),coin:$("#journalCoin").value,mood:$("#journalMood").value,note});
+ $("#journalNote").value="";persist();renderJournal();toast("Journal-Eintrag gespeichert.");
+});
+$("#journalEntries").addEventListener("click",e=>{
+ const b=e.target.closest("[data-delete-journal]");if(!b)return;
+ state.journal=state.journal.filter(j=>String(j.id)!==b.dataset.deleteJournal);persist();renderJournal();
 });
 
 function tick(){
-  if(paused)return;
-  tickCount++;
-  Object.keys(assets).forEach(sym=>{
-    const old=lastPrice[sym],vol=sym==='SOL'?.0014:.001;
-    const next=Math.max(assets[sym].initial*.1,old*(1+(Math.random()-.498)*vol));
-    lastPrice[sym]=next;
-    const arr=candles[sym],c=arr[arr.length-1];
-    c.close=next;c.high=Math.max(c.high,next);c.low=Math.min(c.low,next);
-    if(tickCount%7===0){
-      arr.push({open:next,close:next,high:next,low:next,time:Date.now()});
-      if(arr.length>180)arr.shift();
-    }
-  });
-  $('tradePrice').textContent=fmt(lastPrice[selected]);
-  const change=(lastPrice[selected]/assets[selected].initial-1)*100;
-  $('tradeChange').textContent=(change>=0?'+':'')+change.toFixed(3)+' % · simulierter Kurs';
-  $('tickStatus').textContent='Update '+new Date().toLocaleTimeString(state.lang==='en'?'en-GB':'de-DE');
-  if($('page-trade').classList.contains('active')){
-    drawChart();
-    $('holdingValue').textContent=fmt(pos().qty*lastPrice[selected]);
-    $('avgPrice').textContent=pos().qty>0?fmt(pos().cost/pos().qty):'—';
-    updateEstimate();
+ coinData.forEach(c=>{
+  const old=price(c.id),move=(Math.random()-.498)*c.vol;
+  const next=Math.max(c.price*.02,old*(1+move));
+  state.prices[c.id]=next;
+  const arr=state.candles[c.id],last=arr[arr.length-1];
+  last.h=Math.max(last.h,next);last.l=Math.min(last.l,next);last.c=next;
+  if(Date.now()-last.t>60000){
+   arr.push({t:Date.now(),o:next,h:next,l:next,c:next});
+   if(arr.length>500)arr.shift();
   }
-  if(tickCount%4===0){renderHome();save()}
+ });
+ const page=$$(".page.active")[0]?.id;
+ if(page==="page-trade")renderTerminal();
+ if(page==="page-dashboard")renderDashboard();
+ if(page==="page-markets")renderMarkets();
+ persist();
 }
-
-function renderHistory(){
-  const body=$('historyRows');
-  body.innerHTML=state.history.map(r=>`<tr>
-    <td>${new Date(r.time).toLocaleString(state.lang==='en'?'en-GB':'de-DE')}</td>
-    <td class="${r.action==='buy'?'green':'red'}">${r.action==='buy'?'Kauf':'Verkauf'}</td>
-    <td><b>${r.coin}</b></td><td>${qtyFmt(r.qty)}</td><td>${fmt(r.price)}</td><td>${fmt(r.total)}</td>
-  </tr>`).join('');
-  $('historyEmpty').style.display=state.history.length?'none':'block';
-}
-$('exportBtn').addEventListener('click',()=>{
-  if(!state.history.length){notify('Noch keine Trades zum Exportieren.');return}
-  const rows=[['Zeit','Aktion','Coin','Menge','Preis','Gesamt'],...state.history.map(r=>[r.time,r.action,r.coin,r.qty,r.price,r.total])];
-  const csv=rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\n');
-  const url=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}));
-  const a=document.createElement('a');a.href=url;a.download='nexyron-trades.csv';a.click();URL.revokeObjectURL(url);
-});
-
-document.querySelectorAll('[data-answer]').forEach(btn=>btn.addEventListener('click',()=>{
-  const group=btn.closest('.quiz'),feedback=group.querySelector('.feedback');
-  group.querySelectorAll('[data-answer]').forEach(b=>b.disabled=true);
-  feedback.textContent=btn.dataset.feedback;feedback.classList.add('show');
-  if(btn.dataset.answer==='wrong'){feedback.style.background='#3a202b';feedback.style.color='#ffb3c1'}
-  else{feedback.style.background='#172f2b';feedback.style.color='#9cf1ce'}
-}));
-
-const translations={
-de:{status:'SIMULATION · LIVE-TAKT',overview:'Übersicht',trade:'Trading',learn:'Lernen',history:'Verlauf',settings:'Einstellungen',open:'Trading öffnen ↗'},
-en:{status:'SIMULATION · LIVE TICK',overview:'Overview',trade:'Trading',learn:'Learn',history:'History',settings:'Settings',open:'Open trading ↗'},
-fr:{status:'SIMULATION · FLUX RAPIDE',overview:'Aperçu',trade:'Trading',learn:'Apprendre',history:'Historique',settings:'Paramètres',open:'Ouvrir le trading ↗'},
-ru:{status:'СИМУЛЯЦИЯ · БЫСТРЫЙ ТАКТ',overview:'Обзор',trade:'Торговля',learn:'Обучение',history:'История',settings:'Настройки',open:'Открыть торговлю ↗'},
-tg:{status:'ТАҚЛИД · НАВБАТИ ТЕЗ',overview:'Шарҳи умумӣ',trade:'Савдо',learn:'Омӯзиш',history:'Таърих',settings:'Танзимот',open:'Савдоро кушо ↗'}
-};
-function setLanguage(lang){
-  state.lang=lang;save();
-  const t=translations[lang]||translations.de;
-  $('status').textContent=t.status;$('topTrade').textContent=t.open;
-  const navs=document.querySelectorAll('.nav');
-  ['overview','trade','learn','history','settings'].forEach((k,i)=>navs[i].lastChild.textContent=' '+t[k]);
-  document.documentElement.lang=lang;
-  renderHome();renderTrade();renderHistory();drawChart();
-}
-$('language').value=state.lang;
-$('language').addEventListener('change',e=>setLanguage(e.target.value));
-$('reset').addEventListener('click',()=>{
-  if(!confirm('Wirklich alle Übungsdaten zurücksetzen?'))return;
-  state=structuredClone(defaults);
-  Object.keys(assets).forEach(k=>{lastPrice[k]=assets[k].initial;seedCandles(k)});
-  selected='BTC';side='buy';save();setLanguage(state.lang);
-  renderTrade();renderHome();renderHistory();navigate('home');notify('Übung wurde zurückgesetzt.');
-});
-window.addEventListener('resize',()=>{if($('page-trade').classList.contains('active'))drawChart()});
-
-renderHome();renderTrade();renderHistory();setLanguage(state.lang);drawChart();
-setInterval(tick,250);
-setInterval(save,5000);
+fillCoinSelects();
+renderDashboard();renderMarkets();renderTerminal();renderPatterns();renderLessons();renderHistory();renderJournal();
+setInterval(tick,1800);
 </script>
 </body>
 </html>
