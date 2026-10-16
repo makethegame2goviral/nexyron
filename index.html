@@ -3,426 +3,837 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#080d19">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090e1b">
 <title>NEXYRON — Trading Academy</title>
 <style>
-:root{--bg:#080d19;--panel:#111a2b;--panel2:#19253a;--line:#293750;--text:#f3f6ff;--muted:#9aaac1;--green:#21d6a0;--red:#ff627b;--blue:#829cff}
+:root{--bg:#090e1b;--panel:#111a2b;--panel2:#18243a;--line:#293852;--text:#edf3ff;--muted:#9babc5;--blue:#8daaff;--green:#36d6a0;--red:#ff667d;--gold:#f6c96b}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 50% -20%,#263d67 0,transparent 55%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,sans-serif}
 button,input,select{font:inherit}
-button{cursor:pointer;touch-action:manipulation}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:12px 4%;gap:12px;background:#080d19ed;border-bottom:1px solid #ffffff15;backdrop-filter:blur(16px)}
-.brand{display:flex;align-items:center;gap:10px;font-weight:950;letter-spacing:.12em}
-.logo{width:39px;height:39px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,#9ab4ff,#5e66d9);font-size:22px}
-.brand small{display:block;font-size:10px;color:var(--muted);letter-spacing:.12em}
-.status{font-size:11px;color:var(--green)}
-nav{display:flex;gap:5px;padding:9px 4%;overflow-x:auto;border-bottom:1px solid #ffffff12}
-nav button,.chip{white-space:nowrap;border:1px solid transparent;border-radius:11px;background:transparent;color:var(--muted);padding:10px 13px;font-weight:750}
-nav button.active,nav button:hover,.chip.active{background:var(--panel2);color:var(--text);border-color:#ffffff12}
-main{max-width:1450px;margin:auto;padding:clamp(12px,3vw,32px)}
+button{color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer;transition:.15s}
+button:hover{border-color:var(--blue);filter:brightness(1.12)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+button:disabled{opacity:.4;cursor:not-allowed}
+input,select{width:100%;min-width:0;background:#0b1323;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:clamp(25px,4vw,38px);line-height:1.15}
+h2{font-size:22px}
+h3{font-size:17px}
+small,.muted{color:var(--muted)}
+header{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 22px;background:#0c1322;border-bottom:1px solid var(--line)}
+.logo{font-size:23px;font-weight:900;letter-spacing:2px}.logo span{color:var(--blue)}
+.headerRight{display:flex;gap:9px;align-items:center}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:calc(100vh - 70px)}
+nav{padding:18px 12px;border-right:1px solid var(--line);background:#0c1320}
+.navbtn{display:flex;gap:10px;align-items:center;text-align:left;width:100%;margin-bottom:7px;background:transparent;border-color:transparent}
+.navbtn.active{background:#1a2944;border-color:#344969}
+.navicon{width:24px;text-align:center}
+main{padding:clamp(14px,3vw,30px);width:100%;max-width:1600px;margin:auto;min-width:0}
 .page{display:none}.page.active{display:block}
-.hero,.card,.stat,.lesson{background:linear-gradient(145deg,#15223a,#101827);border:1px solid #ffffff12;border-radius:19px;box-shadow:0 12px 36px #0002}
-.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:22px;padding:clamp(22px,4vw,42px);margin-bottom:18px}
-.eyebrow{color:var(--blue);font-size:11px;font-weight:850;letter-spacing:.15em;text-transform:uppercase}
-h1{font-size:clamp(36px,6vw,65px);line-height:1.02;letter-spacing:-.055em;margin:14px 0}
-h2{font-size:clamp(23px,3vw,32px);letter-spacing:-.035em;margin:0}
-h3{margin:10px 0}
-p{color:var(--muted)}
-.hero p{max-width:650px;font-size:16px}
-.hero-side{display:flex;flex-direction:column;justify-content:space-between;gap:20px;padding:8px}
-.big-number{font-size:clamp(27px,4vw,39px);font-weight:900;letter-spacing:-.045em}
-.muted,.small{color:var(--muted)}.small{font-size:12px}
-.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:17px}
-.btn{padding:11px 15px;border-radius:12px;border:1px solid #ffffff19;background:#ffffff08;color:var(--text);font-weight:800}
-.btn.primary{background:linear-gradient(135deg,#839fff,#5d69de);border:0;color:white}
-.btn.buy{background:#123c33;color:#6af0c8;border-color:#1a6c5b}
-.btn.sell{background:#45202a;color:#ff9aaa;border-color:#773344}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 26px}
-.stat{padding:17px;min-width:0}.stat label{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:clamp(19px,2.5vw,27px);margin-top:5px;overflow-wrap:anywhere}
-.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:25px 0 13px}
-.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(270px,.7fr);gap:14px}
-.card{padding:17px;min-width:0}
-.coin-list{display:grid;gap:7px}
-.coin{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:11px;border:1px solid #ffffff0a;border-radius:13px;cursor:pointer}
-.coin:hover{background:#ffffff09}
-.coin-info{display:flex;align-items:center;gap:10px;min-width:0}
-.coin-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#293957;font-weight:900;font-size:18px;flex-shrink:0}
-.coin-name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.symbol{font-size:12px;color:var(--muted)}
-.price{font-weight:800;text-align:right;white-space:nowrap}
-.change{font-size:12px;text-align:right;white-space:nowrap}
-.green{color:var(--green)}.red{color:var(--red)}
-.search,.field input,.field select,.field select option,.toolbar select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#0b1423;color:var(--text)}
-.search{margin:10px 0}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:15px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:18px;min-width:0}
+.s12{grid-column:span 12}.s8{grid-column:span 8}.s7{grid-column:span 7}.s6{grid-column:span 6}.s5{grid-column:span 5}.s4{grid-column:span 4}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.between{justify-content:space-between}
+.stat{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.7px;overflow-wrap:anywhere}
+.positive{color:var(--green)}.negative{color:var(--red)}.blue{color:var(--blue)}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:30px;padding:4px 9px;font-size:12px;color:var(--muted)}
+.primary{background:var(--blue);color:#10182a;border-color:var(--blue);font-weight:800}
+.buy{background:#12382f;color:#8cf1c8;border-color:#245f4f}
+.sell{background:#401d2b;color:#ff9bab;border-color:#723347}
+.danger{color:#ff9bab}
 .field{display:grid;gap:6px;margin:12px 0}
-.field label{font-size:12px;font-weight:750;color:var(--muted)}
-.toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.toolbar>div{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.chip{background:#17243a;border-color:var(--line);font-size:12px;padding:8px 10px}
-.chart-wrap{height:350px;position:relative;overflow:hidden;border:1px solid #293750;border-radius:14px;background:#091221}
-canvas{display:block;width:100%;height:100%;touch-action:pan-y}
-.chart-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--muted);padding-top:10px}
-.notice{font-size:12px;color:#e8d6a5;background:#3a311c66;border:1px solid #75653a66;border-radius:11px;padding:11px;margin-top:12px}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}
-.tabs button{border:1px solid var(--line);border-radius:11px;background:#17243a;color:var(--muted);padding:11px;font-weight:850}
-.tabs button.active.buy{color:#6af0c8;background:#123c33}
-.tabs button.active.sell{color:#ff9aaa;background:#45202a}
-.summary{display:grid;gap:9px;background:#0b1423;padding:12px;border-radius:11px;font-size:13px;color:var(--muted)}
-.summary div{display:flex;justify-content:space-between;gap:8px}.summary strong{color:var(--text)}
-.learn-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.lesson{padding:17px}.lesson .emoji{font-size:27px}.lesson p{font-size:13px}
-.option{display:block;width:100%;text-align:left;background:#0b1423;color:var(--text);border:1px solid var(--line);border-radius:11px;padding:13px;margin:8px 0}
-.option.correct{border-color:var(--green);background:#12352f}.option.wrong{border-color:var(--red);background:#40202b}
-.progress{height:5px;border-radius:20px;background:#293750;overflow:hidden;margin:14px 0}
-.progress span{display:block;height:100%;background:var(--blue);width:0}
-.table-wrap{overflow-x:auto}
-table{width:100%;min-width:520px;border-collapse:collapse}
-th,td{padding:11px;text-align:left;border-bottom:1px solid #ffffff12;font-size:13px}
-th{color:var(--muted)}
-.empty{text-align:center;padding:25px;color:var(--muted)}
-.overlay{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:16px;background:#040812eF;backdrop-filter:blur(10px)}
-.overlay.show{display:flex}
-.modal{width:min(570px,100%);padding:clamp(22px,4vw,34px);border:1px solid #ffffff20;border-radius:21px;background:#142039;box-shadow:0 30px 90px #0008}
-.toast{position:fixed;z-index:200;bottom:20px;left:50%;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#f0f3ff;color:#10182a;padding:12px 17px;border-radius:12px;font-weight:800;transition:.2s;max-width:calc(100% - 24px)}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-footer{text-align:center;color:#8391a7;font-size:12px;padding:28px 0 10px}
-.fullscreen{position:fixed!important;z-index:99!important;inset:0!important;width:100vw!important;height:100dvh!important;border-radius:0!important;padding:10px!important;background:#09111f!important;display:flex;flex-direction:column}
-.fullscreen .chart-wrap{flex:1;min-height:0;height:auto}
-.fullscreen .trade-panel{display:none}
-.fullscreen .chart-tools{flex-shrink:0}
-@media(max-width:850px){.hero{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.learn-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:560px){header{padding:10px 12px}.brand{font-size:13px}.logo{width:33px;height:33px}nav{padding:7px 10px}nav button{padding:10px;font-size:12px}main{padding:12px}.stats{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:1/-1}.learn-grid{grid-template-columns:1fr}.card{padding:13px}.chart-wrap{height:290px}.coin{grid-template-columns:minmax(0,1fr) auto;gap:7px}.price{grid-column:2;grid-row:1}.change{grid-column:2;grid-row:2}.section-head{align-items:start;flex-direction:column}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+.field label{font-size:13px;color:var(--muted)}
+.chartwrap{position:relative;width:100%;height:340px;background:#0a1220;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+.chartbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.chartbar select{width:auto;max-width:160px}
+.chartbar button{padding:8px 11px}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;white-space:nowrap}
+th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line)}
+th{font-size:12px;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:0}
+.coinrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.coinrow:last-child{border-bottom:0}
+.coinname{font-weight:750}.coinmeta{font-size:12px;color:var(--muted)}
+.coinprice{text-align:right;font-variant-numeric:tabular-nums}
+.coinselect{background:transparent;border:0;padding:0;text-align:left;width:100%;min-width:0}
+.coinselect:hover{filter:none;color:var(--blue)}
+.sectionhead{margin-bottom:18px}
+.sectionhead p{color:var(--muted);max-width:720px}
+.progress{height:7px;border-radius:10px;background:#263249;overflow:hidden;margin:10px 0}
+.progress div{height:100%;background:var(--green);width:0;transition:width .2s}
+.lesson{padding:15px;border:1px solid var(--line);border-radius:13px;margin-bottom:12px}
+.lesson.done{border-color:#287b60}
+.lesson p{color:var(--muted);margin-bottom:8px}
+.answer{display:block;text-align:left;width:100%;margin-top:8px}
+.answer.correct{border-color:var(--green);background:#10382f}
+.answer.wrong{border-color:var(--red);background:#401d2b}
+.feedback{padding:12px;border-radius:10px;margin-top:10px;background:#17243a}
+.modal{position:fixed;inset:0;z-index:30;background:#050913df;display:flex;align-items:center;justify-content:center;padding:18px}
+.modalbox{width:min(540px,100%);padding:25px;background:var(--panel);border:1px solid #3b4c6a;border-radius:20px;box-shadow:0 20px 90px #0009}
+.modal[hidden]{display:none}
+.tutorialstep{display:flex;gap:12px;align-items:flex-start;margin:16px 0}
+.stepnum{width:32px;height:32px;flex-shrink:0;display:grid;place-items:center;background:#223351;color:var(--blue);border-radius:50%;font-weight:800}
+.toast{position:fixed;z-index:40;bottom:20px;left:50%;transform:translateX(-50%);background:#1c2c45;border:1px solid #435879;border-radius:12px;padding:12px 18px;max-width:90%;box-shadow:0 8px 30px #0008}
+.toast[hidden]{display:none}
+footer{text-align:center;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding:25px 12px;margin-top:35px}
+.footername{color:var(--blue);font-weight:800}
+.notice{border:1px solid #51452d;background:#282317;color:#f1d99e;padding:12px 14px;border-radius:12px;font-size:13px}
+.mini{font-size:12px}
+.empty{padding:25px 10px;text-align:center;color:var(--muted)}
+#search{max-width:240px}
+@media(max-width:850px){
+ .layout{grid-template-columns:1fr}
+ nav{position:sticky;top:65px;z-index:8;display:flex;gap:5px;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px;background:#0c1320}
+ .navbtn{width:auto;min-width:max-content;margin:0;padding:9px 12px;font-size:13px}
+ .navicon{width:auto}
+ .s8,.s7,.s6,.s5,.s4{grid-column:span 12}
+ main{padding:14px}
+ header{padding:12px 14px}
+ .chartwrap{height:300px}
+}
+@media(max-width:480px){
+ .brand{font-size:19px}
+ .headerRight{width:100%;justify-content:space-between}
+ .headerRight select{max-width:190px}
+ .card{padding:14px}
+ .stat{font-size:23px}
+ .chartwrap{height:265px}
+ .chartbar select{max-width:120px}
+}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand"><div class="logo">N</div><div>NEXYRON<small>LEARN · PRACTICE · IMPROVE</small></div></div>
-  <span class="status" id="status">DEMO-MODUS</span>
+  <div class="logo">NEXY<span>RON</span></div>
+  <div class="headerRight">
+    <span class="pill">DEMO · VIRTUELLES GELD</span>
+    <button id="headerTutorial" type="button">▶ Tutorial</button>
+  </div>
 </header>
-<nav>
-  <button class="active" data-page="home">⌂ Home</button>
-  <button data-page="markets">◈ Märkte</button>
-  <button data-page="play">↗ Play</button>
-  <button data-page="learn">▤ Learn</button>
-  <button data-page="portfolio">▣ Portfolio</button>
-  <button data-page="settings">⚙ Einstellungen</button>
+
+<div class="layout">
+<nav aria-label="Hauptnavigation">
+  <button class="navbtn active" data-page="home"><span class="navicon">⌂</span><span data-i="navHome">Übersicht</span></button>
+  <button class="navbtn" data-page="markets"><span class="navicon">◈</span><span data-i="navMarkets">Märkte</span></button>
+  <button class="navbtn" data-page="trade"><span class="navicon">▥</span><span data-i="navTrade">Trading</span></button>
+  <button class="navbtn" data-page="portfolio"><span class="navicon">▣</span><span data-i="navPortfolio">Portfolio</span></button>
+  <button class="navbtn" data-page="learn"><span class="navicon">✦</span><span data-i="navLearn">Lernen</span></button>
+  <button class="navbtn" data-page="history"><span class="navicon">◷</span><span data-i="navHistory">Verlauf</span></button>
+  <button class="navbtn" data-page="settings"><span class="navicon">⚙</span><span data-i="navSettings">Einstellungen</span></button>
 </nav>
+
 <main>
-<section class="page active" id="home">
-  <div class="hero">
-    <div>
-      <div class="eyebrow">Deine Trading Academy</div>
-      <h1>Verstehe den Markt.<br><span style="color:#91aaff">Übe ohne Risiko.</span></h1>
-      <p>Lerne Charts zu lesen, Muster zu erkennen und virtuelle Trades auszuprobieren – Schritt für Schritt, auch als Anfänger.</p>
-      <div class="actions"><button class="btn primary" data-go="play">▶ Jetzt üben</button><button class="btn" id="startTutorial">Play Tutorial</button></div>
-    </div>
-    <div class="hero-side">
-      <div><div class="muted">Virtuelles Guthaben</div><div class="big-number" id="heroCash">10.000,00 €</div><div class="small">Spielgeld · keine echten Trades</div></div>
-      <div><div class="muted">Lernfortschritt</div><strong id="progressText">0 / 12 Lektionen</strong><div class="progress"><span id="progressBar"></span></div><button class="btn" data-go="learn">Weiterlernen →</button></div>
-    </div>
+<section id="home" class="page active">
+  <div class="sectionhead">
+    <h1 data-i="welcome">Willkommen bei NEXYRON</h1>
+    <p data-i="welcomeSub">Lerne Charts kennen und übe Trading mit virtuellem Geld.</p>
   </div>
-  <div class="stats">
-    <div class="stat"><label>Gesamtwert</label><strong id="homeTotal">10.000,00 €</strong></div>
-    <div class="stat"><label>Positionen</label><strong id="homePositions">0</strong></div>
-    <div class="stat"><label>Transaktionen</label><strong id="homeTrades">0</strong></div>
-  </div>
-  <div class="section-head"><div><h2>Coins im Blick</h2><p>Demo-Preise bewegen sich im Trainingsmodus.</p></div><button class="btn" data-go="markets">Alle Coins →</button></div>
-  <div class="layout">
-    <div class="card"><div class="coin-list" id="homeCoins"></div></div>
-    <div class="card"><div class="eyebrow">Dein erster Schritt</div><h3>Kerzen verstehen 🕯️</h3><p>Grün: Der Schlusskurs liegt über dem Eröffnungskurs. Rot: Er liegt darunter. Die dünnen Dochte zeigen Hoch und Tief der Kerze.</p><button class="btn primary" data-lesson="0">Erste Lektion</button></div>
+  <div class="grid">
+    <div class="card s4"><small data-i="cash">Virtuelles Guthaben</small><div class="stat" id="homeCash">€10.000,00</div><small data-i="cashSub">Verfügbares Demo-Guthaben</small></div>
+    <div class="card s4"><small data-i="equity">Portfolio-Wert</small><div class="stat" id="homeEquity">€10.000,00</div><small data-i="equitySub">Guthaben plus offene Positionen</small></div>
+    <div class="card s4"><small data-i="profit">Offenes Ergebnis</small><div class="stat" id="homePnl">€0,00</div><small data-i="profitSub">Simuliertes Ergebnis</small></div>
+    <div class="card s8">
+      <div class="row between"><h2 data-i="marketOverview">Marktüberblick</h2><button data-go="markets" data-i="allMarkets">Alle Märkte →</button></div>
+      <div id="homeCoins"></div>
+    </div>
+    <div class="card s4">
+      <h2 data-i="quickstart">Schnellstart</h2>
+      <p class="muted" data-i="quickSub">Neu hier? Starte das geführte Tutorial.</p>
+      <button class="primary" id="startTutorial" style="width:100%" data-i="startTutorial">Tutorial starten</button>
+      <button data-go="learn" style="width:100%;margin-top:9px" data-i="learnNow">Lektion lernen</button>
+      <div class="progress"><div id="homeProgress"></div></div>
+      <small id="homeProgressText">0 / 6 Lektionen</small>
+    </div>
+    <div class="card s12">
+      <div class="row between"><h2 data-i="recentTrades">Letzte Trades</h2><button data-go="history" data-i="viewHistory">Verlauf öffnen</button></div>
+      <div id="homeHistory"></div>
+    </div>
+    <div class="s12 notice" data-i="demoNotice">Demo-Simulation: Kurse und Kerzen sind erfunden und dienen nur zum Lernen. Keine echten Marktdaten.</div>
   </div>
 </section>
 
-<section class="page" id="markets">
-  <div class="section-head"><div><div class="eyebrow">Marktübersicht</div><h2>Coins entdecken</h2><p>Wähle einen Coin für den Trainingschart.</p></div><span class="chip">50 Assets</span></div>
-  <input class="search" id="search" placeholder="Coin oder Symbol suchen …" aria-label="Coins suchen">
-  <div class="card"><div class="coin-list" id="marketCoins"></div></div>
-  <p class="small">Die Startpreise sind illustrative Demo-Werte, keine aktuellen Börsenkurse.</p>
+<section id="markets" class="page">
+  <div class="sectionhead"><h1 data-i="navMarkets">Märkte</h1><p data-i="marketsSub">Wähle einen Markt, um den Chart zu öffnen.</p></div>
+  <div class="card">
+    <div class="row between"><input id="search" type="search" placeholder="Coin suchen …" aria-label="Coin suchen"><span class="pill" id="coinCount">30 Coins</span></div>
+    <div id="marketList"></div>
+  </div>
 </section>
 
-<section class="page" id="play">
-  <div class="section-head"><div><div class="eyebrow">Trainingsmodus</div><h2>Play Trading</h2><p>Übe Kaufen und Verkaufen mit virtuellem Geld.</p></div><span class="chip">SIMULATION</span></div>
-  <div class="layout">
-    <div class="card" id="chartCard">
-      <div class="toolbar chart-tools">
-        <div><select class="chip" id="chartCoin" aria-label="Chart-Coin wählen"></select><select class="chip" id="interval" aria-label="Intervall"><option>1 Minute</option><option>5 Minuten</option><option>15 Minuten</option><option>1 Stunde</option><option>1 Tag</option></select></div>
-        <div><button class="chip" id="pause">Ⅱ Pause</button><button class="chip" id="fullscreen">⛶ Vollbild</button></div>
+<section id="trade" class="page">
+  <div class="sectionhead"><h1 data-i="navTrade">Trading</h1><p data-i="tradeSub">Übe Käufe und Verkäufe mit virtuellem Geld.</p></div>
+  <div class="grid">
+    <div class="card s8">
+      <div class="row between">
+        <div><small data-i="selectedMarket">Ausgewählter Markt</small><h2 id="tradeCoinTitle">Bitcoin · BTC</h2></div>
+        <div style="text-align:right"><small data-i="simPrice">Simulierter Preis</small><div class="stat" id="tradePrice">€60.000,00</div></div>
       </div>
-      <div class="toolbar chart-tools">
-        <div><button class="chip active" data-chart="candle">Kerzen</button><button class="chip" data-chart="line">Linie</button><button class="chip" data-chart="bar">Balken</button></div>
-        <span class="chip" id="chartPrice">—</span>
+      <div class="chartbar">
+        <select id="chartCoin" aria-label="Coin wählen"></select>
+        <select id="chartInterval" aria-label="Chart-Intervall"><option value="1">1 Minute</option><option value="5">5 Minuten</option><option value="15">15 Minuten</option><option value="60">1 Stunde</option></select>
+        <button id="togglePause">Ⅱ</button><button id="fullscreen">⛶</button>
       </div>
-      <div class="chart-wrap" id="chartWrap"><canvas id="chart" aria-label="Simulierter Kurschart"></canvas></div>
-      <div class="chart-foot"><span>🟢 Steigend · 🔴 Fallend</span><span id="chartInfo">Demo-Kerzen</span></div>
-      <div class="notice">Die Kerzen bewegen sich im Übungsmodus. Sie sind simuliert und keine echten historischen Börsenkerzen.</div>
+      <div class="chartwrap" id="chartWrap"><canvas id="chart" aria-label="Simulierter Kerzenchart"></canvas></div>
+      <div class="row between" style="margin-top:12px"><small data-i="chartLegend">Grün = gestiegen · Rot = gefallen</small><small id="lastUpdated">Demo-Chart</small></div>
     </div>
-    <div class="card trade-panel">
-      <div class="eyebrow">Demokonto</div><div class="big-number" id="tradeCash">10.000,00 €</div><div class="small">Verfügbares Spielgeld</div>
-      <div class="tabs"><button class="active buy" data-side="buy">Kaufen</button><button data-side="sell">Verkaufen</button></div>
-      <div class="field"><label for="tradeCoin">Coin auswählen</label><select id="tradeCoin"></select></div>
-      <div class="field"><label for="amount">Menge in Coins</label><input id="amount" type="number" min="0.00000001" step="any" value="0.01" inputmode="decimal"></div>
-      <div class="summary"><div><span>Preis pro Coin</span><strong id="orderPrice">—</strong></div><div><span>Gesamtwert</span><strong id="orderTotal">—</strong></div><div><span>Dein Bestand</span><strong id="holding">0</strong></div></div>
-      <button class="btn buy" id="submitTrade" style="width:100%;margin-top:12px">Virtuell kaufen</button>
-      <p class="small">Du kannst nur Coins verkaufen, die du besitzt. Es werden keine echten Orders ausgeführt.</p>
+    <div class="card s4">
+      <h2 data-i="order">Order platzieren</h2>
+      <div class="row between"><small data-i="available">Verfügbar</small><strong id="tradeCash">€10.000,00</strong></div>
+      <div class="field"><label for="orderQty" data-i="quantity">Menge (Coins)</label><input id="orderQty" type="number" min="0.000001" step="any" value="0.01"></div>
+      <div class="row between"><small data-i="estimatedTotal">Geschätzter Gesamtwert</small><strong id="orderTotal">€600,00</strong></div>
+      <div class="row" style="margin-top:14px">
+        <button class="buy" id="buyBtn" style="flex:1" data-i="buy">Kaufen</button>
+        <button class="sell" id="sellBtn" style="flex:1" data-i="sell">Verkaufen</button>
+      </div>
+      <button id="sellAllBtn" class="sell" style="width:100%;margin-top:9px" data-i="sellAll">Sell All · Alles verkaufen</button>
+      <p class="muted mini" style="margin-top:12px" data-i="sellNote">Verkauft wird nur die ausgewählte Coin. Teilverkäufe sind möglich.</p>
+      <div class="field"><label data-i="yourPosition">Deine Position</label><div class="row between"><strong id="positionQty">0 Coins</strong><strong id="positionValue">€0,00</strong></div><small id="positionPnl">€0,00</small></div>
+      <div id="tradeMessage" class="feedback" hidden></div>
+    </div>
+    <div class="card s12">
+      <div class="row between"><h2 data-i="tradeMarkers">Kauf- und Verkaufsmarkierungen</h2><small data-i="markerHelp">Marker im Chart zeigen deine Trades.</small></div>
+      <div id="tradeMarkersList"></div>
     </div>
   </div>
 </section>
 
-<section class="page" id="learn">
-  <div class="section-head"><div><div class="eyebrow">Lernpfad</div><h2>Learn – Schritt für Schritt</h2><p>Lies die Erklärung, dann beantworte eine passende Frage.</p></div><span class="chip" id="learnCount">0 / 12</span></div>
-  <div class="learn-grid" id="lessons"></div>
-  <div class="card" style="margin-top:16px" id="quiz">
-    <div class="eyebrow">Mini-Quiz</div><h2 id="quizTitle" style="margin-top:8px">Wähle eine Lektion</h2><p id="question">Starte eine Lektion, um eine Aufgabe zu lösen.</p>
-    <div id="options"></div><div id="feedback" aria-live="polite"></div>
-    <div class="actions"><button class="btn" id="nextQuestion">Nächste Aufgabe →</button><button class="btn primary" data-go="play">Im Chart üben</button></div>
+<section id="portfolio" class="page">
+  <div class="sectionhead"><h1 data-i="navPortfolio">Portfolio</h1><p data-i="portfolioSub">Deine offenen virtuellen Positionen und Ergebnisse.</p></div>
+  <div class="grid">
+    <div class="card s4"><small data-i="cash">Virtuelles Guthaben</small><div class="stat" id="portCash">€10.000,00</div></div>
+    <div class="card s4"><small data-i="positionsValue">Wert der Positionen</small><div class="stat" id="portPositions">€0,00</div></div>
+    <div class="card s4"><small data-i="equity">Portfolio-Wert</small><div class="stat" id="portEquity">€10.000,00</div></div>
+    <div class="card s12"><h2 data-i="openPositions">Offene Positionen</h2><div id="positionsTable"></div></div>
   </div>
 </section>
 
-<section class="page" id="portfolio">
-  <div class="section-head"><div><div class="eyebrow">Dein Demokonto</div><h2>Portfolio</h2><p>Alle Beträge sind virtuell.</p></div><button class="btn" id="reset">Konto zurücksetzen</button></div>
-  <div class="stats"><div class="stat"><label>Guthaben</label><strong id="cash">—</strong></div><div class="stat"><label>Positionswert</label><strong id="positionValue">—</strong></div><div class="stat"><label>Gesamtwert</label><strong id="total">—</strong></div></div>
-  <div class="card"><h3>Deine Positionen</h3><div class="table-wrap" id="positionsTable"></div></div>
-  <div class="card" style="margin-top:15px"><h3>Transaktionsverlauf</h3><div class="table-wrap" id="tradesTable"></div></div>
-</section>
-
-<section class="page" id="settings">
-  <div class="section-head"><div><div class="eyebrow">Dein Profil</div><h2>Einstellungen</h2><p>Einfach anpassen und weiterspielen.</p></div></div>
-  <div class="layout">
-    <div class="card"><h3>Simulationsgeschwindigkeit</h3><div class="field"><label for="speed">Tempo der Demo-Kerzen</label><select id="speed"><option value="slow">Ruhig</option><option value="normal">Normal</option><option value="fast">Schnell</option></select></div><button class="btn primary" id="saveSettings">Einstellungen speichern</button></div>
-    <div class="card"><h3>Über NEXYRON</h3><p>NEXYRON ist eine Lern- und Handelssimulation für Anfänger. Die App verwendet Spielgeld und bietet keine Finanzberatung.</p><div class="notice">Die angezeigten Demo-Kurse sind keine echten Marktdaten. Für verlässliche Live-Kurse und historische Candlestick-Daten wäre eine separate Marktdatenintegration erforderlich.</div></div>
+<section id="learn" class="page">
+  <div class="sectionhead"><h1 data-i="navLearn">Lernen</h1><p data-i="learnSub">Erst verstehen, dann üben. Jede Lektion erklärt das Thema, bevor die Aufgabe startet.</p></div>
+  <div class="card">
+    <div class="row between"><strong data-i="learningProgress">Dein Lernfortschritt</strong><span class="pill" id="lessonCount">0 / 6</span></div>
+    <div class="progress"><div id="learnProgress"></div></div>
+    <div id="lessons"></div>
   </div>
 </section>
-<footer>NEXYRON · Trading Academy · Spielgeld-Simulation · Keine Finanzberatung</footer>
+
+<section id="history" class="page">
+  <div class="sectionhead"><h1 data-i="navHistory">Verlauf</h1><p data-i="historySub">Jeder simulierte Kauf und Verkauf wird mit Zeitpunkt, Menge und Preis gespeichert.</p></div>
+  <div class="card">
+    <div class="row between"><h2 data-i="allTrades">Alle Trades</h2><button id="exportTrades" data-i="export">CSV exportieren</button></div>
+    <div id="historyTable"></div>
+  </div>
+</section>
+
+<section id="settings" class="page">
+  <div class="sectionhead"><h1 data-i="navSettings">Einstellungen</h1><p data-i="settingsSub">Passe NEXYRON an deine Sprache und deinen Lernstil an.</p></div>
+  <div class="grid">
+    <div class="card s6">
+      <h2 data-i="language">Sprache</h2>
+      <p class="muted" data-i="languageSub">Die Oberfläche und die Lernhilfen werden umgestellt.</p>
+      <div class="field"><label for="languageSelect" data-i="chooseLanguage">Sprache auswählen</label>
+      <select id="languageSelect">
+        <option value="de">Deutsch</option><option value="en">English</option><option value="fr">Français</option><option value="ru">Русский</option><option value="tg">Тоҷикӣ</option>
+      </select></div>
+    </div>
+    <div class="card s6">
+      <h2 data-i="tutorialSettings">Tutorial</h2>
+      <p class="muted" data-i="tutorialSettingsSub">Du kannst die Einführung jederzeit wiederholen.</p>
+      <button class="primary" id="settingsTutorial" data-i="restartTutorial">Tutorial erneut starten</button>
+    </div>
+    <div class="card s12">
+      <h2 data-i="dataSettings">Gespeicherte Demo-Daten</h2>
+      <p class="muted" data-i="dataSub">Dein Guthaben, Positionen, Lernfortschritt und Trade-Verlauf werden in diesem Browser gespeichert.</p>
+      <button class="danger" id="resetData" data-i="reset">Demo zurücksetzen</button>
+      <p class="mini muted" data-i="resetWarning">Achtung: Das löscht deine lokalen Demo-Daten unwiderruflich.</p>
+    </div>
+    <div class="card s12 notice" data-i="demoNotice">Demo-Simulation: Kurse und Kerzen sind erfunden und dienen nur zum Lernen. Keine echten Marktdaten.</div>
+  </div>
+</section>
+
+<footer><span data-i="footerMade">Erstellt für die NEXYRON Trading Academy</span><br><span class="footername">Creator Yusuf</span></footer>
 </main>
-
-<div class="overlay" id="tutorial" role="dialog" aria-modal="true" aria-labelledby="tTitle">
-  <div class="modal"><div class="eyebrow">Dein erstes Tutorial</div><h2 id="tTitle">Willkommen</h2><div class="progress"><span id="tBar"></span></div><p id="tText"></p><div class="actions"><button class="btn" id="skipTutorial">Überspringen</button><button class="btn primary" id="nextTutorial">Weiter →</button></div></div>
 </div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="modal" id="tutorialModal" hidden role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+  <div class="modalbox">
+    <div class="row between"><span class="pill">NEXYRON · TUTORIAL</span><button id="closeTutorial" aria-label="Tutorial schließen">✕</button></div>
+    <h2 id="tutorialTitle" style="margin-top:18px">Willkommen bei NEXYRON!</h2>
+    <div class="progress"><div id="tutorialProgress"></div></div>
+    <div id="tutorialContent"></div>
+    <div class="row between" style="margin-top:20px"><button id="skipTutorial" data-i="skip">Überspringen</button><button id="nextTutorial" class="primary" data-i="next">Weiter →</button></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden role="status"></div>
 
 <script>
-(()=> {
 "use strict";
-const $=s=>document.querySelector(s);
-const $$=s=>[...document.querySelectorAll(s)];
-const money=n=>new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR",maximumFractionDigits:2}).format(Number.isFinite(n)?n:0);
-const quantity=n=>new Intl.NumberFormat("de-DE",{maximumFractionDigits:7}).format(Number.isFinite(n)?n:0);
-const data=[
-["BTC","Bitcoin","₿",62000],["ETH","Ethereum","◆",3200],["SOL","Solana","◎",145],["BNB","BNB","◆",560],
-["XRP","XRP","✕",.56],["ADA","Cardano","₳",.44],["DOGE","Dogecoin","Ð",.13],["AVAX","Avalanche","▲",35],
-["TRX","TRON","◈",.12],["DOT","Polkadot","●",7.2],["LINK","Chainlink","⬡",14],["LTC","Litecoin","Ł",82],
-["BCH","Bitcoin Cash","Ƀ",380],["NEAR","NEAR Protocol","N",5.5],["ATOM","Cosmos","⚛",8.3],["ETC","Ethereum Classic","Ξ",25],
-["XLM","Stellar","✦",.11],["FIL","Filecoin","▰",5.2],["ICP","Internet Computer","∞",12],["APT","Aptos","A",8.5],
-["ARB","Arbitrum","◆",.9],["OP","Optimism","◉",2.1],["UNI","Uniswap","🦄",9.5],["AAVE","Aave","👻",95],
-["SUI","Sui","💧",1.4],["SHIB","Shiba Inu","🐕",.00002],["MKR","Maker","M",2400],["INJ","Injective","I",25],
-["IMX","Immutable","⬢",1.8],["HBAR","Hedera","ℏ",.09],["VET","VeChain","V",.03],["ALGO","Algorand","A",.19],
-["MNT","Mantle","M",.8],["PEPE","Pepe","🐸",.000009],["SEI","Sei","S",.4],["RUNE","THORChain","ᚱ",4.8],
-["GRT","The Graph","G",.2],["EGLD","MultiversX","E",34],["SAND","The Sandbox","▧",.42],["MANA","Decentraland","M",.45],
-["AXS","Axie Infinity","A",7],["FLOW","Flow","F",.7],["XTZ","Tezos","ꜩ",.9],["EOS","EOS","E",.75],
-["KAS","Kaspa","K",.12],["QNT","Quant","Q",95],["FET","Fetch.ai","F",1.3],["TAO","Bittensor","τ",380],
-["WIF","dogwifhat","🐶",2.3],["BONK","Bonk","🐕",.000025]
-].map((x,i)=>({symbol:x[0],name:x[1],icon:x[2],price:x[3],base:x[3],change:Math.sin(i*2.1)*3}));
 
-const lessons=[
-{icon:"🕯️",title:"Candlesticks verstehen",level:"Anfänger",text:"Der Kerzenkörper zeigt Eröffnung und Schluss. Die dünnen Dochte zeigen Hoch und Tief im gewählten Zeitraum.",q:"Eine grüne Kerze schließt normalerweise …",opts:["über dem Eröffnungskurs","unter dem Eröffnungskurs","immer am Tageshoch"],a:0,why:"Grün bedeutet hier: Schlusskurs über Eröffnungskurs."},
-{icon:"📈",title:"Trends erkennen",level:"Anfänger",text:"Ein Aufwärtstrend hat häufig höhere Hochs und höhere Tiefs. Ein Abwärtstrend zeigt häufig tiefere Hochs und tiefere Tiefs.",q:"Was passt zu einem Aufwärtstrend?",opts:["Höhere Hochs und höhere Tiefs","Nur rote Kerzen","Immer derselbe Preis"],a:0,why:"Das ist ein typisches Merkmal, aber keine Garantie für die Zukunft."},
-{icon:"🧱",title:"Unterstützung",level:"Anfänger",text:"Eine Unterstützungszone ist ein Preisbereich, an dem Rückgänge zuvor öfter gebremst wurden. Sie kann trotzdem durchbrochen werden.",q:"Was ist eine Unterstützungszone?",opts:["Ein Bereich, in dem Rückgänge gebremst wurden","Ein garantierter Mindestpreis","Eine Handelsgebühr"],a:0,why:"Unterstützung ist ein Bereich, kein sicherer Boden."},
-{icon:"🚧",title:"Widerstand",level:"Anfänger",text:"An einem Widerstandsbereich gerieten frühere Kursanstiege öfter ins Stocken.",q:"Was kann an einem Widerstand passieren?",opts:["Der Kurs muss steigen","Ein Anstieg kann stocken","Der Kurs bleibt garantiert gleich"],a:1,why:"Ein Widerstand kann bremsen, sagt aber die Zukunft nicht sicher voraus."},
-{icon:"⛰️",title:"Double Top",level:"Mittel",text:"Ein Double Top ähnelt zwei Hochpunkten in einer ähnlichen Preiszone mit einem Rücksetzer dazwischen. Die Form allein bestätigt kein Muster.",q:"Woran erinnert ein Double Top?",opts:["Zwei ähnliche Hochs mit Tief dazwischen","Drei höhere Tiefs","Eine einzelne Kerze"],a:0,why:"Zwei Hochpunkte mit einem Rücksetzer sind die typische Grundform."},
-{icon:"🏔️",title:"Head and Shoulders",level:"Mittel",text:"Das klassische Kopf-Schulter-Muster zeigt drei Hochpunkte: Der mittlere Kopf ist höher als die beiden Schultern.",q:"Welcher Teil ist normalerweise am höchsten?",opts:["Linke Schulter","Kopf","Nackenlinie"],a:1,why:"Der mittlere Hochpunkt heißt Kopf."},
-{icon:"🔻",title:"Dreiecke",level:"Mittel",text:"Bei Dreiecksmustern laufen Hochs und Tiefs zusammen. Man unterscheidet unter anderem aufsteigende, absteigende und symmetrische Dreiecke.",q:"Was passiert bei einem Dreieck typischerweise?",opts:["Die Handelsspanne verengt sich","Der Kurs ist risikofrei","Es gibt keine Hochs und Tiefs"],a:0,why:"Die Preisbewegungen laufen innerhalb des Musters häufig zusammen."},
-{icon:"🚩",title:"Flaggen",level:"Mittel",text:"Eine Flagge besteht in der klassischen Charttechnik aus einer starken vorherigen Bewegung und einer kurzen, oft gegenläufigen Konsolidierung.",q:"Woraus besteht eine klassische Flagge?",opts:["Starke Bewegung plus Konsolidierung","Nur eine einzelne Kerze","Zwei identische Preise"],a:0,why:"Die kurze Konsolidierung folgt auf eine stärkere Bewegung."},
-{icon:"📊",title:"Volumen lesen",level:"Mittel",text:"Das Volumen beschreibt die gehandelte Menge oder den Handelswert innerhalb eines Zeitraums, je nach Datenquelle.",q:"Was misst Handelsvolumen?",opts:["Wie viel gehandelt wurde","Die Anzahl der App-Nutzer","Nur rote Kerzen"],a:0,why:"Volumen beschreibt die Handelsaktivität."},
-{icon:"🔄",title:"Ausbrüche",level:"Mittel",text:"Ein Ausbruch liegt vor, wenn der Kurs einen zuvor beobachteten Bereich verlässt. Fehlausbrüche kommen ebenfalls vor.",q:"Was ist ein Fehlausbruch?",opts:["Der Kurs bricht aus und fällt wieder zurück","Eine sichere Gewinnchance","Eine Handelsgebühr"],a:0,why:"Der Kurs verlässt einen Bereich, kann aber wieder hineinlaufen."},
-{icon:"🛡️",title:"Risiko verstehen",level:"Anfänger",text:"Auch Muster können scheitern. Prüfe beim Üben die Positionsgröße und überlege, wie sich Kursänderungen auf den Gesamtwert auswirken.",q:"Was ist beim Üben sinnvoll?",opts:["Immer alles einsetzen","Positionsgröße und Risiko bedenken","Muster als Garantie sehen"],a:1,why:"Risikobewusstsein ist ein zentraler Teil des Lernens."},
-{icon:"🧠",title:"Geduld und Planung",level:"Anfänger",text:"Nicht jeder Kursausschlag ist ein Signal. Schreibe auf, warum du eine simulierte Entscheidung triffst und was du daraus gelernt hast.",q:"Was hilft beim Lernen?",opts:["Jeder Bewegung hinterherlaufen","Planen und Ergebnisse reflektieren","Jede Entscheidung sofort ändern"],a:1,why:"Ein klarer Lernplan hilft, Entscheidungen nachvollziehbar zu machen."}
+const $ = id => document.getElementById(id);
+const STORAGE_KEY = "nexyron_academy_v3";
+const COINS = [
+ ["BTC","Bitcoin",60000],["ETH","Ethereum",3000],["SOL","Solana",145],
+ ["BNB","BNB",550],["XRP","XRP",0.55],["ADA","Cardano",0.45],
+ ["DOGE","Dogecoin",0.14],["AVAX","Avalanche",35],["DOT","Polkadot",7],
+ ["LINK","Chainlink",14],["LTC","Litecoin",80],["BCH","Bitcoin Cash",380],
+ ["UNI","Uniswap",9],["ATOM","Cosmos",8],["XLM","Stellar",0.11],
+ ["ETC","Ethereum Classic",25],["FIL","Filecoin",5],["NEAR","NEAR Protocol",5],
+ ["APT","Aptos",9],["ARB","Arbitrum",1],["OP","Optimism",2],
+ ["ICP","Internet Computer",12],["INJ","Injective",25],["AAVE","Aave",95],
+ ["ALGO","Algorand",0.18],["VET","VeChain",0.03],["SUI","Sui",1.2],
+ ["SHIB","Shiba Inu",0.00002],["TRX","TRON",0.12],["MATIC","Polygon",0.7]
 ];
-
-const state={selected:"BTC",side:"buy",type:"candle",cash:10000,hold:{},trades:[],done:[],speed:"fast",seen:false,paused:false,series:{}};
-function save(){try{localStorage.setItem("nexyron_v5",JSON.stringify({cash:state.cash,hold:state.hold,trades:state.trades.slice(0,100),done:state.done,speed:state.speed,seen:state.seen}))}catch{}}
-function load(){try{const d=JSON.parse(localStorage.getItem("nexyron_v5")||"{}");if(typeof d.cash==="number"&&Number.isFinite(d.cash))state.cash=d.cash;["hold","trades","done"].forEach(k=>{if(d[k])state[k]=d[k]});if(["slow","normal","fast"].includes(d.speed))state.speed=d.speed;state.seen=!!d.seen}catch{}}
-function getCoin(s=state.selected){return data.find(c=>c.symbol===s)||data[0]}
-function qty(s){return Number(state.hold[s]?.qty||0)}
-function cost(s){return Number(state.hold[s]?.cost||0)}
-function value(){return data.reduce((sum,c)=>sum+qty(c.symbol)*c.price,0)}
-function total(){return state.cash+value()}
-let toastTimer;
-function toast(msg){$("#toast").textContent=msg;$("#toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("#toast").classList.remove("show"),2400)}
-function go(id){$$(".page").forEach(p=>p.classList.toggle("active",p.id===id));$$("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));if(id==="play"){syncTrade();draw()}if(id==="portfolio")renderPortfolio();window.scrollTo({top:0,behavior:"smooth"})}
-$$("[data-page]").forEach(b=>b.onclick=()=>go(b.dataset.page));
-$$("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
-
-function renderCoins(target,filter=""){
-const q=filter.toLowerCase();
-$(target).innerHTML=data.filter(c=>(c.name+" "+c.symbol).toLowerCase().includes(q)).map(c=>`<div class="coin" role="button" tabindex="0" data-coin="${c.symbol}"><div class="coin-info"><div class="coin-icon">${c.icon}</div><div style="min-width:0"><div class="coin-name">${c.name}</div><div class="symbol">${c.symbol} · DEMO</div></div></div><div class="price">${money(c.price)}</div><div class="change ${c.change>=0?"green":"red"}">${c.change>=0?"+":""}${c.change.toFixed(2)}%</div></div>`).join("")||'<div class="empty">Kein Coin gefunden.</div>';
-$$(`${target} [data-coin]`).forEach(el=>{const fn=()=>selectCoin(el.dataset.coin);el.onclick=fn;el.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();fn()}}});
-}
-function options(){return data.map(c=>`<option value="${c.symbol}">${c.name} (${c.symbol})</option>`).join("")}
-$("#chartCoin").innerHTML=options();$("#tradeCoin").innerHTML=options();
-$("#search").oninput=e=>renderCoins("#marketCoins",e.target.value);
-function selectCoin(s){state.selected=s;$("#chartCoin").value=s;$("#tradeCoin").value=s;syncTrade();draw();go("play")}
-$("#chartCoin").onchange=e=>{state.selected=e.target.value;$("#tradeCoin").value=state.selected;syncTrade();draw()};
-$("#tradeCoin").onchange=e=>{state.selected=e.target.value;$("#chartCoin").value=state.selected;syncTrade();draw()};
-
-function syncTrade(){const c=getCoin(),n=Math.max(0,Number($("#amount").value)||0);$("#tradeCash").textContent=money(state.cash);$("#orderPrice").textContent=money(c.price);$("#orderTotal").textContent=money(c.price*n);$("#holding").textContent=quantity(qty(c.symbol))+" "+c.symbol;$("#submitTrade").textContent=state.side==="buy"?"Virtuell kaufen":"Virtuell verkaufen";$("#submitTrade").className="btn "+state.side}
-$$("[data-side]").forEach(b=>b.onclick=()=>{state.side=b.dataset.side;$$("[data-side]").forEach(x=>x.classList.toggle("active",x===b));syncTrade()});
-$("#amount").oninput=syncTrade;
-
-$("#submitTrade").onclick=()=>{
-const c=getCoin(),n=Number($("#amount").value),p=c.price,v=n*p;
-if(!Number.isFinite(n)||n<=0||!Number.isFinite(v)||v<=0){toast("Bitte gib eine gültige Menge ein.");return}
-if(state.side==="buy"){
-if(v>state.cash+1e-8){toast("Dein virtuelles Guthaben reicht nicht aus.");return}
-const old=qty(c.symbol);state.cash-=v;state.hold[c.symbol]={qty:old+n,cost:cost(c.symbol)+v};
-}else{
-const old=qty(c.symbol),oldCost=cost(c.symbol);
-if(n>old+1e-10){toast("Du besitzt nicht genug "+c.symbol+".");return}
-state.cash+=v;const remaining=Math.max(0,old-n);
-if(remaining<1e-10)delete state.hold[c.symbol];
-else state.hold[c.symbol]={qty:remaining,cost:Math.max(0,oldCost-oldCost*n/old)};
-}
-state.trades.unshift({side:state.side,symbol:c.symbol,name:c.name,n,p,v,time:new Date().toISOString()});
-save();renderStats();renderPortfolio();syncTrade();toast((state.side==="buy"?"Virtuell gekauft: ":"Virtuell verkauft: ")+quantity(n)+" "+c.symbol);
+const I18N = {
+ de:{
+ navHome:"Übersicht",navMarkets:"Märkte",navTrade:"Trading",navPortfolio:"Portfolio",navLearn:"Lernen",navHistory:"Verlauf",navSettings:"Einstellungen",
+ welcome:"Willkommen bei NEXYRON",welcomeSub:"Lerne Charts kennen und übe Trading mit virtuellem Geld.",
+ cash:"Virtuelles Guthaben",cashSub:"Verfügbares Demo-Guthaben",equity:"Portfolio-Wert",equitySub:"Guthaben plus offene Positionen",profit:"Offenes Ergebnis",profitSub:"Simuliertes Ergebnis",
+ marketOverview:"Marktüberblick",allMarkets:"Alle Märkte →",quickstart:"Schnellstart",quickSub:"Neu hier? Starte das geführte Tutorial.",startTutorial:"Tutorial starten",learnNow:"Lektion lernen",recentTrades:"Letzte Trades",viewHistory:"Verlauf öffnen",
+ demoNotice:"Demo-Simulation: Kurse und Kerzen sind erfunden und dienen nur zum Lernen. Keine echten Marktdaten.",
+ marketsSub:"Wähle einen Markt, um den Chart zu öffnen.",search:"Coin suchen …",tradeSub:"Übe Käufe und Verkäufe mit virtuellem Geld.",selectedMarket:"Ausgewählter Markt",simPrice:"Simulierter Preis",chartLegend:"Grün = gestiegen · Rot = gefallen",order:"Order platzieren",available:"Verfügbar",quantity:"Menge (Coins)",estimatedTotal:"Geschätzter Gesamtwert",buy:"Kaufen",sell:"Verkaufen",sellAll:"Sell All · Alles verkaufen",sellNote:"Verkauft wird nur die ausgewählte Coin. Teilverkäufe sind möglich.",yourPosition:"Deine Position",tradeMarkers:"Kauf- und Verkaufsmarkierungen",markerHelp:"Marker im Chart zeigen deine Trades.",
+ portfolioSub:"Deine offenen virtuellen Positionen und Ergebnisse.",positionsValue:"Wert der Positionen",openPositions:"Offene Positionen",learnSub:"Erst verstehen, dann üben. Jede Lektion erklärt das Thema, bevor die Aufgabe startet.",learningProgress:"Dein Lernfortschritt",
+ historySub:"Jeder simulierte Kauf und Verkauf wird mit Zeitpunkt, Menge und Preis gespeichert.",allTrades:"Alle Trades",export:"CSV exportieren",settingsSub:"Passe NEXYRON an deine Sprache und deinen Lernstil an.",language:"Sprache",languageSub:"Die Oberfläche und die Lernhilfen werden umgestellt.",chooseLanguage:"Sprache auswählen",tutorialSettings:"Tutorial",tutorialSettingsSub:"Du kannst die Einführung jederzeit wiederholen.",restartTutorial:"Tutorial erneut starten",dataSettings:"Gespeicherte Demo-Daten",dataSub:"Dein Guthaben, Positionen, Lernfortschritt und Trade-Verlauf werden in diesem Browser gespeichert.",reset:"Demo zurücksetzen",resetWarning:"Achtung: Das löscht deine lokalen Demo-Daten unwiderruflich.",footerMade:"Erstellt für die NEXYRON Trading Academy",skip:"Überspringen",next:"Weiter →",finish:"Los geht's!",coin:"Coin",action:"Aktion",amount:"Menge",price:"Preis",time:"Zeitpunkt",total:"Gesamt",noTrades:"Noch keine Trades. Starte im Trading einen virtuellen Kauf.",noPositions:"Du hast noch keine offenen Positionen.",buyDone:"Virtueller Kauf ausgeführt.",sellDone:"Virtueller Verkauf ausgeführt.",noCash:"Nicht genug virtuelles Guthaben.",noCoins:"Du hast nicht genug von dieser Coin.",badQty:"Bitte gib eine gültige Menge größer als null ein.",tutorialDone:"Tutorial abgeschlossen! Du kannst jetzt selbst üben.",chartUpdated:"Simulierter Chart",lessonDone:"Lektion abgeschlossen!",tryAgain:"Noch nicht ganz. Lies die Erklärung und versuche es erneut.",right:"Richtig! Hier ist die Erklärung:",coins:"Coins",buyLabel:"KAUF",sellLabel:"VERKAUF",confirmReset:"Wirklich alle Demo-Daten löschen? Das kann nicht rückgängig gemacht werden.",resetDone:"Demo-Daten wurden zurückgesetzt.",csvDone:"CSV-Datei wird vorbereitet.",interval:"Intervall",chartFull:"Chart vergrößern",paused:"Pause",resume:"Weiter",avgCost:"Durchschnittlicher Kaufpreis",market:"Markt",emptySearch:"Keine passenden Coins gefunden.",learning:"Lernfortschritt"
+ },
+ en:{
+ navHome:"Overview",navMarkets:"Markets",navTrade:"Trading",navPortfolio:"Portfolio",navLearn:"Learn",navHistory:"History",navSettings:"Settings",
+ welcome:"Welcome to NEXYRON",welcomeSub:"Learn charts and practise trading with virtual money.",cash:"Virtual cash",cashSub:"Available demo balance",equity:"Portfolio value",equitySub:"Cash plus open positions",profit:"Open P/L",profitSub:"Simulated result",
+ marketOverview:"Market overview",allMarkets:"All markets →",quickstart:"Quick start",quickSub:"New here? Start the guided tutorial.",startTutorial:"Start tutorial",learnNow:"Learn a lesson",recentTrades:"Recent trades",viewHistory:"View history",
+ demoNotice:"Demo simulation: prices and candles are fictional and for learning only. No live market data.",
+ marketsSub:"Choose a market to open its chart.",search:"Search coins …",tradeSub:"Practise buying and selling with virtual money.",selectedMarket:"Selected market",simPrice:"Simulated price",chartLegend:"Green = up · Red = down",order:"Place order",available:"Available",quantity:"Quantity (coins)",estimatedTotal:"Estimated total",buy:"Buy",sell:"Sell",sellAll:"Sell All",sellNote:"Only the selected coin is sold. Partial sells are supported.",yourPosition:"Your position",tradeMarkers:"Buy and sell markers",markerHelp:"Chart markers show your trades.",
+ portfolioSub:"Your open virtual positions and results.",positionsValue:"Position value",openPositions:"Open positions",learnSub:"Understand first, then practise. Each lesson explains the topic before the task.",learningProgress:"Your learning progress",
+ historySub:"Every simulated buy and sell is saved with time, quantity and price.",allTrades:"All trades",export:"Export CSV",settingsSub:"Customise NEXYRON's language and learning experience.",language:"Language",languageSub:"The interface and learning help will change.",chooseLanguage:"Choose language",tutorialSettings:"Tutorial",tutorialSettingsSub:"You can replay the introduction any time.",restartTutorial:"Restart tutorial",dataSettings:"Saved demo data",dataSub:"Your balance, positions, progress and trade history are stored in this browser.",reset:"Reset demo",resetWarning:"Warning: this permanently deletes your local demo data.",footerMade:"Made for the NEXYRON Trading Academy",skip:"Skip",next:"Next →",finish:"Let's go!",coin:"Coin",action:"Action",amount:"Quantity",price:"Price",time:"Time",total:"Total",noTrades:"No trades yet. Make a virtual purchase in Trading.",noPositions:"You have no open positions yet.",buyDone:"Virtual purchase completed.",sellDone:"Virtual sale completed.",noCash:"Not enough virtual cash.",noCoins:"You don't own enough of this coin.",badQty:"Enter a valid quantity greater than zero.",tutorialDone:"Tutorial complete! You can practise now.",chartUpdated:"Simulated chart",lessonDone:"Lesson completed!",tryAgain:"Not quite. Read the explanation and try again.",right:"Correct! Here's why:",coins:"coins",buyLabel:"BUY",sellLabel:"SELL",confirmReset:"Delete all demo data? This cannot be undone.",resetDone:"Demo data has been reset.",csvDone:"Preparing CSV file.",interval:"Interval",chartFull:"Expand chart",paused:"Paused",resume:"Resume",avgCost:"Average purchase price",market:"Market",emptySearch:"No matching coins found.",learning:"Learning progress"
+ },
+ fr:{
+ navHome:"Accueil",navMarkets:"Marchés",navTrade:"Trading",navPortfolio:"Portefeuille",navLearn:"Apprendre",navHistory:"Historique",navSettings:"Paramètres",
+ welcome:"Bienvenue sur NEXYRON",welcomeSub:"Apprends à lire les graphiques et entraîne-toi avec de l'argent virtuel.",cash:"Solde virtuel",cashSub:"Solde de démonstration disponible",equity:"Valeur du portefeuille",equitySub:"Solde et positions ouvertes",profit:"Résultat ouvert",profitSub:"Résultat simulé",
+ marketOverview:"Aperçu du marché",allMarkets:"Tous les marchés →",quickstart:"Démarrage rapide",quickSub:"Nouveau ici ? Lance le tutoriel guidé.",startTutorial:"Commencer le tutoriel",learnNow:"Apprendre une leçon",recentTrades:"Transactions récentes",viewHistory:"Voir l'historique",
+ demoNotice:"Simulation : les cours et chandeliers sont fictifs et servent uniquement à apprendre. Pas de données de marché en direct.",
+ marketsSub:"Choisis un marché pour ouvrir son graphique.",search:"Rechercher une crypto …",tradeSub:"Entraîne-toi à acheter et vendre avec de l'argent virtuel.",selectedMarket:"Marché sélectionné",simPrice:"Prix simulé",chartLegend:"Vert = hausse · Rouge = baisse",order:"Passer un ordre",available:"Disponible",quantity:"Quantité (coins)",estimatedTotal:"Total estimé",buy:"Acheter",sell:"Vendre",sellAll:"Tout vendre",sellNote:"Seule la crypto sélectionnée est vendue. Les ventes partielles sont possibles.",yourPosition:"Ta position",tradeMarkers:"Marqueurs d'achat et de vente",markerHelp:"Les marqueurs du graphique indiquent tes transactions.",
+ portfolioSub:"Tes positions virtuelles ouvertes et leurs résultats.",positionsValue:"Valeur des positions",openPositions:"Positions ouvertes",learnSub:"Comprendre d'abord, pratiquer ensuite. Chaque leçon explique le sujet avant l'exercice.",learningProgress:"Ta progression",
+ historySub:"Chaque achat et vente simulés sont enregistrés avec l'heure, la quantité et le prix.",allTrades:"Toutes les transactions",export:"Exporter CSV",settingsSub:"Personnalise la langue et l'apprentissage de NEXYRON.",language:"Langue",languageSub:"L'interface et l'aide pédagogique changeront.",chooseLanguage:"Choisir la langue",tutorialSettings:"Tutoriel",tutorialSettingsSub:"Tu peux revoir l'introduction à tout moment.",restartTutorial:"Relancer le tutoriel",dataSettings:"Données de démonstration",dataSub:"Solde, positions, progression et historique sont enregistrés dans ce navigateur.",reset:"Réinitialiser",resetWarning:"Attention : cela supprime définitivement tes données locales.",footerMade:"Créé pour la NEXYRON Trading Academy",skip:"Passer",next:"Suivant →",finish:"C'est parti !",coin:"Crypto",action:"Action",amount:"Quantité",price:"Prix",time:"Date",total:"Total",noTrades:"Aucune transaction. Fais un achat virtuel dans Trading.",noPositions:"Aucune position ouverte.",buyDone:"Achat virtuel effectué.",sellDone:"Vente virtuelle effectuée.",noCash:"Solde virtuel insuffisant.",noCoins:"Tu ne possèdes pas assez de cette crypto.",badQty:"Saisis une quantité supérieure à zéro.",tutorialDone:"Tutoriel terminé ! Tu peux t'entraîner.",chartUpdated:"Graphique simulé",lessonDone:"Leçon terminée !",tryAgain:"Pas tout à fait. Relis l'explication et réessaie.",right:"Correct ! Voici pourquoi :",coins:"coins",buyLabel:"ACHAT",sellLabel:"VENTE",confirmReset:"Supprimer toutes les données de démonstration ?",resetDone:"Données de démonstration réinitialisées.",csvDone:"Préparation du fichier CSV.",interval:"Intervalle",chartFull:"Agrandir le graphique",paused:"En pause",resume:"Reprendre",avgCost:"Prix d'achat moyen",market:"Marché",emptySearch:"Aucune crypto trouvée.",learning:"Progression"
+ },
+ ru:{
+ navHome:"Обзор",navMarkets:"Рынки",navTrade:"Торговля",navPortfolio:"Портфель",navLearn:"Обучение",navHistory:"История",navSettings:"Настройки",
+ welcome:"Добро пожаловать в NEXYRON",welcomeSub:"Изучай графики и тренируйся торговать на виртуальные деньги.",cash:"Виртуальный баланс",cashSub:"Доступный демо-баланс",equity:"Стоимость портфеля",equitySub:"Баланс и открытые позиции",profit:"Текущий результат",profitSub:"Симуляция",
+ marketOverview:"Обзор рынка",allMarkets:"Все рынки →",quickstart:"Быстрый старт",quickSub:"Впервые здесь? Запусти обучение.",startTutorial:"Начать обучение",learnNow:"Изучить урок",recentTrades:"Последние сделки",viewHistory:"Открыть историю",
+ demoNotice:"Симуляция: цены и свечи вымышлены и предназначены только для обучения. Реальных рыночных данных нет.",
+ marketsSub:"Выбери рынок, чтобы открыть график.",search:"Поиск монеты …",tradeSub:"Тренируйся покупать и продавать на виртуальные деньги.",selectedMarket:"Выбранный рынок",simPrice:"Симулируемая цена",chartLegend:"Зелёный = рост · Красный = падение",order:"Разместить ордер",available:"Доступно",quantity:"Количество монет",estimatedTotal:"Примерная сумма",buy:"Купить",sell:"Продать",sellAll:"Продать всё",sellNote:"Продаётся только выбранная монета. Можно продать часть позиции.",yourPosition:"Твоя позиция",tradeMarkers:"Метки покупок и продаж",markerHelp:"Метки на графике показывают сделки.",
+ portfolioSub:"Открытые виртуальные позиции и результаты.",positionsValue:"Стоимость позиций",openPositions:"Открытые позиции",learnSub:"Сначала разберись, потом практикуйся. Каждый урок объясняет тему перед заданием.",learningProgress:"Твой прогресс",
+ historySub:"Каждая симулированная покупка и продажа сохраняется со временем, количеством и ценой.",allTrades:"Все сделки",export:"Экспорт CSV",settingsSub:"Настрой язык и обучение NEXYRON.",language:"Язык",languageSub:"Интерфейс и учебные подсказки изменятся.",chooseLanguage:"Выбрать язык",tutorialSettings:"Обучение",tutorialSettingsSub:"Введение можно пройти повторно.",restartTutorial:"Повторить обучение",dataSettings:"Сохранённые демо-данные",dataSub:"Баланс, позиции, прогресс и история сохраняются в этом браузере.",reset:"Сбросить демо",resetWarning:"Внимание: локальные демо-данные будут удалены.",footerMade:"Создано для NEXYRON Trading Academy",skip:"Пропустить",next:"Далее →",finish:"Начать!",coin:"Монета",action:"Действие",amount:"Количество",price:"Цена",time:"Время",total:"Сумма",noTrades:"Сделок пока нет. Соверши виртуальную покупку в разделе торговли.",noPositions:"Открытых позиций пока нет.",buyDone:"Виртуальная покупка выполнена.",sellDone:"Виртуальная продажа выполнена.",noCash:"Недостаточно виртуальных средств.",noCoins:"У тебя недостаточно этой монеты.",badQty:"Введи количество больше нуля.",tutorialDone:"Обучение завершено! Теперь можно практиковаться.",chartUpdated:"Симулируемый график",lessonDone:"Урок завершён!",tryAgain:"Пока неверно. Прочитай объяснение и попробуй снова.",right:"Верно! Вот почему:",coins:"монет",buyLabel:"ПОКУПКА",sellLabel:"ПРОДАЖА",confirmReset:"Удалить все демо-данные? Это нельзя отменить.",resetDone:"Демо-данные сброшены.",csvDone:"Подготовка CSV-файла.",interval:"Интервал",chartFull:"Увеличить график",paused:"Пауза",resume:"Продолжить",avgCost:"Средняя цена покупки",market:"Рынок",emptySearch:"Монеты не найдены.",learning:"Прогресс обучения"
+ },
+ tg:{
+ navHome:"Шарҳи умумӣ",navMarkets:"Бозорҳо",navTrade:"Савдо",navPortfolio:"Сармоягузорӣ",navLearn:"Омӯзиш",navHistory:"Таърих",navSettings:"Танзимот",
+ welcome:"Ба NEXYRON хуш омадед",welcomeSub:"Диаграммаҳоро омӯзед ва бо пули маҷозӣ машқ кунед.",cash:"Бақияи виртуалӣ",cashSub:"Бақияи дастрас",equity:"Арзиши портфел",equitySub:"Бақия ва мавқеъҳои кушода",profit:"Натиҷаи ҷорӣ",profitSub:"Натиҷаи тақлидӣ",
+ marketOverview:"Шарҳи бозор",allMarkets:"Ҳамаи бозорҳо →",quickstart:"Оғози зуд",quickSub:"Нав ҳастед? Дарси роҳнаморо оғоз кунед.",startTutorial:"Оғози роҳнамо",learnNow:"Омӯхтани дарс",recentTrades:"Муомилоти охирин",viewHistory:"Кушодани таърих",
+ demoNotice:"Тақлид: нархҳо ва шамъҳо сохта шудаанд ва танҳо барои омӯзишанд. Маълумоти воқеии бозор истифода намешавад.",
+ marketsSub:"Барои кушодани диаграмма бозорро интихоб кунед.",search:"Ҷустуҷӯи танга …",tradeSub:"Бо пули маҷозӣ харидуфурӯшро машқ кунед.",selectedMarket:"Бозори интихобшуда",simPrice:"Нархи тақлидӣ",chartLegend:"Сабз = болоравӣ · Сурх = пастравӣ",order:"Супориши савдо",available:"Дастрас",quantity:"Миқдор (танга)",estimatedTotal:"Арзиши тахминӣ",buy:"Харидан",sell:"Фурӯхтан",sellAll:"Ҳамаро фурӯхтан",sellNote:"Танҳо тангаи интихобшуда фурӯхта мешавад. Қисман фурӯхтан мумкин аст.",yourPosition:"Мавқеи шумо",tradeMarkers:"Нишонаҳои харидуфурӯш",markerHelp:"Нишонаҳои диаграмма муомилоти шуморо нишон медиҳанд.",
+ portfolioSub:"Мавқеъҳои маҷозии кушода ва натиҷаҳои шумо.",positionsValue:"Арзиши мавқеъҳо",openPositions:"Мавқеъҳои кушода",learnSub:"Аввал фаҳмед, баъд машқ кунед. Пеш аз супориш ҳар дарс мавзӯъро мефаҳмонад.",learningProgress:"Пешрафти омӯзиш",
+ historySub:"Ҳар харидуфурӯши тақлидӣ бо вақт, миқдор ва нарх сабт мешавад.",allTrades:"Ҳамаи муомилот",export:"Содироти CSV",settingsSub:"Забон ва тарзи омӯзиши NEXYRON-ро танзим кунед.",language:"Забон",languageSub:"Забони интерфейс ва шарҳҳои омӯзишӣ иваз мешавад.",chooseLanguage:"Интихоби забон",tutorialSettings:"Роҳнамо",tutorialSettingsSub:"Шумо метавонед роҳнаморо такроран оғоз кунед.",restartTutorial:"Аз нав оғоз кардани роҳнамо",dataSettings:"Маълумоти захирашуда",dataSub:"Бақия, мавқеъҳо, пешрафт ва таърихи муомилот дар ҳамин браузер нигоҳ дошта мешаванд.",reset:"Аз нав оғоз кардан",resetWarning:"Огоҳӣ: ин амал маълумоти маҳаллии шуморо пурра нест мекунад.",footerMade:"Барои NEXYRON Trading Academy сохта шудааст",skip:"Гузаронидан",next:"Баъдӣ →",finish:"Оғоз мекунем!",coin:"Танга",action:"Амал",amount:"Миқдор",price:"Нарх",time:"Вақт",total:"Ҳамагӣ",noTrades:"Ҳоло муомилот нест. Дар бахши савдо хариди маҷозӣ кунед.",noPositions:"Шумо мавқеи кушода надоред.",buyDone:"Хариди маҷозӣ анҷом ёфт.",sellDone:"Фурӯши маҷозӣ анҷом ёфт.",noCash:"Пули маҷозӣ кофӣ нест.",noCoins:"Шумо ин қадар танга надоред.",badQty:"Миқдори аз сифр зиёдро ворид кунед.",tutorialDone:"Роҳнамо анҷом ёфт! Акнун машқ кунед.",chartUpdated:"Диаграммаи тақлидӣ",lessonDone:"Дарс анҷом ёфт!",tryAgain:"Ҳоло дуруст нест. Шарҳро хонда, боз кӯшиш кунед.",right:"Дуруст! Сабаб ин аст:",coins:"танга",buyLabel:"ХАРИД",sellLabel:"ФУРӮШ",confirmReset:"Ҳамаи маълумоти намоишӣ нест карда шавад?",resetDone:"Маълумот аз нав танзим шуд.",csvDone:"Файли CSV омода мешавад.",interval:"Фосила",chartFull:"Калон кардани диаграмма",paused:"Таваққуф",resume:"Идома",avgCost:"Нархи миёнаи харид",market:"Бозор",emptySearch:"Танга ёфт нашуд.",learning:"Пешрафти омӯзиш"
+ }
 };
 
-function renderStats(){
-$("#heroCash").textContent=money(state.cash);$("#homeTotal").textContent=money(total());
-$("#homePositions").textContent=data.filter(c=>qty(c.symbol)>0).length;$("#homeTrades").textContent=state.trades.length;
-$("#progressText").textContent=`${state.done.length} / ${lessons.length} Lektionen`;
-$("#progressBar").style.width=(state.done.length/lessons.length*100)+"%";
-$("#learnCount").textContent=`${state.done.length} / ${lessons.length} abgeschlossen`;
+const LESSONS = [
+ {title:{de:"1. Шамъҳои диаграмма",en:"1. Candlesticks",fr:"1. Chandeliers",ru:"1. Свечи на графике",tg:"1. Шамъҳои диаграмма"},explain:{
+ de:"Eine Kerze zeigt Eröffnung, Schluss, Hoch und Tief innerhalb eines Zeitraums. Der breite Körper zeigt den Bereich zwischen Eröffnung und Schluss. Die dünnen Linien heißen Dochte. Grün bedeutet in diesem Beispiel: Schluss höher als Eröffnung. Rot bedeutet: Schluss niedriger als Eröffnung.",
+ en:"A candle shows open, close, high and low for a period. Its body spans the open and close. Thin lines are wicks. Green means the close is above the open; red means it is below.",
+ fr:"Une bougie montre l'ouverture, la clôture, le plus haut et le plus bas d'une période. Le corps relie l'ouverture et la clôture. Les fines lignes sont les mèches. Vert signifie clôture plus haute ; rouge, plus basse.",
+ ru:"Свеча показывает цену открытия, закрытия, максимум и минимум за период. Тело соединяет открытие и закрытие, тонкие линии — тени. Зелёная свеча означает рост за период, красная — снижение.",
+ tg:"Шамъ нархи кушодашавӣ, басташавӣ, баландтарин ва пасттаринро дар як фосила нишон медиҳад. Қисми ғафс байни кушодашавӣ ва басташавӣ аст. Хатҳои борик сояҳо мебошанд. Шамъи сабз болоравӣ ва шамъи сурх пастравиро нишон медиҳад."
+ },q:{de:"Eine Kerze schließt bei 105 und öffnet bei 100. Welche Farbe hat sie in diesem Beispiel?",en:"A candle opens at 100 and closes at 105. What colour is it in this example?",fr:"Une bougie ouvre à 100 et clôture à 105. Quelle est sa couleur ?",ru:"Свеча открылась на 100 и закрылась на 105. Какого она цвета?",tg:"Шамъ дар 100 кушода шуда, дар 105 баста шуд. Ранги он чист?"},answers:[{de:"Grün",en:"Green",fr:"Verte",ru:"Зелёная",tg:"Сабз"},{de:"Rot",en:"Red",fr:"Rouge",ru:"Красная",tg:"Сурх"},{de:"Das kann man nie wissen",en:"Impossible to tell",fr:"Impossible à savoir",ru:"Невозможно узнать",tg:"Муайян кардан имкон надорад"}],correct:0,why:{de:"Der Schlusskurs 105 liegt über dem Eröffnungskurs 100.",en:"The close at 105 is above the open at 100.",fr:"La clôture à 105 est supérieure à l'ouverture à 100.",ru:"Цена закрытия 105 выше цены открытия 100.",tg:"Нархи басташавӣ 105 аз нархи кушодашавӣ 100 баландтар аст."}},
+ {title:{de:"2. Trend erkennen",en:"2. Recognising trends",fr:"2. Identifier une tendance",ru:"2. Определение тренда",tg:"2. Муайян кардани раванд"},explain:{
+ de:"Ein Aufwärtstrend zeigt häufig höhere Hochs und höhere Tiefs. Ein Abwärtstrend zeigt häufig tiefere Hochs und tiefere Tiefs. Ein kurzer Anstieg allein beweist keinen neuen Trend. Charts können sich jederzeit ändern.",
+ en:"An uptrend often makes higher highs and higher lows. A downtrend often makes lower highs and lower lows. One short rise alone does not prove a new trend.",
+ fr:"Une tendance haussière forme souvent des sommets et creux de plus en plus hauts. Une tendance baissière forme souvent des sommets et creux plus bas. Une seule hausse ne suffit pas.",
+ ru:"При восходящем тренде максимумы и минимумы часто становятся выше. При нисходящем — ниже. Один короткий рост не доказывает смену тренда.",
+ tg:"Дар раванди болоравӣ баландтарин ва пасттарин нархҳо аксар вақт баландтар мешаванд. Дар раванди пастравӣ онҳо пасттар мешаванд. Як болоравии кӯтоҳ тағйири равандро исбот намекунад."
+ },q:{de:"Die Hochs und Tiefs steigen über mehrere Abschnitte. Was beschreibt das am ehesten?",en:"Highs and lows rise over several periods. What does this most likely describe?",fr:"Les sommets et les creux montent sur plusieurs périodes. Que décrit cela ?",ru:"Максимумы и минимумы растут несколько периодов подряд. Что это напоминает?",tg:"Баландтарин ва пасттарин нархҳо дар чанд фосила боло мераванд. Ин чӣ гуна раванд аст?"},answers:[{de:"Aufwärtstrend",en:"Uptrend",fr:"Tendance haussière",ru:"Восходящий тренд",tg:"Раванди болоравӣ"},{de:"Abwärtstrend",en:"Downtrend",fr:"Tendance baissière",ru:"Нисходящий тренд",tg:"Раванди пастравӣ"},{de:"Das beweist den nächsten Preis",en:"It proves the next price",fr:"Cela prouve le prochain prix",ru:"Это точно предсказывает цену",tg:"Нархи ояндаро аниқ исбот мекунад"}],correct:0,why:{de:"Mehrere höhere Hochs und Tiefs passen zu einem Aufwärtstrend. Sie garantieren nicht, dass er weitergeht.",en:"Higher highs and lows fit an uptrend, but do not guarantee it will continue.",fr:"Des sommets et creux plus hauts correspondent à une tendance haussière, sans garantir sa poursuite.",ru:"Повышающиеся максимумы и минимумы соответствуют восходящему тренду, но не гарантируют продолжение.",tg:"Баландшавии баландтарин ва пасттарин ба раванди болоравӣ мувофиқ аст, вале идомаи онро кафолат намедиҳад."}},
+ {title:{de:"3. Unterstützung und Widerstand",en:"3. Support and resistance",fr:"3. Support et résistance",ru:"3. Поддержка и сопротивление",tg:"3. Дастгирӣ ва муқовимат"},explain:{
+ de:"Unterstützung ist ein Preisbereich, in dem ein Kurs zuvor öfter aufgehört hat zu fallen oder sich erholt hat. Widerstand ist ein Bereich, in dem Anstiege zuvor öfter ins Stocken geraten sind. Beides sind Bereiche, keine unüberwindbaren Wände.",
+ en:"Support is a price area where a market previously stopped falling or bounced. Resistance is an area where rises previously stalled. Neither is an unbreakable wall.",
+ fr:"Le support est une zone où le prix a souvent cessé de baisser. La résistance est une zone où les hausses ont souvent ralenti. Ce ne sont pas des barrières garanties.",
+ ru:"Поддержка — область, где цена раньше часто переставала падать. Сопротивление — область, где рост часто замедлялся. Это не непреодолимые границы.",
+ tg:"Дастгирӣ минтақаест, ки нарх қаблан дар он ҷо аксар вақт аз пастшавӣ бозмондааст. Муқовимат минтақаест, ки болоравӣ дар он суст шудааст. Инҳо кафолат нестанд."
+ },q:{de:"Der Kurs dreht in der Vergangenheit mehrmals in der Nähe eines ähnlichen Tiefs nach oben. Welcher Begriff passt?",en:"Price has bounced up several times near a similar low. Which term fits?",fr:"Le prix est remonté plusieurs fois près d'un creux similaire. Quel terme convient ?",ru:"Цена несколько раз отскакивала вверх около похожего минимума. Какой термин подходит?",tg:"Нарх чанд бор дар наздикии як пасттарин ба боло баргашт. Кадом мафҳум мувофиқ аст?"},answers:[{de:"Widerstand",en:"Resistance",fr:"Résistance",ru:"Сопротивление",tg:"Муқовимат"},{de:"Unterstützung",en:"Support",fr:"Support",ru:"Поддержка",tg:"Дастгирӣ"},{de:"Garantierter Gewinn",en:"Guaranteed profit",fr:"Profit garanti",ru:"Гарантированная прибыль",tg:"Фоидаи кафолатнок"}],correct:1,why:{de:"Ein Bereich mit wiederholten Erholungen kann Unterstützung sein. Er kann trotzdem durchbrochen werden.",en:"An area with repeated bounces can act as support, but it can still break.",fr:"Une zone de rebonds répétés peut agir comme support, mais elle peut céder.",ru:"Область повторных отскоков может быть поддержкой, но цена может её пробить.",tg:"Минтақаи баргаштҳои такрорӣ метавонад дастгирӣ бошад, аммо нарх метавонад онро бишканад."}},
+ {title:{de:"4. Doppeltop",en:"4. Double top",fr:"4. Double sommet",ru:"4. Двойная вершина",tg:"4. Қуллаи дугона"},explain:{
+ de:"Ein Doppeltop ist ein mögliches Umkehrmuster: Der Kurs erreicht zweimal einen ähnlichen Hochbereich und fällt dazwischen zurück. Das Muster gilt erst als bestätigt, wenn die Zwischenunterstützung durchbrochen wird. Es ist kein sicheres Verkaufssignal.",
+ en:"A double top is a possible reversal pattern: price reaches a similar high twice and pulls back between them. A break below the intervening support is often used as confirmation. It is not a guaranteed sell signal.",
+ fr:"Un double sommet est une figure de retournement possible : le prix atteint deux fois une zone haute similaire. Une cassure du support intermédiaire est souvent utilisée comme confirmation. Ce n'est pas un signal garanti.",
+ ru:"Двойная вершина — возможная разворотная фигура: цена дважды достигает похожего максимума. Пробой промежуточной поддержки часто используют для подтверждения. Это не гарантированный сигнал.",
+ tg:"Қуллаи дугона шакли эҳтимолии тағйири раванд аст: нарх ду бор ба баландии монанд мерасад. Шикастани дастгирии байни онҳо метавонад онро тасдиқ кунад. Ин сигнали кафолатнок нест."
+ },q:{de:"Im Diagramm entsteht zweimal ein ähnliches Hoch, aber die Zwischenunterstützung hält noch. Was ist die vorsichtigste Aussage?",en:"The chart shows two similar highs, but the support between them still holds. What is the most careful statement?",fr:"Le graphique montre deux sommets similaires, mais le support intermédiaire tient encore. Quelle affirmation est la plus prudente ?",ru:"На графике два похожих максимума, но промежуточная поддержка ещё держится. Какое утверждение осторожнее?",tg:"Дар диаграмма ду қуллаи монанд ҳаст, вале дастгирии байни онҳо ҳанӯз нигоҳ дошта шудааст. Кадом хулоса эҳтиёткорона аст?"},answers:[{de:"Der Kurs muss fallen",en:"Price must fall",fr:"Le prix doit baisser",ru:"Цена обязательно упадёт",tg:"Нарх ҳатман паст мешавад"},{de:"Mögliches Doppeltop, noch nicht bestätigt",en:"Possible double top, not confirmed yet",fr:"Double sommet possible, pas encore confirmé",ru:"Возможная двойная вершина, пока не подтверждена",tg:"Қуллаи дугонаи эҳтимолӣ, ҳанӯз тасдиқ нашудааст"},{de:"Sicheres Kaufsignal",en:"Guaranteed buy signal",fr:"Signal d'achat garanti",ru:"Гарантированный сигнал покупки",tg:"Сигнали кафолатноки харид"}],correct:1,why:{de:"Das Muster allein garantiert nichts. Ein Durchbruch der Zwischenunterstützung wird oft als zusätzliche Bestätigung betrachtet.",en:"The pattern alone guarantees nothing. A break of the middle support is often treated as added confirmation.",fr:"La figure seule ne garantit rien. La cassure du support intermédiaire est souvent une confirmation supplémentaire.",ru:"Фигура сама по себе ничего не гарантирует. Пробой промежуточной поддержки часто считают дополнительным подтверждением.",tg:"Шакл танҳо чизеро кафолат намедиҳад. Шикастани дастгирии миёна метавонад тасдиқи иловагӣ бошад."}},
+ {title:{de:"5. Risiko und Positionsgröße",en:"5. Risk and position size",fr:"5. Risque et taille de position",ru:"5. Риск и размер позиции",tg:"5. Хавф ва андозаи мавқеъ"},explain:{
+ de:"Eine große Position kann bei einer kleinen Preisbewegung stark schwanken. Überlege vor einer Übung, wie viel virtuelles Guthaben du einsetzen willst und was ein Preisrückgang bedeuten würde. Eine Stop-Order ist keine Garantie für einen bestimmten Ausführungspreis.",
+ en:"A large position can change value significantly with a small price move. Before practising, consider how much virtual balance you want to use and what a price drop would mean. A stop order does not guarantee an exact execution price.",
+ fr:"Une position importante peut beaucoup varier avec un petit mouvement de prix. Réfléchis au montant virtuel engagé et aux conséquences d'une baisse. Un ordre stop ne garantit pas un prix exact.",
+ ru:"Большая позиция может сильно менять стоимость даже при небольшом движении цены. Перед тренировкой оцени размер позиции и последствия снижения. Стоп-ордер не гарантирует точную цену исполнения.",
+ tg:"Мавқеи калон ҳатто бо тағйири хурди нарх метавонад арзиши худро зиёд тағйир диҳад. Пеш аз машқ маблағи виртуалӣ ва таъсири пастшавии нархро баррасӣ кунед. Фармоиши stop нархи дақиқро кафолат намедиҳад."
+ },q:{de:"Du hast nur 100 € virtuelles Guthaben und eine Übung würde 500 € kosten. Was solltest du beachten?",en:"You have €100 in virtual cash and a practice order would cost €500. What should you consider?",fr:"Tu disposes de 100 € virtuels et un ordre coûterait 500 €. Que faut-il considérer ?",ru:"У тебя 100 € виртуальных средств, а сделка стоит 500 €. Что нужно учесть?",tg:"Шумо 100 евро пули маҷозӣ доред, аммо фармоиш 500 евро арзиш дорад. Чиро бояд ба назар гирифт?"},answers:[{de:"Die Position passt nicht zum verfügbaren Guthaben",en:"The position exceeds the available balance",fr:"La position dépasse le solde disponible",ru:"Позиция превышает доступный баланс",tg:"Мавқеъ аз бақияи дастрас зиёд аст"},{de:"Es ist egal, das Guthaben zählt nicht",en:"It doesn't matter; balance is irrelevant",fr:"Peu importe, le solde ne compte pas",ru:"Это неважно, баланс не имеет значения",tg:"Ин муҳим нест"},{de:"Große Positionen sind immer sicherer",en:"Large positions are always safer",fr:"Les grandes positions sont toujours plus sûres",ru:"Большие позиции всегда безопаснее",tg:"Мавқеъҳои калон ҳамеша бехатартаранд"}],correct:0,why:{de:"Die Übung muss ins verfügbare virtuelle Guthaben passen. Eine größere Position erhöht auch die möglichen Schwankungen.",en:"The order must fit the available virtual balance. Larger positions also magnify value changes.",fr:"L'ordre doit respecter le solde virtuel disponible. Une grande position amplifie aussi les variations.",ru:"Ордер должен соответствовать доступному виртуальному балансу. Большая позиция увеличивает колебания стоимости.",tg:"Фармоиш бояд ба бақияи виртуалии дастрас мувофиқ бошад. Мавқеи калон тағйироти арзишро зиёд мекунад."}},
+ {title:{de:"6. Chart lesen und entscheiden",en:"6. Reading a chart",fr:"6. Lire un graphique",ru:"6. Анализ графика",tg:"6. Хондани диаграмма"},explain:{
+ de:"Charts zeigen nur vergangene Kursbewegungen. Ein Muster kann mehrere Deutungen zulassen und ist kein verlässlicher Blick in die Zukunft. Manchmal ist Abwarten eine sinnvolle Lernantwort. In dieser Übung gibt es deshalb keine pauschal richtige Kauf- oder Verkaufsentscheidung.",
+ en:"Charts show past price movements only. A pattern can have several interpretations and cannot reliably predict the future. Waiting can be a reasonable learning choice. There is no universally correct buy or sell decision here.",
+ fr:"Les graphiques montrent uniquement les mouvements passés. Une figure peut avoir plusieurs interprétations et ne prédit pas sûrement l'avenir. Attendre peut être raisonnable. Il n'existe pas de décision universellement correcte ici.",
+ ru:"Графики показывают только прошлые движения цены. У фигуры могут быть разные толкования, и она не предсказывает будущее надёжно. Иногда разумно подождать. Здесь нет универсально правильного решения о покупке или продаже.",
+ tg:"Диаграмма танҳо ҳаракати гузаштаи нархро нишон медиҳад. Як шакл метавонад чанд маъно дошта бошад ва ояндаро боэътимод пешгӯӣ намекунад. Баъзан интизор шудан интихоби оқилона аст."
+ },q:{de:"Der Kurs steigt schnell, aber du hast keine klare Strategie und weißt nicht, wo dein Risiko liegt. Welche Antwort zeigt vorsichtiges Denken?",en:"Price is rising quickly, but you have no clear plan and don't know your risk. Which response is cautious?",fr:"Le prix monte vite, mais tu n'as pas de stratégie claire ni de plan de risque. Quelle réponse est prudente ?",ru:"Цена быстро растёт, но у тебя нет плана и ты не знаешь свой риск. Какой ответ осторожен?",tg:"Нарх зуд боло меравад, аммо нақшаи равшан ва фаҳмиши хавф надоред. Кадом ҷавоб эҳтиёткорона аст?"},answers:[{de:"Sofort kaufen, weil es steigt",en:"Buy immediately because it is rising",fr:"Acheter immédiatement parce que ça monte",ru:"Немедленно купить, потому что цена растёт",tg:"Фавран харидан, зеро нарх боло меравад"},{de:"Alles investieren",en:"Invest everything",fr:"Tout investir",ru:"Вложить всё",tg:"Ҳамаашро гузоштан"},{de:"Erst lernen, einen Plan machen oder abwarten",en:"Learn first, make a plan or wait",fr:"Apprendre, établir un plan ou attendre",ru:"Сначала разобраться, составить план или подождать",tg:"Аввал омӯзиш, нақша ё интизор шудан"}],correct:2,why:{de:"Ein schneller Anstieg allein ist keine Garantie. Ohne Plan ist Abwarten eine vernünftige Lernentscheidung.",en:"A rapid rise is no guarantee. Without a plan, waiting is a reasonable learning choice.",fr:"Une hausse rapide n'est pas une garantie. Sans plan, attendre est un choix raisonnable.",ru:"Быстрый рост ничего не гарантирует. Без плана разумно подождать.",tg:"Болоравии зуд кафолат нест. Бе нақша интизор шудан интихоби оқилона аст."}}
+];
+
+const TUTORIAL = {
+ de:[
+ ["Willkommen bei NEXYRON","Dies ist eine Lernsimulation. Du verwendest nur virtuelles Geld. Die angezeigten Kurse sind erfunden und keine echten Live-Preise."],
+ ["Wähle einen Markt","Öffne Märkte oder wähle im Trading eine Coin aus. So siehst du ihren simulierten Kurs und den Kerzenchart."],
+ ["Lies die Kerzen","Grüne Kerzen zeigen in diesem Beispiel einen Anstieg innerhalb des Zeitraums, rote Kerzen einen Rückgang. Die dünnen Linien heißen Dochte."],
+ ["Übe einen Kauf","Gib im Trading eine Menge ein und tippe auf Kaufen. Der Kauf wird im Verlauf gespeichert und im Chart markiert."],
+ ["Verkaufe einen Teil oder alles","Du kannst eine Menge verkaufen oder Sell All verwenden, um deine gesamte Position dieser Coin zu schließen."],
+ ["Lerne und prüfe deinen Verlauf","Die Lernlektionen erklären zuerst die Grundlagen. Danach kannst du Aufgaben lösen und deine Trades im Verlauf ansehen."]
+ ],
+ en:[
+ ["Welcome to NEXYRON","This is a learning simulation. You use virtual money only. Prices are fictional, not live market prices."],
+ ["Choose a market","Open Markets or choose a coin in Trading to see its simulated price and candlestick chart."],
+ ["Read candles","Green candles show a rise within the period in this example; red candles show a fall. Thin lines are wicks."],
+ ["Practise a buy","Enter a quantity in Trading and press Buy. The trade is saved in history and marked on the chart."],
+ ["Sell some or all","Sell a chosen quantity, or use Sell All to close your entire position in that coin."],
+ ["Learn and check history","Lessons explain the basics before asking questions. You can then review tasks and your trade history."]
+ ],
+ fr:[
+ ["Bienvenue sur NEXYRON","C'est une simulation pédagogique. Tu utilises uniquement de l'argent virtuel. Les prix sont fictifs."],
+ ["Choisir un marché","Ouvre Marchés ou choisis une crypto dans Trading pour voir son prix simulé et son graphique."],
+ ["Lire les bougies","Les bougies vertes montrent une hausse sur la période et les rouges une baisse. Les lignes fines sont les mèches."],
+ ["Essayer un achat","Saisis une quantité dans Trading puis appuie sur Acheter. La transaction est enregistrée et marquée sur le graphique."],
+ ["Vendre une partie ou tout","Vends une quantité choisie ou utilise Tout vendre pour fermer toute ta position sur cette crypto."],
+ ["Apprendre et consulter l'historique","Les leçons expliquent les bases avant les questions. Consulte ensuite tes exercices et transactions."]
+ ],
+ ru:[
+ ["Добро пожаловать в NEXYRON","Это учебная симуляция. Используются только виртуальные деньги. Цены вымышленные."],
+ ["Выбери рынок","Открой Рынки или выбери монету в разделе Торговля, чтобы увидеть цену и свечной график."],
+ ["Читай свечи","Зелёные свечи показывают рост за период, красные — снижение. Тонкие линии называются тенями."],
+ ["Попробуй покупку","Введи количество в разделе Торговля и нажми Купить. Сделка сохранится в истории и на графике."],
+ ["Продай часть или всё","Можно продать часть позиции или нажать Продать всё, чтобы закрыть её полностью."],
+ ["Учись и проверяй историю","Уроки сначала объясняют основы, затем предлагают задания. Сделки можно посмотреть в истории."]
+ ],
+ tg:[
+ ["Ба NEXYRON хуш омадед","Ин симулятсияи омӯзишӣ аст. Танҳо пули маҷозӣ истифода мешавад. Нархҳо сохта шудаанд."],
+ ["Бозорро интихоб кунед","Бахши Бозорҳоро кушоед ё дар Савдо тангаеро интихоб кунед, то нарх ва диаграммаро бинед."],
+ ["Шамъҳоро хонед","Шамъҳои сабз болоравӣ ва шамъҳои сурх пастравиро дар фосила нишон медиҳанд. Хатҳои борик сояҳо мебошанд."],
+ ["Харидро машқ кунед","Дар бахши Савдо миқдорро ворид карда, Хариданро пахш кунед. Муомилот сабт шуда, дар диаграмма нишон дода мешавад."],
+ ["Қисман ё пурра фурӯшед","Метавонед қисми мавқеъро фурӯшед ё Ҳамаро фурӯхтанро интихоб кунед."],
+ ["Омӯзед ва таърихро бинед","Дарсҳо аввал асосҳоро мефаҳмонанд ва баъд супориш медиҳанд. Муомилотро дар бахши Таърих бинед."]
+ ]
+};
+
+let state = loadState();
+let selected = state.selected || "BTC";
+let paused = false;
+let chartMode = "candle";
+let tutorialStep = 0;
+let activeLesson = -1;
+let toastTimer = null;
+let lastTick = Date.now();
+
+function loadState(){
+ try{
+  const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+  if(s && typeof s.cash==="number" && s.holdings && Array.isArray(s.trades)) return s;
+ }catch(e){}
+ return {cash:10000,holdings:{},trades:[],done:[],language:"de",selected:"BTC",tutorialSeen:false,charts:{}};
+}
+function saveState(){
+ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+ catch(e){console.warn("Local save unavailable",e);}
+}
+function t(key){return (I18N[state.language]||I18N.de)[key]||I18N.de[key]||key;}
+function lt(obj){return obj[state.language]||obj.de||Object.values(obj)[0];}
+function money(n){
+ return new Intl.NumberFormat(state.language==="fr"?"fr-FR":state.language==="ru"?"ru-RU":state.language==="tg"?"tg-TJ":state.language==="en"?"en-IE":"de-DE",{style:"currency",currency:"EUR",maximumFractionDigits:2}).format(n);
+}
+function qtyFmt(n){
+ return new Intl.NumberFormat(state.language==="de"?"de-DE":"en-US",{maximumFractionDigits:8}).format(n);
+}
+function coin(code){return COINS.find(c=>c[0]===code)||COINS[0];}
+function holding(code){return state.holdings[code]||{qty:0,avg:0};}
+function currentPrice(code){return chartFor(code).at(-1).c;}
+function positionValue(code){return holding(code).qty*currentPrice(code);}
+function openPnl(code){const h=holding(code);return h.qty*(currentPrice(code)-h.avg);}
+function totalPositions(){return COINS.reduce((sum,c)=>sum+positionValue(c[0]),0);}
+function equity(){return state.cash+totalPositions();}
+function totalPnl(){return COINS.reduce((sum,c)=>sum+openPnl(c[0]),0);}
+function toast(msg){
+ const el=$("toast");el.textContent=msg;el.hidden=false;
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.hidden=true,2600);
+}
+function safeText(str){return String(str).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function timeFmt(ts){
+ return new Intl.DateTimeFormat(state.language==="fr"?"fr-FR":state.language==="ru"?"ru-RU":state.language==="tg"?"tg-TJ":state.language==="en"?"en-GB":"de-DE",{dateStyle:"short",timeStyle:"short"}).format(new Date(ts));
+}
+
+function chartFor(code){
+ if(!state.charts[code]){
+  let seed=COINS.find(c=>c[0]===code)?.[2]||100;
+  const now=Date.now(),arr=[];let p=seed;
+  for(let i=0;i<70;i++){
+   const o=p,delta=(Math.random()-.49)*.018*p,c=Math.max(p*.05,p+delta);
+   const h=Math.max(o,c)*(1+Math.random()*.006),l=Math.min(o,c)*(1-Math.random()*.006);
+   arr.push({o,h,l,c,t:now-(69-i)*60000});p=c;
+  }
+  state.charts[code]=arr;
+ }
+ return state.charts[code];
+}
+function tickCharts(){
+ if(paused)return;
+ const now=Date.now();
+ for(const c of COINS){
+  const arr=chartFor(c[0]),last=arr[arr.length-1];
+  if(now-last.t>8000){
+   const o=last.c,delta=(Math.random()-.5)*.012*o,c=Math.max(o*.05,o+delta);
+   arr.push({o,h:Math.max(o,c)*(1+Math.random()*.004),l:Math.min(o,c)*(1-Math.random()*.004),c,t:now});
+   if(arr.length>100)arr.shift();
+  }else{
+   const change=(Math.random()-.5)*.0012*last.c;
+   last.c=Math.max(last.o*.8,last.c+change);
+   last.h=Math.max(last.h,last.c);
+   last.l=Math.min(last.l,last.c);
+  }
+ }
+ lastTick=now;saveState();renderDashboardNumbers();
+ if($("trade").classList.contains("active"))renderTrade(false);
+ if($("markets").classList.contains("active"))renderMarkets();
+ if($("home").classList.contains("active"))renderHomeCoins();
+ if($("portfolio").classList.contains("active"))renderPortfolio();
+}
+
+function applyLanguage(){
+ document.documentElement.lang=state.language;
+ document.querySelectorAll("[data-i]").forEach(el=>{
+  const key=el.dataset.i;if(t(key))el.textContent=t(key);
+ });
+ $("languageSelect").value=state.language;
+ $("search").placeholder=t("search");
+ $("headerTutorial").textContent="▶ "+t("startTutorial");
+ renderAll();
+}
+function go(page){
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===page));
+ document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ if(page==="trade")renderTrade();
+ if(page==="markets")renderMarkets();
+ if(page==="portfolio")renderPortfolio();
+ if(page==="history")renderHistory();
+ if(page==="learn")renderLessons();
+ if(page==="home")renderHome();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderDashboardNumbers(){
+ $("homeCash").textContent=money(state.cash);
+ $("homeEquity").textContent=money(equity());
+ $("homePnl").textContent=money(totalPnl());
+ $("homePnl").className="stat "+(totalPnl()>0?"positive":totalPnl()<0?"negative":"");
+ $("portCash").textContent=money(state.cash);
+ $("portPositions").textContent=money(totalPositions());
+ $("portEquity").textContent=money(equity());
+ $("tradeCash").textContent=money(state.cash);
+}
+function renderHomeCoins(){
+ $("homeCoins").innerHTML=COINS.slice(0,6).map(c=>`
+ <div class="coinrow">
+  <button class="coinselect" data-select="${c[0]}"><span class="coinname">${c[1]}</span><br><span class="coinmeta">${c[0]}</span></button>
+  <div class="coinprice">${money(currentPrice(c[0]))}</div>
+  <button data-select="${c[0]}">→</button>
+ </div>`).join("");
+}
+function renderHomeHistory(){
+ const recent=state.trades.slice(0,4);
+ if(!recent.length){$("homeHistory").innerHTML=`<div class="empty">${t("noTrades")}</div>`;return;}
+ $("homeHistory").innerHTML=`<div class="tablewrap"><table><thead><tr><th>${t("coin")}</th><th>${t("action")}</th><th>${t("amount")}</th><th>${t("price")}</th><th>${t("time")}</th></tr></thead><tbody>${recent.map(tr=>tradeRow(tr,false)).join("")}</tbody></table></div>`;
+}
+function renderHome(){
+ renderDashboardNumbers();renderHomeCoins();renderHomeHistory();
+ const n=state.done.length;$("homeProgress").style.width=(n/LESSONS.length*100)+"%";
+ $("homeProgressText").textContent=`${n} / ${LESSONS.length} ${t("learning")}`;
+}
+function renderMarkets(){
+ const search=$("search").value.toLowerCase().trim();
+ const filtered=COINS.filter(c=>c[0].toLowerCase().includes(search)||c[1].toLowerCase().includes(search));
+ $("coinCount").textContent=filtered.length+" "+t("coins");
+ $("marketList").innerHTML=filtered.length?filtered.map(c=>`
+ <div class="coinrow">
+  <button class="coinselect" data-select="${c[0]}"><span class="coinname">${c[1]}</span><br><span class="coinmeta">${c[0]}</span></button>
+  <div class="coinprice"><strong>${money(currentPrice(c[0]))}</strong><br><small class="${currentPrice(c[0])>=chartFor(c[0])[0].c?"positive":"negative"}">${currentPrice(c[0])>=chartFor(c[0])[0].c?"+":"−"}${Math.abs((currentPrice(c[0])/chartFor(c[0])[0].c-1)*100).toFixed(2)}%</small></div>
+  <button class="primary" data-trade="${c[0]}">${t("navTrade")} →</button>
+ </div>`).join(""):`<div class="empty">${t("emptySearch")}</div>`;
+}
+function renderTrade(updateChart=true){
+ const c=coin(selected),price=currentPrice(selected),h=holding(selected);
+ $("chartCoin").value=selected;
+ $("tradeCoinTitle").textContent=c[1]+" · "+c[0];
+ $("tradePrice").textContent=money(price);
+ $("tradeCash").textContent=money(state.cash);
+ $("positionQty").textContent=qtyFmt(h.qty)+" "+t("coins");
+ $("positionValue").textContent=money(positionValue(selected));
+ $("positionPnl").textContent=t("avgCost")+": "+money(h.avg)+" · "+money(openPnl(selected));
+ $("positionPnl").className=openPnl(selected)>0?"positive":openPnl(selected)<0?"negative":"muted";
+ $("orderTotal").textContent=money(Math.max(0,Number($("orderQty").value)||0)*price);
+ renderTradeMarkers();
+ if(updateChart)drawChart();
+}
+function renderTradeMarkers(){
+ const trades=state.trades.filter(tr=>tr.code===selected).slice(0,6);
+ $("tradeMarkersList").innerHTML=trades.length?trades.map(tr=>`
+ <div class="row between" style="padding:8px 0;border-bottom:1px solid var(--line)">
+ <span class="${tr.side==="BUY"?"positive":"negative"}">${tr.side==="BUY"?"▲ "+t("buyLabel"):"▼ "+t("sellLabel")}</span>
+ <span>${qtyFmt(tr.qty)} ${tr.code}</span><span>${money(tr.price)}</span><small>${timeFmt(tr.time)}</small>
+ </div>`).join(""):`<div class="empty">${t("noTrades")}</div>`;
+}
+function tradeRow(tr,showTotal=true){
+ return `<tr><td>${coin(tr.code)[1]} (${tr.code})</td><td class="${tr.side==="BUY"?"positive":"negative"}">${tr.side==="BUY"?t("buyLabel"):t("sellLabel")}</td><td>${qtyFmt(tr.qty)}</td><td>${money(tr.price)}</td>${showTotal?`<td>${money(tr.qty*tr.price)}</td>`:""}<td>${timeFmt(tr.time)}</td></tr>`;
+}
+function renderHistory(){
+ $("historyTable").innerHTML=state.trades.length?`<div class="tablewrap"><table><thead><tr><th>${t("coin")}</th><th>${t("action")}</th><th>${t("amount")}</th><th>${t("price")}</th><th>${t("total")}</th><th>${t("time")}</th></tr></thead><tbody>${state.trades.map(tr=>tradeRow(tr,true)).join("")}</tbody></table></div>`:`<div class="empty">${t("noTrades")}</div>`;
 }
 function renderPortfolio(){
-$("#cash").textContent=money(state.cash);$("#positionValue").textContent=money(value());$("#total").textContent=money(total());
-const active=data.filter(c=>qty(c.symbol)>0);
-$("#positionsTable").innerHTML=active.length?`<table><thead><tr><th>Coin</th><th>Menge</th><th>Ø Einstand</th><th>Wert</th><th>Unrealisiert</th></tr></thead><tbody>${active.map(c=>{const q=qty(c.symbol),co=cost(c.symbol),v=q*c.price,pl=v-co;return `<tr><td>${c.icon} ${c.name}</td><td>${quantity(q)}</td><td>${money(co/q)}</td><td>${money(v)}</td><td class="${pl>=0?"green":"red"}">${pl>=0?"+":""}${money(pl)}</td></tr>`}).join("")}</tbody></table>`:'<div class="empty">Noch keine Positionen. Probiere einen virtuellen Kauf im Play-Bereich.</div>';
-$("#tradesTable").innerHTML=state.trades.length?`<table><thead><tr><th>Aktion</th><th>Coin</th><th>Menge</th><th>Preis</th><th>Gesamt</th><th>Zeit</th></tr></thead><tbody>${state.trades.map(t=>`<tr><td class="${t.side==="buy"?"green":"red"}">${t.side==="buy"?"Kauf":"Verkauf"}</td><td>${t.name} (${t.symbol})</td><td>${quantity(t.n)}</td><td>${money(t.p)}</td><td>${money(t.v)}</td><td>${new Date(t.time).toLocaleString("de-DE")}</td></tr>`).join("")}</tbody></table>`:'<div class="empty">Deine Transaktionen erscheinen hier.</div>';
+ renderDashboardNumbers();
+ const positions=COINS.filter(c=>holding(c[0]).qty>0);
+ $("positionsTable").innerHTML=positions.length?`<div class="tablewrap"><table><thead><tr><th>${t("coin")}</th><th>${t("amount")}</th><th>${t("avgCost")}</th><th>${t("price")}</th><th>${t("total")}</th><th>P/L</th><th></th></tr></thead><tbody>${positions.map(c=>{
+ const h=holding(c[0]),p=currentPrice(c[0]),pnl=openPnl(c[0]);
+ return `<tr><td>${c[1]} (${c[0]})</td><td>${qtyFmt(h.qty)}</td><td>${money(h.avg)}</td><td>${money(p)}</td><td>${money(h.qty*p)}</td><td class="${pnl>=0?"positive":"negative"}">${money(pnl)}</td><td><button class="sell" data-sellall="${c[0]}">${t("sellAll")}</button></td></tr>`;
+ }).join("")}</tbody></table></div>`:`<div class="empty">${t("noPositions")}</div>`;
 }
 
-let currentLesson=0;
+function drawChart(){
+ const canvas=$("chart"),wrap=$("chartWrap"),ctx=canvas.getContext("2d");
+ const dpr=Math.max(1,window.devicePixelRatio||1),w=wrap.clientWidth,h=wrap.clientHeight;
+ if(!w||!h)return;
+ canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ ctx.clearRect(0,0,w,h);
+ ctx.fillStyle="#0a1220";ctx.fillRect(0,0,w,h);
+ const arr=chartFor(selected),pad={l:8,r:74,t:16,b:25},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
+ const visible=arr.slice(-55),values=visible.flatMap(v=>[v.h,v.l]);
+ let min=Math.min(...values),max=Math.max(...values);
+ if(max===min){max+=1;min-=1;}
+ const extra=(max-min)*.1;min-=extra;max+=extra;
+ const y=p=>pad.t+(max-p)/(max-min)*ch;
+ ctx.strokeStyle="#202d42";ctx.lineWidth=1;ctx.font="10px system-ui";
+ for(let i=0;i<=5;i++){
+  const yy=pad.t+ch*i/5,val=max-(max-min)*i/5;
+  ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();
+  ctx.fillStyle="#9babc5";ctx.fillText(val>=1000?Math.round(val).toLocaleString("de-DE"):Number(val.toPrecision(4)).toString(),w-pad.r+6,yy+3);
+ }
+ const slot=cw/visible.length,bodyW=Math.max(2,slot*.58);
+ if(chartMode==="line"){
+  ctx.strokeStyle="#8daaff";ctx.lineWidth=2;ctx.beginPath();
+  visible.forEach((v,i)=>{const x=pad.l+i*slot+slot/2;if(i===0)ctx.moveTo(x,y(v.c));else ctx.lineTo(x,y(v.c));});
+  ctx.stroke();
+ }else{
+  visible.forEach((v,i)=>{
+   const x=pad.l+i*slot+slot/2,col=v.c>=v.o?"#36d6a0":"#ff667d";
+   ctx.strokeStyle=col;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y(v.h));ctx.lineTo(x,y(v.l));ctx.stroke();
+   ctx.fillStyle=col;const top=y(Math.max(v.o,v.c)),bottom=y(Math.min(v.o,v.c));
+   ctx.fillRect(x-bodyW/2,top,bodyW,Math.max(1,bottom-top));
+  });
+ }
+ const current=visible[visible.length-1].c,cy=y(current);
+ ctx.strokeStyle="#8daaff";ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(pad.l,cy);ctx.lineTo(w-pad.r,cy);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle="#8daaff";ctx.fillRect(w-pad.r+1,cy-9,pad.r-2,18);ctx.fillStyle="#07101e";ctx.font="bold 10px system-ui";ctx.fillText(current>=1000?Math.round(current).toString():Number(current.toPrecision(5)).toString(),w-pad.r+4,cy+3);
+ // Persistent trade markers: marker index is stored against the saved candle series.
+ const all=chartFor(selected),start=Math.max(0,all.length-visible.length);
+ state.trades.filter(tr=>tr.code===selected).forEach(tr=>{
+  const index=Number.isInteger(tr.candleIndex)?tr.candleIndex:all.length-1;
+  if(index<start||index>=all.length)return;
+  const i=index-start,v=visible[i],x=pad.l+i*slot+slot/2,yy=y(tr.price);
+  const col=tr.side==="BUY"?"#36d6a0":"#ff667d";
+  ctx.fillStyle=col;ctx.beginPath();
+  if(tr.side==="BUY"){ctx.moveTo(x,yy-6);ctx.lineTo(x-5,yy+3);ctx.lineTo(x+5,yy+3);}
+  else{ctx.moveTo(x,yy+6);ctx.lineTo(x-5,yy-3);ctx.lineTo(x+5,yy-3);}
+  ctx.closePath();ctx.fill();
+ });
+ $("lastUpdated").textContent=t("chartUpdated")+" · "+timeFmt(Date.now());
+}
+function updateOrderTotal(){ $("orderTotal").textContent=money(Math.max(0,Number($("orderQty").value)||0)*currentPrice(selected)); }
+
+function trade(side,all=false){
+ const code=selected,p=currentPrice(code),h=holding(code);
+ let q=all?h.qty:Number($("orderQty").value);
+ if(!Number.isFinite(q)||q<=0){toast(t("badQty"));return;}
+ if(side==="BUY"){
+  const cost=q*p;
+  if(cost>state.cash+1e-8){toast(t("noCash"));return;}
+  const newQty=h.qty+q;
+  state.holdings[code]={qty:newQty,avg:(h.qty*h.avg+cost)/newQty};
+  state.cash-=cost;
+ }else{
+  if(q>h.qty+1e-9){toast(t("noCoins"));return;}
+  q=Math.min(q,h.qty);
+  state.cash+=q*p;
+  const newQty=Math.max(0,h.qty-q);
+  state.holdings[code]={qty:newQty,avg:newQty===0?0:h.avg};
+ }
+ const tr={id:Date.now()+"-"+Math.random().toString(36).slice(2,7),code,side,qty:q,price:p,time:Date.now(),candleIndex:chartFor(code).length-1};
+ state.trades.unshift(tr);
+ $("tradeMessage").hidden=false;
+ $("tradeMessage").textContent=t(side==="BUY"?"buyDone":"sellDone");
+ $("tradeMessage").className="feedback "+(side==="BUY"?"positive":"negative");
+ saveState();renderAll();drawChart();
+}
+function selectCoin(code){
+ if(!COINS.some(c=>c[0]===code))return;
+ selected=code;state.selected=code;saveState();go("trade");renderTrade();
+}
+
 function renderLessons(){
-$("#lessons").innerHTML=lessons.map((l,i)=>`<article class="lesson"><div class="emoji">${l.icon}</div><div class="eyebrow">${l.level} · Lektion ${i+1}</div><h3>${l.title}</h3><p>${l.text}</p><button class="btn" data-lesson="${i}">${state.done.includes(i)?"✓ Wiederholen":"Lektion starten"}</button></article>`).join("");
-$$("[data-lesson]").forEach(b=>b.onclick=()=>{loadQuestion(Number(b.dataset.lesson));$("#quiz").scrollIntoView({behavior:"smooth",block:"start"})});
+ const done=state.done.length;
+ $("lessonCount").textContent=`${done} / ${LESSONS.length}`;
+ $("learnProgress").style.width=(done/LESSONS.length*100)+"%";
+ $("lessons").innerHTML=LESSONS.map((l,i)=>`
+ <article class="lesson ${state.done.includes(i)?"done":""}">
+  <div class="row between"><h3>${lt(l.title)}</h3><span class="pill">${state.done.includes(i)?"✓":`${i+1}/${LESSONS.length}`}</span></div>
+  <p>${l.explain[state.language]||l.explain.de}</p>
+  <button data-openlesson="${i}" class="${activeLesson===i?"primary":""}">${activeLesson===i?"▲": "▼"} ${state.done.includes(i)?(state.language==="en"?"Review":state.language==="fr"?"Revoir":state.language==="ru"?"Повторить":state.language==="tg"?"Такрор":"Wiederholen"):(state.language==="en"?"Open lesson":state.language==="fr"?"Ouvrir la leçon":state.language==="ru"?"Открыть урок":state.language==="tg"?"Кушодани дарс":"Lektion öffnen")}</button>
+  ${activeLesson===i?lessonTask(l,i):""}
+ </article>`).join("");
 }
-function loadQuestion(i){
-currentLesson=(i+lessons.length)%lessons.length;const l=lessons[currentLesson];
-$("#quizTitle").textContent=l.icon+" "+l.title;$("#question").textContent=l.q;
-$("#options").innerHTML=l.opts.map((o,j)=>`<button class="option" data-answer="${j}">${String.fromCharCode(65+j)}. ${o}</button>`).join("");
-$("#feedback").innerHTML="";
-$$("[data-answer]").forEach(b=>b.onclick=()=>answer(Number(b.dataset.answer)));
+function lessonTask(l,i){
+ return `<div style="margin-top:14px;padding:14px;background:#0b1322;border-radius:12px">
+ <div class="pill" style="margin-bottom:10px">${state.language==="en"?"CHART EXERCISE":state.language==="fr"?"EXERCICE GRAPHIQUE":state.language==="ru"?"ЗАДАНИЕ ПО ГРАФИКУ":state.language==="tg"?"СУПОРИШИ ДИАГРАММА":"DIAGRAMM-AUFGABE"}</div>
+ ${miniLessonChart(i)}
+ <h3>${l.q[state.language]||l.q.de}</h3>
+ ${l.answers.map((a,j)=>`<button class="answer" data-answer="${i}:${j}">${a[state.language]||a.de}</button>`).join("")}
+ <div id="feedback-${i}" class="feedback" hidden></div>
+ </div>`;
 }
-function answer(a){
-const l=lessons[currentLesson],correct=a===l.a;
-$$("[data-answer]").forEach((b,i)=>{b.disabled=true;if(i===l.a)b.classList.add("correct");else if(i===a)b.classList.add("wrong")});
-$("#feedback").innerHTML=`<div class="notice"><strong class="${correct?"green":"red"}">${correct?"Richtig! Gut gemacht.":"Noch nicht ganz."}</strong><br>${l.why}</div>`;
-if(correct&&!state.done.includes(currentLesson))state.done.push(currentLesson);
-save();renderStats();renderLessons();
+function miniLessonChart(i){
+ const data=[
+ [[100,104],[104,102],[102,107],[107,105],[105,110],[110,108],[108,114]],
+ [[100,103],[103,106],[106,104],[104,109],[109,107],[107,113],[113,115]],
+ [[100,98],[98,101],[101,97],[97,100],[100,96],[96,101],[101,99]],
+ [[100,106],[106,110],[110,104],[104,109],[109,110],[110,105],[105,102]],
+ [[100,103],[103,98],[98,101],[101,95],[95,98],[98,94],[94,96]],
+ [[100,105],[105,108],[108,104],[104,111],[111,115],[115,113],[113,117]]
+ ][i];
+ return `<svg viewBox="0 0 320 100" width="100%" height="100" role="img" aria-label="Lern-Diagramm" style="display:block;background:#09101d;border-radius:9px;margin:8px 0 14px">${[25,50,75].map(y=>`<line x1="8" y1="${y}" x2="312" y2="${y}" stroke="#263349" stroke-dasharray="3 4"/>`).join("")}${data.map((d,j)=>{const x=20+j*45,o=90-(d[0]-90)*3.5,c=90-(d[1]-90)*3.5;const hi=Math.min(o,c)-6,lo=Math.max(o,c)+6,col=d[1]>=d[0]?"#36d6a0":"#ff667d";return `<line x1="${x}" y1="${hi}" x2="${x}" y2="${lo}" stroke="${col}"/><rect x="${x-6}" y="${Math.min(o,c)}" width="12" height="${Math.max(3,Math.abs(o-c))}" fill="${col}" rx="1"/>`;}).join("")}</svg>`;
 }
-$("#nextQuestion").onclick=()=>loadQuestion(currentLesson+1);
+function answerLesson(i,j){
+ const l=LESSONS[i],box=$("feedback-"+i);
+ const buttons=document.querySelectorAll(`[data-answer^="${i}:"]`);
+ buttons.forEach(b=>{b.disabled=true;const index=Number(b.dataset.answer.split(":")[1]);if(index===l.correct)b.classList.add("correct");else if(index===j)b.classList.add("wrong");});
+ box.hidden=false;
+ if(j===l.correct){
+  box.textContent=t("right")+" "+(l.why[state.language]||l.why.de);
+  if(!state.done.includes(i))state.done.push(i);
+  saveState();renderDashboardNumbers();$("homeProgress").style.width=(state.done.length/LESSONS.length*100)+"%";
+ }else box.textContent=t("tryAgain")+" "+(l.why[state.language]||l.why.de);
+ renderLessons();
+ const newBox=$("feedback-"+i);newBox.hidden=false;newBox.textContent=j===l.correct?t("right")+" "+(l.why[state.language]||l.why.de):t("tryAgain")+" "+(l.why[state.language]||l.why.de);
+}
+function renderTutorial(){
+ const steps=TUTORIAL[state.language]||TUTORIAL.de;
+ const step=steps[tutorialStep];
+ $("tutorialTitle").textContent=step[0];
+ $("tutorialContent").innerHTML=`<div class="tutorialstep"><div class="stepnum">${tutorialStep+1}</div><div>${safeText(step[1])}</div></div>${tutorialStep===3?`<button class="primary" id="tutorialTryBuy">${state.language==="en"?"Try a virtual buy →":state.language==="fr"?"Essayer un achat virtuel →":state.language==="ru"?"Попробовать виртуальную покупку →":state.language==="tg"?"Хариди маҷозиро санҷед →":"Virtuellen Kauf ausprobieren →"}</button>`:tutorialStep===4?`<button id="tutorialTrySell">${state.language==="en"?"Try sell controls →":state.language==="fr"?"Essayer les commandes de vente →":state.language==="ru"?"Попробовать продажу →":state.language==="tg"?"Фурӯшро санҷед →":"Verkauf ausprobieren →"}</button>`:""}`;
+ $("tutorialProgress").style.width=((tutorialStep+1)/steps.length*100)+"%";
+ $("nextTutorial").textContent=tutorialStep===steps.length-1?t("finish"):t("next");
+}
+function startTutorial(){
+ tutorialStep=0;$("tutorialModal").hidden=false;renderTutorial();
+}
+function finishTutorial(){
+ $("tutorialModal").hidden=true;state.tutorialSeen=true;saveState();toast(t("tutorialDone"));
+}
+function renderAll(){
+ renderHome();renderMarkets();renderTrade();renderPortfolio();renderHistory();renderLessons();
+}
+function resetDemo(){
+ if(!confirm(t("confirmReset")))return;
+ const lang=state.language;
+ state={cash:10000,holdings:{},trades:[],done:[],language:lang,selected:"BTC",tutorialSeen:true,charts:{}};
+ selected="BTC";activeLesson=-1;saveState();renderAll();toast(t("resetDone"));
+}
+function exportCSV(){
+ const rows=[[t("coin"),t("action"),t("amount"),t("price"),t("total"),t("time")],...state.trades.map(tr=>[coin(tr.code)[1]+" ("+tr.code+")",tr.side,qtyFmt(tr.qty),tr.price.toFixed(8),(tr.qty*tr.price).toFixed(8),new Date(tr.time).toISOString()])];
+ const csv=rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="nexyron-trades.csv";a.click();URL.revokeObjectURL(url);toast(t("csvDone"));
+}
 
-const tutorialSteps=[
-["Willkommen bei NEXYRON","Du lernst in einer sicheren Simulation. Es wird kein echtes Geld verwendet."],
-["Wähle einen Coin","Öffne Play und wähle einen Coin, dessen Kurs du beobachten möchtest."],
-["Lies die Kerzen","Der Kerzenkörper zeigt Eröffnung und Schluss. Die Dochte zeigen Hoch und Tief. Grün bedeutet Schluss über Eröffnung; Rot bedeutet Schluss darunter."],
-["Virtuell kaufen","Wähle Kaufen, gib eine Menge ein und prüfe den Gesamtwert. Erst danach bestätigst du den simulierten Kauf."],
-["Virtuell verkaufen","Wechsle zu Verkaufen. Du kannst nur Coins verkaufen, die du in deinem Demokonto besitzt."],
-["Jetzt selbst üben","Im Learn-Bereich erklären wir Chartmuster, bevor du dazu Fragen beantwortest."]
-];
-let tutorialIndex=0;
-function showTutorial(){tutorialIndex=0;$("#tutorial").classList.add("show");drawTutorial()}
-function drawTutorial(){const s=tutorialSteps[tutorialIndex];$("#tTitle").textContent=s[0];$("#tText").textContent=s[1];$("#tBar").style.width=((tutorialIndex+1)/tutorialSteps.length*100)+"%";$("#nextTutorial").textContent=tutorialIndex===tutorialSteps.length-1?"Los geht’s ✓":"Weiter →"}
-function closeTutorial(){ $("#tutorial").classList.remove("show");state.seen=true;save();go("play")}
-$("#startTutorial").onclick=showTutorial;$("#skipTutorial").onclick=closeTutorial;
-$("#nextTutorial").onclick=()=>{if(tutorialIndex<tutorialSteps.length-1){tutorialIndex++;drawTutorial()}else closeTutorial()};
-
-/* Animierter Simulationschart: eigene, ausdrücklich simulierte OHLC-Kerzen. */
-const canvas=$("#chart"),ctx=canvas.getContext("2d");let candles=[];
-function createSeries(c){
-let seed=0;for(const ch of c.symbol)seed=(seed*31+ch.charCodeAt(0))>>>0;
-const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
-let p=c.price;
-return Array.from({length:65},()=>{const o=p,cl=Math.max(p*.1,p*(1+(rand()-.5)*.025)),h=Math.max(o,cl)*(1+rand()*.008),l=Math.min(o,cl)*(1-rand()*.008);p=cl;return{o,h,l,c:cl}});
+function populateCoinSelect(){
+ $("chartCoin").innerHTML=COINS.map(c=>`<option value="${c[0]}">${c[0]} · ${c[1]}</option>`).join("");
 }
-function ensureSeries(){if(!state.series[state.selected])state.series[state.selected]=createSeries(getCoin());candles=state.series[state.selected]}
-function tick(){
-if(state.paused)return;
-ensureSeries();
-const c=getCoin(),a=candles,last=a[a.length-1],base=last.c;
-const vol=state.speed==="fast"?.012:state.speed==="normal"?.005:.0015;
-const next=Math.max(base*.05,base*(1+(Math.random()-.495)*vol));
-const hi=Math.max(base,next)*(1+Math.random()*vol*.6),lo=Math.min(base,next)*(1-Math.random()*vol*.6);
-if(Math.random()>.3){a.push({o:base,h:hi,l:lo,c:next});if(a.length>65)a.shift()}
-else{last.h=Math.max(last.h,hi);last.l=Math.min(last.l,lo);last.c=next}
-c.price=next;c.change=(next/c.base-1)*100;
-renderStats();renderCoins("#homeCoins");renderCoins("#marketCoins",$("#search").value);syncTrade();draw();
-}
-function short(n){if(n>=1000)return(n/1000).toLocaleString("de-DE",{maximumFractionDigits:1})+"k";if(n<.001)return n.toExponential(1);return n.toLocaleString("de-DE",{maximumFractionDigits:n<1?5:2})}
-function draw(){
-if(!ctx)return;ensureSeries();
-const rect=canvas.getBoundingClientRect(),w=rect.width,h=rect.height;if(!w||!h)return;
-const d=Math.min(window.devicePixelRatio||1,2);
-if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d)}
-ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,w,h);ctx.fillStyle="#091221";ctx.fillRect(0,0,w,h);
-const pad={l:12,r:73,t:15,b:24},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
-const a=candles.slice(-52);let lo=Math.min(...a.map(c=>c.l)),hi=Math.max(...a.map(c=>c.h));
-if(hi===lo){hi*=1.01;lo*=.99}
-const margin=(hi-lo)*.07;lo-=margin;hi+=margin;
-const y=v=>pad.t+(hi-v)/(hi-lo)*ch,x=i=>pad.l+i*cw/a.length;
-ctx.font="10px system-ui";
-for(let i=0;i<=5;i++){
-const yy=pad.t+ch*i/5;ctx.strokeStyle="#ffffff12";ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();
-ctx.fillStyle="#9babc1";ctx.fillText(short(hi-(hi-lo)*i/5),w-pad.r+6,yy+3);
-}
-if(state.type==="line"){
-ctx.strokeStyle="#91aaff";ctx.lineWidth=2;ctx.beginPath();
-a.forEach((c,i)=>{const xx=x(i)+cw/a.length/2;i?ctx.lineTo(xx,y(c.c)):ctx.moveTo(xx,y(c.c))});ctx.stroke();
-}else{
-const bw=Math.max(2,Math.min(9,cw/a.length*.65));
-a.forEach((c,i)=>{
-const xx=x(i)+cw/a.length/2,up=c.c>=c.o,col=up?"#21d6a0":"#ff627b";
-ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1.2;ctx.beginPath();
-ctx.moveTo(xx,y(c.h));ctx.lineTo(xx,y(c.l));ctx.stroke();
-if(state.type==="bar"){
-ctx.beginPath();ctx.moveTo(xx-bw,y(c.o));ctx.lineTo(xx,y(c.o));ctx.moveTo(xx,y(c.c));ctx.lineTo(xx+bw,y(c.c));ctx.stroke();
-}else ctx.fillRect(xx-bw/2,y(Math.max(c.o,c.c)),bw,Math.max(1,Math.abs(y(c.o)-y(c.c))));
+document.addEventListener("click",e=>{
+ const nav=e.target.closest("[data-page]");
+ if(nav){go(nav.dataset.page);return;}
+ const goBtn=e.target.closest("[data-go]");
+ if(goBtn){go(goBtn.dataset.go);return;}
+ const sel=e.target.closest("[data-select]");
+ if(sel){selectCoin(sel.dataset.select);return;}
+ const tr=e.target.closest("[data-trade]");
+ if(tr){selectCoin(tr.dataset.trade);return;}
+ const sellall=e.target.closest("[data-sellall]");
+ if(sellall){selected=sellall.dataset.sellall;state.selected=selected;saveState();go("trade");trade("SELL",true);return;}
+ const lesson=e.target.closest("[data-openlesson]");
+ if(lesson){activeLesson=activeLesson===Number(lesson.dataset.openlesson)?-1:Number(lesson.dataset.openlesson);renderLessons();return;}
+ const ans=e.target.closest("[data-answer]");
+ if(ans){const [i,j]=ans.dataset.answer.split(":").map(Number);answerLesson(i,j);return;}
+ if(e.target.id==="tutorialTryBuy"){go("trade");$("tutorialModal").hidden=true;$("orderQty").value="0.001";updateOrderTotal();$("buyBtn").focus();toast(state.language==="en"?"Try a virtual purchase. Return to the tutorial when ready.":"Probiere einen virtuellen Kauf. Starte das Tutorial danach erneut.");return;}
+ if(e.target.id==="tutorialTrySell"){go("trade");$("tutorialModal").hidden=true;$("sellBtn").focus();return;}
 });
+$("headerTutorial").addEventListener("click",startTutorial);
+$("startTutorial").addEventListener("click",startTutorial);
+$("settingsTutorial").addEventListener("click",startTutorial);
+$("closeTutorial").addEventListener("click",finishTutorial);
+$("skipTutorial").addEventListener("click",finishTutorial);
+$("nextTutorial").addEventListener("click",()=>{
+ if(tutorialStep<(TUTORIAL[state.language]||TUTORIAL.de).length-1){tutorialStep++;renderTutorial();}
+ else finishTutorial();
+});
+$("buyBtn").addEventListener("click",()=>trade("BUY"));
+$("sellBtn").addEventListener("click",()=>trade("SELL"));
+$("sellAllBtn").addEventListener("click",()=>trade("SELL",true));
+$("chartCoin").addEventListener("change",e=>{selected=e.target.value;state.selected=selected;saveState();renderTrade();});
+$("orderQty").addEventListener("input",updateOrderTotal);
+$("search").addEventListener("input",renderMarkets);
+$("languageSelect").addEventListener("change",e=>{state.language=e.target.value;saveState();applyLanguage();if(!$("tutorialModal").hidden)renderTutorial();});
+$("resetData").addEventListener("click",resetDemo);
+$("exportTrades").addEventListener("click",exportCSV);
+$("togglePause").addEventListener("click",()=>{
+ paused=!paused;$("togglePause").textContent=paused?"▶":"Ⅱ";
+ $("togglePause").title=paused?t("resume"):t("paused");
+});
+$("fullscreen").addEventListener("click",async()=>{
+ const el=$("chartWrap");
+ try{
+  if(!document.fullscreenElement&&el.requestFullscreen)await el.requestFullscreen();
+  else if(document.fullscreenElement)await document.exitFullscreen();
+  else el.classList.toggle("expanded");
+ }catch(e){el.classList.toggle("expanded");}
+});
+$("chartInterval").addEventListener("change",e=>{
+ // Intervals change the displayed candle grouping; the source data remains simulated.
+ const mins=Number(e.target.value)||1;
+ const arr=chartFor(selected);
+ if(mins>1){
+  const grouped=[];
+  for(let i=0;i<arr.length;i+=mins){
+   const part=arr.slice(i,i+mins);if(!part.length)continue;
+   grouped.push({o:part[0].o,h:Math.max(...part.map(v=>v.h)),l:Math.min(...part.map(v=>v.l)),c:part[part.length-1].c,t:part[0].t});
+  }
+  drawChartWithData(grouped);
+ }else drawChart();
+});
+function drawChartWithData(data){
+ // Draw using the standard chart renderer after temporarily supplying grouped candles.
+ const original=state.charts[selected];state.charts[selected]=data;drawChart();state.charts[selected]=original;
 }
-const last=a[a.length-1],yy=y(last.c),color=last.c>=last.o?"#21d6a0":"#ff627b";
-ctx.setLineDash([4,4]);ctx.strokeStyle=color;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.setLineDash([]);
-ctx.fillStyle=color;ctx.fillRect(w-pad.r+2,yy-9,pad.r-4,18);
-ctx.fillStyle="#07121a";ctx.font="bold 10px system-ui";ctx.fillText(short(last.c),w-pad.r+6,yy+3);
-ctx.fillStyle="#9babc1";ctx.fillText("älter",pad.l,h-7);ctx.fillText("jetzt",w-pad.r-25,h-7);
-$("#chartPrice").textContent=money(getCoin().price);
-}
-$$("[data-chart]").forEach(b=>b.onclick=()=>{$$("[data-chart]").forEach(x=>x.classList.toggle("active",x===b));state.type=b.dataset.chart;draw()});
-$("#pause").onclick=()=>{state.paused=!state.paused;$("#pause").textContent=state.paused?"▶ Start":"Ⅱ Pause";toast(state.paused?"Chart pausiert":"Chart läuft wieder")};
-$("#interval").onchange=()=>toast("Intervall ausgewählt. Die Demo bleibt simuliert.");
-$("#fullscreen").onclick=async()=>{
-const el=$("#chartCard");
-if(document.fullscreenElement){await document.exitFullscreen().catch(()=>{});return}
-if(el.requestFullscreen){try{await el.requestFullscreen()}catch{el.classList.add("fullscreen")}}
-else el.classList.add("fullscreen");
-$("#fullscreen").textContent="✕ Schließen";setTimeout(resizeChart,120);
-};
-document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement){$("#chartCard").classList.remove("fullscreen");$("#fullscreen").textContent="⛶ Vollbild"}setTimeout(resizeChart,100)});
-function resizeChart(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;const d=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);draw()}
-window.addEventListener("resize",resizeChart);
-if("ResizeObserver"in window)new ResizeObserver(resizeChart).observe($("#chartWrap"));
+window.addEventListener("resize",()=>{if($("trade").classList.contains("active"))drawChart();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("tutorialModal").hidden)finishTutorial();});
 
-$("#saveSettings").onclick=()=>{state.speed=$("#speed").value;save();toast("Einstellungen gespeichert.");};
-$("#reset").onclick=()=>{if(confirm("Demokonto wirklich zurücksetzen? Guthaben, Positionen und Verlauf werden gelöscht.")){state.cash=10000;state.hold={};state.trades=[];save();renderStats();renderPortfolio();syncTrade();toast("Demokonto zurückgesetzt.")}};
-
-function boot(){
-load();$("#speed").value=state.speed;
-renderCoins("#homeCoins");renderCoins("#marketCoins");renderLessons();renderStats();renderPortfolio();loadQuestion(0);syncTrade();ensureSeries();resizeChart();
-setInterval(tick,850);
-if(!state.seen)setTimeout(showTutorial,500);
-}
-boot();
-})();
+populateCoinSelect();
+if(!COINS.some(c=>c[0]===selected))selected="BTC";
+applyLanguage();
+if(!state.tutorialSeen){startTutorial();}
+setInterval(tickCharts,1800);
 </script>
 </body>
 </html>
