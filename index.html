@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -68,12 +67,334 @@ th{color:var(--muted);font-weight:600}
 .lesson summary{cursor:pointer;font-weight:700}.lesson p{color:#b2bfd1}
 #toast{position:fixed;bottom:20px;right:20px;z-index:10;background:#1c2c42;border:1px solid #3a5577;border-radius:10px;padding:12px 16px;max-width:330px;display:none;box-shadow:0 8px 30px #0008}
 footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
+
+/* NEU: Start-Dokumentation */
+#documentation{
+ position:fixed;
+ inset:0;
+ z-index:1000;
+ background:rgba(5,9,16,.98);
+ overflow-y:auto;
+ padding:24px;
+}
+.doc-container{max-width:1050px;margin:0 auto}
+.doc-header{
+ padding:24px 0;
+ border-bottom:1px solid var(--line);
+ margin-bottom:22px;
+}
+.doc-brand{font-size:27px;font-weight:900;letter-spacing:3px}
+.doc-brand span{color:var(--green)}
+.doc-intro{font-size:15px;color:var(--muted);max-width:800px}
+.doc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.doc-card{
+ background:var(--panel);
+ border:1px solid var(--line);
+ border-radius:12px;
+ padding:17px;
+ min-width:0;
+}
+.doc-card h2{color:var(--blue);margin-bottom:10px}
+.doc-card p{color:#b2bfd1;margin:7px 0}
+.doc-card ul{padding-left:20px;color:#b2bfd1}
+.doc-card li{margin:7px 0}
+.doc-tag{
+ display:inline-block;
+ padding:3px 8px;
+ border-radius:6px;
+ background:#1b2c41;
+ color:var(--green);
+ font-size:11px;
+ margin-bottom:9px;
+}
+.doc-warning{
+ border:1px solid #705c31;
+ background:#211d14;
+ color:#f4d79a;
+ padding:14px;
+ border-radius:10px;
+ margin:18px 0;
+}
+.doc-start{
+ display:block;
+ width:100%;
+ max-width:360px;
+ margin:22px auto;
+ padding:15px 20px;
+ background:#126d53;
+ border-color:#1b9b73;
+ font-size:16px;
+ font-weight:800;
+}
+.doc-start:hover{background:#168363}
+.doc-footer{text-align:center;color:var(--muted);padding:10px 0 30px}
 @media(max-width:1050px){.trade-layout{grid-template-columns:minmax(0,1fr) 250px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.coin-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{display:flex;gap:6px;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px}.nav-label,.side-card{display:none}.nav{width:auto;white-space:nowrap;margin:0;padding:9px 12px}.topbar{padding:0 13px}main{padding:12px}.trade-layout,.split{grid-template-columns:1fr}.canvas-wrap{height:340px}.stats{gap:8px}.card{padding:13px}.stat-value{font-size:19px}.coin-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:420px){.stats{grid-template-columns:1fr 1fr}.coin-list{grid-template-columns:1fr}.coin-price{font-size:19px}}
+@media(max-width:760px){
+ .layout{grid-template-columns:1fr}
+ .sidebar{display:flex;gap:6px;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px}
+ .nav-label,.side-card{display:none}
+ .nav{width:auto;white-space:nowrap;margin:0;padding:9px 12px}
+ .topbar{padding:0 13px}
+ main{padding:12px}
+ .trade-layout,.split{grid-template-columns:1fr}
+ .canvas-wrap{height:340px}
+ .stats{gap:8px}
+ .card{padding:13px}
+ .stat-value{font-size:19px}
+ .coin-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #documentation{padding:14px}
+ .doc-grid{grid-template-columns:1fr}
+ .doc-header{padding:12px 0}
+}
+@media(max-width:420px){
+ .stats{grid-template-columns:1fr 1fr}
+ .coin-list{grid-template-columns:1fr}
+ .coin-price{font-size:19px}
+ .doc-brand{font-size:23px}
+}
 </style>
 </head>
 <body>
+
+<!-- NEU: Dokumentation wird beim Öffnen zuerst angezeigt -->
+<div id="documentation">
+ <div class="doc-container">
+  <div class="doc-header">
+   <div class="doc-brand">NEXY<span>RON</span></div>
+   <h1 style="margin-top:18px">Trading Simulator – Bedienungsanleitung</h1>
+   <p class="doc-intro">
+    Willkommen bei NEXYRON! Diese Anleitung erklärt dir alle Bereiche,
+    Schaltflächen und Funktionen. Du kannst hier lernen, wie du den
+    simulierten Markt bedienst, virtuelle Trades ausführst und deine
+    Ergebnisse analysierst. Lies die Abschnitte durch und starte danach
+    den Simulator.
+   </p>
+  </div>
+
+  <div class="doc-grid">
+   <section class="doc-card">
+    <span class="doc-tag">01 · Übersicht</span>
+    <h2>Das Dashboard verstehen</h2>
+    <p>Im Trading-Dashboard findest du den Chart und die wichtigsten Informationen zu deinem ausgewählten Coin.</p>
+    <ul>
+     <li><b>Gesamtvermögen:</b> Dein virtuelles Bargeld plus der aktuelle Wert aller offenen Positionen.</li>
+     <li><b>Offener Gewinn / Verlust:</b> Die rechnerische Entwicklung deiner noch offenen Positionen.</li>
+     <li><b>Realisierter P/L:</b> Der Gewinn oder Verlust aus abgeschlossenen Verkäufen.</li>
+     <li><b>Simulationstempo:</b> Die eingestellte Geschwindigkeit der künstlichen Kursbewegungen.</li>
+     <li><b>Verfügbares Cash:</b> Das virtuelle Geld, das für neue Käufe zur Verfügung steht.</li>
+    </ul>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">02 · Geschwindigkeit</span>
+    <h2>Marktgeschwindigkeit einstellen</h2>
+    <p>Rechts im Bereich „Simulation steuern“ kannst du das Tempo des simulierten Marktes auswählen.</p>
+    <ul>
+     <li><b>1×:</b> Langsame Kursbewegungen, gut zum Beobachten.</li>
+     <li><b>2×:</b> Etwas schnellerer Ablauf.</li>
+     <li><b>5×:</b> Schneller Ablauf, voreingestellt.</li>
+     <li><b>10×:</b> Sehr schnelle Kursbewegungen.</li>
+    </ul>
+    <p>Mit „Pause“ hältst du die Kursentwicklung an. Mit „Weiter“ setzt du die Simulation fort. Während der Pause kannst du weiterhin die Oberfläche verwenden und Trades ausführen.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">03 · Märkte</span>
+    <h2>Coins auswählen</h2>
+    <p>Im Menü „Märkte“ findest du alle verfügbaren simulierten Kryptowährungen.</p>
+    <ul>
+     <li>Wähle einen Coin aus der Liste aus.</li>
+     <li>Der Simulator öffnet dessen Chart im Trading-Bereich.</li>
+     <li>Jeder Coin besitzt einen eigenen künstlichen Kursverlauf.</li>
+     <li>Du kannst verschiedene Coins auswählen und ihre Entwicklungen vergleichen.</li>
+    </ul>
+    <p>Die angezeigten Preise sind simuliert und entsprechen nicht den echten Marktpreisen.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">04 · Kaufen</span>
+    <h2>Einen virtuellen Kauf ausführen</h2>
+    <p>So kaufst du einen Coin im Simulator:</p>
+    <ul>
+     <li>Wähle zuerst den gewünschten Coin.</li>
+     <li>Gib unter „Betrag in EUR“ den Betrag ein, den du investieren möchtest.</li>
+     <li>Die geschätzte Coin-Menge wird unter dem Eingabefeld angezeigt.</li>
+     <li>Klicke auf „Kaufen“, um den virtuellen Trade auszuführen.</li>
+    </ul>
+    <p>Der Simulator prüft, ob dein virtuelles Guthaben ausreicht. Auf Käufe wird eine simulierte Gebühr von 0,1 % berechnet.</p>
+    <p>Nach dem Kauf wird die Position gespeichert und dein verfügbares Cash entsprechend reduziert.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">05 · Verkaufen</span>
+    <h2>Positionen verkaufen</h2>
+    <p>Du kannst Coins teilweise oder vollständig verkaufen.</p>
+    <ul>
+     <li><b>Verkaufen:</b> Gib den gewünschten Verkaufswert in Euro im Betragsfeld ein. Der Simulator berechnet daraus die Coin-Menge.</li>
+     <li><b>Position komplett verkaufen:</b> Schließt die gesamte offene Position des ausgewählten Coins.</li>
+     <li><b>Alles verkaufen im Portfolio:</b> Verkauft die jeweilige Position direkt aus der Positionsübersicht.</li>
+    </ul>
+    <p>Ein Verkauf ist nur möglich, wenn du ausreichend Coins besitzt. Verkaufsgebühren werden ebenfalls berücksichtigt.</p>
+    <p>Der realisierte Gewinn oder Verlust wird nach einem Verkauf berechnet und im Trade-Verlauf festgehalten.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">06 · Chart</span>
+    <h2>Kerzen und Zeiträume</h2>
+    <p>Der Chart stellt die künstlichen Kursbewegungen als Kerzen dar.</p>
+    <ul>
+     <li><b>Grüne Kerze:</b> Der Schlusskurs liegt über dem Eröffnungskurs.</li>
+     <li><b>Rote Kerze:</b> Der Schlusskurs liegt unter dem Eröffnungskurs.</li>
+     <li><b>Dochte:</b> Zeigen das Hoch und Tief der jeweiligen Kerze.</li>
+     <li><b>Zeiträume:</b> 1m, 5m, 15m, 1h, 4h, 1D und 1W gruppieren die simulierten Kerzen unterschiedlich.</li>
+     <li><b>Zoom:</b> Mit Plus und Minus veränderst du die Anzahl der sichtbaren Kerzen.</li>
+     <li><b>Ansicht zurücksetzen:</b> Stellt die Standard-Zoomansicht wieder her.</li>
+    </ul>
+    <p>Die Zeitangaben unter dem Chart sind interne Simulationsindizes und keine echten Zeitstempel.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">07 · Indikatoren</span>
+    <h2>Gleitende Durchschnitte und Volumen</h2>
+    <p>Über die Kontrollkästchen oberhalb des Charts kannst du zusätzliche Darstellungen ein- und ausschalten.</p>
+    <ul>
+     <li><b>MA:</b> Zeigt zwei gleitende Durchschnitte über 9 und 21 Kerzen.</li>
+     <li><b>Volumen:</b> Zeigt simulierte Volumenbalken unterhalb der Kerzen.</li>
+    </ul>
+    <p>Ein gleitender Durchschnitt glättet vergangene Schlusskurse. Er reagiert verzögert und sagt nicht zuverlässig voraus, wie sich der Markt weiterentwickelt.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">08 · Zeichnungen</span>
+    <h2>Chart analysieren und zeichnen</h2>
+    <p>Du kannst direkt im Chart eigene Markierungen einzeichnen.</p>
+    <ul>
+     <li><b>Cursor:</b> Normale Chartbedienung ohne neue Zeichnung.</li>
+     <li><b>Freihand:</b> Zeichnet eine Linie entlang deiner Maus- oder Fingerbewegung.</li>
+     <li><b>Trendlinie:</b> Verbindet zwei Punkte.</li>
+     <li><b>Horizontale:</b> Zeichnet eine horizontale Preislinie.</li>
+     <li><b>Pfeil:</b> Zeichnet eine Linie mit Pfeilspitze.</li>
+     <li><b>Radierer:</b> Entfernt eine Zeichnung, wenn du nahe an einem ihrer gespeicherten Punkte klickst.</li>
+     <li><b>Rückgängig:</b> Stellt die letzte gespeicherte Zeichnungsänderung wieder her.</li>
+     <li><b>Zeichnungen löschen:</b> Entfernt alle Zeichnungen des ausgewählten Coins.</li>
+    </ul>
+    <p>Die Zeichnungen werden lokal gespeichert und beim Wechsel des Coins getrennt verwaltet.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">09 · Preis-Alarm</span>
+    <h2>Preisalarme setzen</h2>
+    <p>Mit einem Preisalarm kannst du einen Kurs beobachten.</p>
+    <ul>
+     <li>Gib im Bereich „Preis-Alarm“ deinen gewünschten Alarmkurs in Euro ein.</li>
+     <li>Klicke auf „Alarm setzen“.</li>
+     <li>Liegt der eingegebene Kurs oberhalb des aktuellen Preises, wartet der Simulator auf einen Anstieg bis zu diesem Kurs.</li>
+     <li>Liegt er unterhalb des aktuellen Preises, wartet er auf einen Rückgang bis zu diesem Kurs.</li>
+     <li>Beim Erreichen des Kurses erscheint eine Meldung im Simulator.</li>
+    </ul>
+    <p>Die Alarme sind nur während der aktuellen Sitzung aktiv. Sie sind keine externen Benachrichtigungen und werden nach einem Neuladen nicht wiederhergestellt.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">10 · Portfolio</span>
+    <h2>Deine Positionen überprüfen</h2>
+    <p>Im Menü „Portfolio“ findest du die Übersicht deiner offenen Positionen.</p>
+    <ul>
+     <li><b>Menge:</b> Die Anzahl deiner Coins.</li>
+     <li><b>Ø Einstieg:</b> Der durchschnittliche Einstiegspreis inklusive der beim Kauf berücksichtigten Gebühren.</li>
+     <li><b>Aktueller Preis:</b> Der aktuelle simulierte Kurs.</li>
+     <li><b>Wert:</b> Die aktuelle Bewertung deiner Position.</li>
+     <li><b>Offener P/L:</b> Der rechnerische Unterschied zwischen aktuellem Kurs und durchschnittlichem Einstieg.</li>
+     <li><b>Alles verkaufen:</b> Schließt die jeweilige Position.</li>
+    </ul>
+    <p>Die Werte können sich während der Simulation verändern, solange der Markt läuft.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">11 · Verlauf</span>
+    <h2>Trade-Verlauf und CSV-Export</h2>
+    <p>Im Menü „Trade-Verlauf“ findest du deine aufgezeichneten virtuellen Käufe und Verkäufe.</p>
+    <ul>
+     <li>Die Tabelle zeigt Zeit, Typ, Coin, Menge, Preis, Gebühr und realisierten Gewinn oder Verlust.</li>
+     <li><b>CSV exportieren:</b> Erstellt einen Export des gespeicherten Trade-Verlaufs, den du beispielsweise in einer Tabellenkalkulation öffnen kannst.</li>
+     <li><b>Verlauf löschen:</b> Löscht die Trade-Historie nach einer Bestätigung.</li>
+    </ul>
+    <p>Das Löschen des Verlaufs löscht nicht automatisch dein Portfolio oder dein virtuelles Guthaben.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">12 · Journal</span>
+    <h2>Deine Trading-Ideen dokumentieren</h2>
+    <p>Im Trading-Journal kannst du deine Beobachtungen und Entscheidungen festhalten.</p>
+    <ul>
+     <li><b>Titel:</b> Vergib einen Namen für deinen Eintrag.</li>
+     <li><b>Marktgefühl:</b> Wähle Neutral, Optimistisch, Vorsichtig oder Unsicher.</li>
+     <li><b>Notizen:</b> Beschreibe deine Idee, deinen Plan und deine Beobachtungen.</li>
+     <li><b>Eintrag speichern:</b> Speichert den Eintrag lokal.</li>
+     <li><b>Eintrag löschen:</b> Entfernt einen gespeicherten Journal-Eintrag.</li>
+    </ul>
+    <p>Nutze das Journal, um nach Trades zu prüfen, ob du deinen Plan eingehalten hast und was du beim nächsten Versuch verbessern möchtest.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">13 · Lernen</span>
+    <h2>Die Lernsektion nutzen</h2>
+    <p>Im Bereich „Lernen“ findest du kurze Grundlagen zu verschiedenen Themen.</p>
+    <ul>
+     <li>Kerzen und ihre Bestandteile verstehen.</li>
+     <li>Trendlinien zur Untersuchung möglicher Trends verwenden.</li>
+     <li>Risiko und Positionsgröße beachten.</li>
+     <li>Gleitende Durchschnitte verstehen.</li>
+     <li>Das Gelernte mit dem Chart und dem Journal üben.</li>
+    </ul>
+    <p>Die Lernsektion ist eine Einführung und ersetzt keine umfassende Finanzbildung.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">14 · Speichern</span>
+    <h2>Speicherung und Zurücksetzen</h2>
+    <p>Der Simulator verwendet den lokalen Browserspeicher (<code>localStorage</code>), um unter anderem Guthaben, Positionen, Trade-Verlauf, Journal, Zeichnungen, ausgewählten Coin, Geschwindigkeit und Zeitraum zu speichern.</p>
+    <ul>
+     <li>Gespeicherte Daten bleiben normalerweise bei einem Neuladen im selben Browser erhalten.</li>
+     <li>Die Daten werden nicht automatisch mit anderen Geräten synchronisiert.</li>
+     <li>Der Browser darf die lokalen Daten nicht zwischenzeitlich löschen oder blockieren.</li>
+     <li><b>Zurücksetzen:</b> Setzt Guthaben, Positionen, Verlauf, Zeichnungen und Journal zurück und stellt die Startwerte wieder her.</li>
+    </ul>
+    <p>Ein Zurücksetzen kann nicht rückgängig gemacht werden.</p>
+   </section>
+
+   <section class="doc-card">
+    <span class="doc-tag">15 · Grenzen</span>
+    <h2>Was kann der Simulator – und was nicht?</h2>
+    <ul>
+     <li>Virtuelle Käufe und Verkäufe üben.</li>
+     <li>Simulierte Kurse beobachten.</li>
+     <li>Charts und Indikatoren untersuchen.</li>
+     <li>Virtuelle Positionen, Ergebnisse und Trades verfolgen.</li>
+     <li>Eigene Zeichnungen, Preisalarme und Journal-Einträge nutzen.</li>
+    </ul>
+    <p>Der Simulator bietet keine echten Marktdaten, keine Verbindung zu einer Börse, keine echten Orders, keine echten Ein- oder Auszahlungen und keine Garantie für zukünftige Kursentwicklungen.</p>
+    <p>Die Marktbewegungen sind zufällig erzeugt. Sie sind nicht aus historischen oder aktuellen Kursdaten abgeleitet.</p>
+   </section>
+  </div>
+
+  <div class="doc-warning">
+   <b>Wichtiger Hinweis:</b> NEXYRON ist ein Lern- und Paper-Trading-Simulator.
+   Das Guthaben und alle Trades sind virtuell. Es wird kein echtes Geld bewegt.
+   Gewinne und Verluste im Simulator sind keine Vorhersage für echte Märkte
+   und keine Anlageberatung.
+  </div>
+
+  <button id="startSimulator" class="doc-start">
+   ✓ Alles verstanden – Simulator öffnen
+  </button>
+
+  <div class="doc-footer">
+   NEXYRON · Paper-Trading-Lernsimulator · Creator Yusuf
+  </div>
+ </div>
+</div>
+
 <header class="topbar">
   <div class="brand">NEXY<span>RON</span></div>
   <div class="status"><i class="dot"></i> SIMULATION AKTIV</div>
@@ -217,6 +538,12 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
 <script>
 "use strict";
 
+/* NEU: Dokumentation schließen und Simulator öffnen */
+$("startSimulator").addEventListener("click",()=>{
+ $("documentation").style.display="none";
+});
+
+/* Bestehender Simulator-Code */
 const COINS = [
  {s:"BTC",n:"Bitcoin",p:65000,c:"#f7931a"},
  {s:"ETH",n:"Ethereum",p:3200,c:"#8c9eff"},
@@ -347,14 +674,12 @@ function renderChart(){
   if(idx<0)idx=t<data[0].t?0:data.length-1;
   return xAt(idx);
  };
- // grid and price labels
  ctx.font="10px system-ui";ctx.textAlign="left";ctx.strokeStyle="#1b293c";ctx.fillStyle="#8495ab";ctx.lineWidth=1;
  for(let i=0;i<=5;i++){
   const yy=top+plotH*i/5,price=max-(max-min)*i/5;
   ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(W-right,yy);ctx.stroke();
   ctx.fillText(price.toLocaleString("de-DE",{maximumFractionDigits:4}),W-right+5,yy+3);
  }
- // volume bars
  if($("volumeToggle").checked){
   const maxV=Math.max(...data.map(d=>d.v),1);
   data.forEach((d,i)=>{
@@ -363,7 +688,6 @@ function renderChart(){
    ctx.fillRect(xAt(i)-cw/2,H-43,cw,bh);
   });
  }
- // candles
  data.forEach((d,i)=>{
   const x=xAt(i),yo=y(d.o),yc=y(d.c),yh=y(d.h),yl=y(d.l);
   ctx.strokeStyle=d.c>=d.o?"#20d99a":"#ff6077";ctx.fillStyle=ctx.strokeStyle;
@@ -371,7 +695,6 @@ function renderChart(){
   const bh=Math.max(1,Math.abs(yc-yo));
   ctx.fillRect(x-cw/2,Math.min(yo,yc),cw,bh);
  });
- // moving averages
  if($("maToggle").checked){
   [9,21].forEach((period,j)=>{
    const ma=movingAverage(data,period);ctx.beginPath();ctx.strokeStyle=j===0?"#f4c76b":"#65a7ff";ctx.lineWidth=1.5;
@@ -380,21 +703,16 @@ function renderChart(){
    ctx.stroke();
   });
  }
- // current price marker
  const price=currentPrice(),py=y(price);
  ctx.setLineDash([4,4]);ctx.strokeStyle="#65a7ff";ctx.beginPath();ctx.moveTo(left,py);ctx.lineTo(W-right,py);ctx.stroke();ctx.setLineDash([]);
  ctx.fillStyle="#234d78";ctx.fillRect(W-right,py-9,right,18);ctx.fillStyle="#fff";ctx.fillText(price.toLocaleString("de-DE",{maximumFractionDigits:4}),W-right+4,py+3);
- // time labels
  ctx.fillStyle="#8190a6";ctx.textAlign="center";
  [0,Math.floor(data.length/3),Math.floor(data.length*2/3),data.length-1].forEach(i=>{
   if(data[i])ctx.fillText("#"+data[i].t2,left+(i+.5)*step,H-8);
  });
- // draw saved annotations in data coordinates
  const anns=drawings[activeCoin]||[];
  anns.forEach(a=>drawAnnotation(ctx,a,xForT,y,W,H));
- // live drawing preview
  if(pointerDrawing)drawAnnotation(ctx,pointerDrawing,xForT,y,W,H,true);
- // save chart geometry for pointer conversion
  chartGeometry={data,left,top,plotW,plotH,min,max,xAt,y,xForT,step};
 }
 let chartGeometry=null,pointerDrawing=null,pointerStart=null;
@@ -591,6 +909,7 @@ function renderAll(){
  if($("page-markets").classList.contains("active"))drawCoinList();
  if($("page-portfolio").classList.contains("active"))renderPortfolio();
  if($("page-history").classList.contains("active"))renderHistory();
+ if($("page-journal").classList.contains("active"))renderJournal();
 }
 function tick(){
  if(!paused){
@@ -599,7 +918,6 @@ function tick(){
    globalIndex++;
    COINS.forEach(c=>{
     const m=market[c.s],prev=m.price;
-    // Schnelle, künstliche Kursbewegung mit gelegentlichen stärkeren Ausschlägen.
     const shock=Math.random()<.035?(Math.random()-.5)*.025:0;
     const move=(Math.random()-.505)*.0045+shock;
     const next=Math.max(m.seed*.05,prev*(1+move));
@@ -705,4 +1023,4 @@ resizeCanvas();
 setInterval(tick,650);
 </script>
 </body>
-</html>
+</html> 
