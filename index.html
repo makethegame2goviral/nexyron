@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
@@ -67,6 +67,26 @@ th{color:var(--muted);font-weight:600}
 .lesson summary{cursor:pointer;font-weight:700}.lesson p{color:#b2bfd1}
 #toast{position:fixed;bottom:20px;right:20px;z-index:10;background:#1c2c42;border:1px solid #3a5577;border-radius:10px;padding:12px 16px;max-width:330px;display:none;box-shadow:0 8px 30px #0008}
 footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
+
+/* Zusätzliche Visualisierungen in der Dokumentation */
+.doc-visual{margin:14px 0 8px;padding:13px;background:#0b1320;border:1px solid #263449;border-radius:10px}
+.doc-visual-title{color:#8797ad;font-size:11px;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+.speed-visual{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.speed-option{min-width:0;padding:9px 4px;border:1px solid #304158;background:#111e30;border-radius:8px;text-align:center}
+.speed-option strong{display:block;font-size:17px;color:#65a7ff}
+.speed-option span{display:block;font-size:10px;color:#8797ad;margin-top:3px}
+.speed-bars{height:23px;display:flex;align-items:end;justify-content:center;gap:3px;margin-top:7px}
+.speed-bars i{display:block;width:4px;border-radius:2px 2px 0 0;background:#20d99a}
+.speed-option:nth-child(1) .speed-bars i:nth-child(n+3){display:none}
+.speed-option:nth-child(2) .speed-bars i:nth-child(n+5){display:none}
+.speed-option:nth-child(3) .speed-bars i{background:#65a7ff}
+.speed-option:nth-child(4) .speed-bars i{background:#f4c76b}
+.mini-chart{display:block;width:100%;height:105px;background:#0b1320;border-radius:8px}
+.trade-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:7px;margin:14px 0 8px}
+.trade-step{text-align:center;border:1px solid #304158;background:#0b1320;border-radius:9px;padding:10px 5px;font-size:11px;color:#b2bfd1}
+.trade-step b{display:block;font-size:19px;margin-bottom:3px}
+.trade-arrow{color:#65a7ff;font-size:18px}
+.doc-card .doc-visual p{font-size:11px;color:#8797ad;margin:8px 0 0}
 
 /* NEU: Start-Dokumentation */
 #documentation{
@@ -151,12 +171,16 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
  .coin-list{grid-template-columns:1fr}
  .coin-price{font-size:19px}
  .doc-brand{font-size:23px}
+ .speed-option strong{font-size:15px}
+ .speed-option span{font-size:9px}
+ .trade-flow{gap:4px}
+ .trade-step{padding:8px 2px;font-size:10px}
 }
 </style>
 </head>
 <body>
 
-<!-- NEU: Dokumentation wird beim Öffnen zuerst angezeigt -->
+<!-- Dokumentation wird beim Öffnen zuerst angezeigt -->
 <div id="documentation">
  <div class="doc-container">
   <div class="doc-header">
@@ -195,6 +219,16 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
      <li><b>5×:</b> Schneller Ablauf, voreingestellt.</li>
      <li><b>10×:</b> Sehr schnelle Kursbewegungen.</li>
     </ul>
+    <div class="doc-visual">
+     <div class="doc-visual-title">So schnell läuft der simulierte Markt</div>
+     <div class="speed-visual">
+      <div class="speed-option"><strong>1×</strong><span>Langsam</span><div class="speed-bars"><i style="height:5px"></i><i style="height:8px"></i><i style="height:11px"></i><i style="height:15px"></i><i style="height:18px"></i></div></div>
+      <div class="speed-option"><strong>2×</strong><span>Normal</span><div class="speed-bars"><i style="height:5px"></i><i style="height:8px"></i><i style="height:11px"></i><i style="height:15px"></i><i style="height:18px"></i></div></div>
+      <div class="speed-option"><strong>5×</strong><span>Schnell</span><div class="speed-bars"><i style="height:5px"></i><i style="height:8px"></i><i style="height:11px"></i><i style="height:15px"></i><i style="height:18px"></i></div></div>
+      <div class="speed-option"><strong>10×</strong><span>Sehr schnell</span><div class="speed-bars"><i style="height:5px"></i><i style="height:8px"></i><i style="height:11px"></i><i style="height:15px"></i><i style="height:18px"></i></div></div>
+     </div>
+     <p>Je höher der Multiplikator, desto schneller werden neue simulierte Kurskerzen erzeugt.</p>
+    </div>
     <p>Mit „Pause“ hältst du die Kursentwicklung an. Mit „Weiter“ setzt du die Simulation fort. Während der Pause kannst du weiterhin die Oberfläche verwenden und Trades ausführen.</p>
    </section>
 
@@ -221,6 +255,17 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
      <li>Die geschätzte Coin-Menge wird unter dem Eingabefeld angezeigt.</li>
      <li>Klicke auf „Kaufen“, um den virtuellen Trade auszuführen.</li>
     </ul>
+    <div class="doc-visual">
+     <div class="doc-visual-title">Der Ablauf eines Trades</div>
+     <div class="trade-flow">
+      <div class="trade-step"><b style="color:#65a7ff">€</b>Betrag<br>eingeben</div>
+      <div class="trade-arrow">→</div>
+      <div class="trade-step"><b style="color:#20d99a">↗</b><span style="color:#20d99a">Kaufen</span><br>Coin erhalten</div>
+      <div class="trade-arrow">→</div>
+      <div class="trade-step"><b style="color:#f4c76b">✓</b>Position<br>beobachten</div>
+     </div>
+     <p>Später kannst du deine Position teilweise oder vollständig verkaufen.</p>
+    </div>
     <p>Der Simulator prüft, ob dein virtuelles Guthaben ausreicht. Auf Käufe wird eine simulierte Gebühr von 0,1 % berechnet.</p>
     <p>Nach dem Kauf wird die Position gespeichert und dein verfügbares Cash entsprechend reduziert.</p>
    </section>
@@ -234,6 +279,17 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
      <li><b>Position komplett verkaufen:</b> Schließt die gesamte offene Position des ausgewählten Coins.</li>
      <li><b>Alles verkaufen im Portfolio:</b> Verkauft die jeweilige Position direkt aus der Positionsübersicht.</li>
     </ul>
+    <div class="doc-visual">
+     <div class="doc-visual-title">Verkauf und Ergebnis</div>
+     <div class="trade-flow">
+      <div class="trade-step"><b style="color:#65a7ff">◈</b>Position<br>auswählen</div>
+      <div class="trade-arrow">→</div>
+      <div class="trade-step"><b style="color:#ff6077">↘</b><span style="color:#ff6077">Verkaufen</span><br>Coin abgeben</div>
+      <div class="trade-arrow">→</div>
+      <div class="trade-step"><b style="color:#20d99a">€</b>Cash und<br>P/L prüfen</div>
+     </div>
+     <p>Der realisierte Gewinn oder Verlust hängt vom Verkaufspreis, dem Einstiegspreis und den Gebühren ab.</p>
+    </div>
     <p>Ein Verkauf ist nur möglich, wenn du ausreichend Coins besitzt. Verkaufsgebühren werden ebenfalls berücksichtigt.</p>
     <p>Der realisierte Gewinn oder Verlust wird nach einem Verkauf berechnet und im Trade-Verlauf festgehalten.</p>
    </section>
@@ -242,6 +298,31 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
     <span class="doc-tag">06 · Chart</span>
     <h2>Kerzen und Zeiträume</h2>
     <p>Der Chart stellt die künstlichen Kursbewegungen als Kerzen dar.</p>
+    <div class="doc-visual">
+     <div class="doc-visual-title">So liest du eine Kerze</div>
+     <svg class="mini-chart" viewBox="0 0 320 105" role="img" aria-label="Beispielchart mit grünen und roten Kerzen">
+      <defs><pattern id="chartGrid" width="40" height="25" patternUnits="userSpaceOnUse"><path d="M40 0H0V25" fill="none" stroke="#263449" stroke-width="1"/></pattern></defs>
+      <rect width="320" height="105" fill="#0b1320"/>
+      <rect width="320" height="105" fill="url(#chartGrid)"/>
+      <g stroke-linecap="round" stroke-width="2">
+       <g stroke="#20d99a" fill="#20d99a">
+        <path d="M30 25V66 M75 17V56 M120 31V75 M210 15V49 M255 8V40" fill="none"/>
+        <rect x="23" y="38" width="14" height="19" rx="1"/>
+        <rect x="68" y="28" width="14" height="19" rx="1"/>
+        <rect x="113" y="42" width="14" height="24" rx="1"/>
+        <rect x="203" y="25" width="14" height="16" rx="1"/>
+        <rect x="248" y="16" width="14" height="15" rx="1"/>
+       </g>
+       <g stroke="#ff6077" fill="#ff6077">
+        <path d="M165 24V64 M285 17V52" fill="none"/>
+        <rect x="158" y="34" width="14" height="20" rx="1"/>
+        <rect x="278" y="26" width="14" height="17" rx="1"/>
+       </g>
+      </g>
+      <path d="M12 78L60 59L100 68L145 43L185 54L220 31L265 20L308 35" fill="none" stroke="#65a7ff" stroke-width="1.5" stroke-dasharray="4 4" opacity=".75"/>
+     </svg>
+     <p>Kerzenkörper zeigen Eröffnung und Schluss; die Dochte markieren Hoch und Tief.</p>
+    </div>
     <ul>
      <li><b>Grüne Kerze:</b> Der Schlusskurs liegt über dem Eröffnungskurs.</li>
      <li><b>Rote Kerze:</b> Der Schlusskurs liegt unter dem Eröffnungskurs.</li>
@@ -393,634 +474,1228 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
    NEXYRON · Paper-Trading-Lernsimulator · Creator Yusuf
   </div>
  </div>
-</div>
-
-<header class="topbar">
+ </div>
+ <header class="topbar">
   <div class="brand">NEXY<span>RON</span></div>
   <div class="status"><i class="dot"></i> SIMULATION AKTIV</div>
   <button id="resetBtn" title="Simulation zurücksetzen">Zurücksetzen</button>
 </header>
 
 <div class="layout">
-<aside class="sidebar">
-  <div class="nav-label">WORKSPACE</div>
-  <button class="nav active" data-page="dashboard">▦ &nbsp; Trading</button>
-  <button class="nav" data-page="markets">◈ &nbsp; Märkte</button>
-  <button class="nav" data-page="portfolio">▤ &nbsp; Portfolio</button>
-  <button class="nav" data-page="history">↻ &nbsp; Trade-Verlauf</button>
-  <button class="nav" data-page="journal">✎ &nbsp; Trading-Journal</button>
-  <button class="nav" data-page="learn">▣ &nbsp; Lernen</button>
-  <div class="side-card">
-    <div class="small muted">Virtuelles Guthaben</div>
-    <div class="balance" id="sideCash">10.000,00 €</div>
-    <div class="small muted">Nur Paper Trading</div>
-  </div>
-</aside>
+  <aside class="sidebar">
+    <div class="nav-label">WORKSPACE</div>
+    <button class="nav active" data-page="dashboard">▦ &nbsp; Trading</button>
+    <button class="nav" data-page="markets">◈ &nbsp; Märkte</button>
+    <button class="nav" data-page="portfolio">▤ &nbsp; Portfolio</button>
+    <button class="nav" data-page="history">↻ &nbsp; Trade-Verlauf</button>
+    <button class="nav" data-page="journal">✎ &nbsp; Trading-Journal</button>
+    <button class="nav" data-page="learn">▣ &nbsp; Lernen</button>
 
-<main>
-<section class="page active" id="page-dashboard">
-  <h1>Trading Dashboard</h1>
-  <div class="subtitle">Übe deine Strategie in einer simulierten Marktumgebung.</div>
-  <div class="grid stats">
-    <div class="card"><div class="small muted">Gesamtvermögen</div><div class="stat-value" id="totalValue">10.000,00 €</div><div class="small muted">Cash + Positionen</div></div>
-    <div class="card"><div class="small muted">Offener Gewinn / Verlust</div><div class="stat-value" id="unrealized">0,00 €</div><div class="small muted">Nicht realisiert</div></div>
-    <div class="card"><div class="small muted">Realisierter P/L</div><div class="stat-value" id="realized">0,00 €</div><div class="small muted">Geschlossene Anteile</div></div>
-    <div class="card"><div class="small muted">Simulationstempo</div><div class="stat-value" id="speedLabel">5×</div><div class="small muted" id="runLabel">Läuft</div></div>
-  </div>
-
-  <div class="trade-layout">
-    <div class="card chart-card">
-      <div class="chart-head">
-        <div class="coin-title">
-          <div><div class="coin-name" id="chartCoinName">Bitcoin (BTC)</div><div class="small muted" id="chartCoinSub">BTC / EUR · Simulierter Markt</div></div>
-          <div style="text-align:right"><div class="coin-price" id="chartPrice">65.000,00 €</div><div id="chartChange" class="small up">+0,00%</div></div>
-        </div>
-        <div class="toolbar" id="timeframes">
-          <button data-tf="1m">1m</button><button data-tf="5m">5m</button><button data-tf="15m">15m</button><button data-tf="1h">1h</button><button data-tf="4h">4h</button><button data-tf="1d">1D</button><button data-tf="1w">1W</button>
-        </div>
-        <div class="toolbar" id="drawingTools">
-          <button data-tool="cursor" class="active">↖ Cursor</button>
-          <button data-tool="freehand">✎ Freihand</button>
-          <button data-tool="trend">╱ Trendlinie</button>
-          <button data-tool="horizontal">― Horizontale</button>
-          <button data-tool="arrow">➜ Pfeil</button>
-          <button data-tool="erase">⌫ Radierer</button>
-          <button id="undoBtn">↶ Rückgängig</button>
-          <button id="clearDrawings">Zeichnungen löschen</button>
-        </div>
-        <div class="toolbar">
-          <button id="zoomIn">＋ Zoom</button><button id="zoomOut">－ Zoom</button>
-          <button id="resetZoom">Ansicht zurücksetzen</button>
-          <label style="display:flex;align-items:center;gap:6px;margin:0 0 0 8px"><input id="maToggle" type="checkbox" checked style="width:auto"> MA</label>
-          <label style="display:flex;align-items:center;gap:6px;margin:0"><input id="volumeToggle" type="checkbox" checked style="width:auto"> Volumen</label>
-        </div>
-      </div>
-      <div class="canvas-wrap"><canvas id="chart"></canvas></div>
-      <div class="chart-footer"><span id="chartStatus">Simulation läuft</span><span>Ziehe im Chart, um zu zeichnen · Zoom verändert Kerzen und Zeichnungen zusammen</span></div>
+    <div class="side-card">
+      <div class="small muted">Virtuelles Guthaben</div>
+      <div class="balance" id="sideCash">10.000,00 €</div>
+      <div class="small muted">Nur Paper Trading</div>
     </div>
+  </aside>
 
-    <div class="side-panel">
-      <div class="card">
-        <h2>Simulation steuern</h2>
-        <label for="speedSelect">Marktgeschwindigkeit</label>
-        <select id="speedSelect">
-          <option value="1">1× – langsam</option><option value="2">2×</option><option value="5" selected>5× – schnell</option><option value="10">10× – sehr schnell</option>
-        </select>
-        <button id="pauseBtn" class="full">Ⅱ Pause</button>
-        <div class="notice" style="margin-top:10px">Kurse sind künstlich erzeugt. Es gibt keine echten Marktdaten und keine echten Orders.</div>
+  <main>
+    <section class="page active" id="page-dashboard">
+      <h1>Trading Dashboard</h1>
+      <div class="subtitle">Übe deine Strategie in einer simulierten Marktumgebung.</div>
+
+      <div class="grid stats">
+        <div class="card">
+          <div class="small muted">Gesamtvermögen</div>
+          <div class="stat-value" id="totalValue">10.000,00 €</div>
+          <div class="small muted">Cash + Positionen</div>
+        </div>
+        <div class="card">
+          <div class="small muted">Offener Gewinn / Verlust</div>
+          <div class="stat-value" id="unrealized">0,00 €</div>
+          <div class="small muted">Nicht realisiert</div>
+        </div>
+        <div class="card">
+          <div class="small muted">Realisierter P/L</div>
+          <div class="stat-value" id="realized">0,00 €</div>
+          <div class="small muted">Geschlossene Anteile</div>
+        </div>
+        <div class="card">
+          <div class="small muted">Simulationstempo</div>
+          <div class="stat-value" id="speedLabel">5×</div>
+          <div class="small muted" id="runLabel">Läuft</div>
+        </div>
+      </div>
+
+      <div class="trade-layout">
+        <div class="card chart-card">
+          <div class="chart-head">
+            <div class="coin-title">
+              <div>
+                <div class="coin-name" id="chartCoinName">Bitcoin (BTC)</div>
+                <div class="small muted" id="chartCoinSub">BTC / EUR · Simulierter Markt</div>
+              </div>
+              <div style="text-align:right">
+                <div class="coin-price" id="chartPrice">65.000,00 €</div>
+                <div id="chartChange" class="small up">+0,00%</div>
+              </div>
+            </div>
+
+            <div class="toolbar" id="timeframes">
+              <button data-tf="1m">1m</button>
+              <button data-tf="5m">5m</button>
+              <button data-tf="15m">15m</button>
+              <button data-tf="1h">1h</button>
+              <button data-tf="4h">4h</button>
+              <button data-tf="1d">1D</button>
+              <button data-tf="1w">1W</button>
+            </div>
+
+            <div class="toolbar" id="drawingTools">
+              <button data-tool="cursor" class="active">↖ Cursor</button>
+              <button data-tool="freehand">✎ Freihand</button>
+              <button data-tool="trend">╱ Trendlinie</button>
+              <button data-tool="horizontal">― Horizontale</button>
+              <button data-tool="arrow">➜ Pfeil</button>
+              <button data-tool="erase">⌫ Radierer</button>
+              <button id="undoBtn">↶ Rückgängig</button>
+              <button id="clearDrawings">Zeichnungen löschen</button>
+            </div>
+
+            <div class="toolbar">
+              <button id="zoomIn">＋ Zoom</button>
+              <button id="zoomOut">－ Zoom</button>
+              <button id="resetZoom">Ansicht zurücksetzen</button>
+              <label style="display:flex;align-items:center;gap:6px;margin:0 0 0 8px">
+                <input id="maToggle" type="checkbox" checked style="width:auto"> MA
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;margin:0">
+                <input id="volumeToggle" type="checkbox" checked style="width:auto"> Volumen
+              </label>
+            </div>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="chart"></canvas>
+          </div>
+          <div class="chart-footer">
+            <span id="chartStatus">Simulation läuft</span>
+            <span>Ziehe im Chart, um zu zeichnen · Zoom verändert Kerzen und Zeichnungen zusammen</span>
+          </div>
+        </div>
+
+        <div class="side-panel">
+          <div class="card">
+            <h2>Simulation steuern</h2>
+            <label for="speedSelect">Marktgeschwindigkeit</label>
+            <select id="speedSelect">
+              <option value="1">1× – langsam</option>
+              <option value="2">2×</option>
+              <option value="5" selected>5× – schnell</option>
+              <option value="10">10× – sehr schnell</option>
+            </select>
+            <button id="pauseBtn" class="full">Ⅱ Pause</button>
+            <div class="notice" style="margin-top:10px">
+              Kurse sind künstlich erzeugt. Es gibt keine echten Marktdaten und keine echten Orders.
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Virtueller Trade</h2>
+            <div class="small muted">Verfügbares Cash</div>
+            <div class="balance" id="cashBalance">10.000,00 €</div>
+            <label for="tradeAmount">Betrag in EUR</label>
+            <input id="tradeAmount" type="number" min="1" step="1" value="100">
+            <div class="small muted" id="estimatedQty" style="margin-top:7px">Geschätzte Menge: —</div>
+            <div class="two">
+              <button class="buy" id="buyBtn">Kaufen</button>
+              <button class="sell" id="sellBtn">Verkaufen</button>
+            </div>
+            <button id="sellAllBtn" class="full">Position komplett verkaufen</button>
+            <div class="small muted" id="positionInfo" style="margin-top:12px">Keine offene Position in diesem Coin.</div>
+          </div>
+
+          <div class="card">
+            <h2>Preis-Alarm</h2>
+            <label for="alertPrice">Alarmkurs (EUR)</label>
+            <input id="alertPrice" type="number" min="0" placeholder="z. B. 67000">
+            <button id="setAlert" class="full">Alarm setzen</button>
+            <div class="small muted" id="alertInfo" style="margin-top:8px">Kein aktiver Alarm.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-markets">
+      <h1>Märkte</h1>
+      <div class="subtitle">Wähle einen Coin aus, um seinen Chart zu öffnen.</div>
+      <div id="coinList" class="coin-list"></div>
+    </section>
+
+    <section class="page" id="page-portfolio">
+      <h1>Portfolio</h1>
+      <div class="subtitle">Deine virtuellen Positionen und deren Entwicklung.</div>
+      <div class="grid stats">
+        <div class="card"><div class="small muted">Cash</div><div class="stat-value" id="portfolioCash">—</div></div>
+        <div class="card"><div class="small muted">Positionswert</div><div class="stat-value" id="holdingsValue">—</div></div>
+        <div class="card"><div class="small muted">Gesamtwert</div><div class="stat-value" id="portfolioTotal">—</div></div>
+        <div class="card"><div class="small muted">Realisierter P/L</div><div class="stat-value" id="portfolioRealized">—</div></div>
       </div>
       <div class="card">
-        <h2>Virtueller Trade</h2>
-        <div class="small muted">Verfügbares Cash</div><div class="balance" id="cashBalance">10.000,00 €</div>
-        <label for="tradeAmount">Betrag in EUR</label><input id="tradeAmount" type="number" min="1" step="1" value="100">
-        <div class="small muted" id="estimatedQty" style="margin-top:7px">Geschätzte Menge: —</div>
-        <div class="two"><button class="buy" id="buyBtn">Kaufen</button><button class="sell" id="sellBtn">Verkaufen</button></div>
-        <button id="sellAllBtn" class="full">Position komplett verkaufen</button>
-        <div class="small muted" id="positionInfo" style="margin-top:12px">Keine offene Position in diesem Coin.</div>
+        <h2>Offene Positionen</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Coin</th><th>Menge</th><th>Ø Einstieg</th><th>Aktueller Preis</th><th>Wert</th><th>Offener P/L</th><th>Aktion</th></tr>
+            </thead>
+            <tbody id="positionsBody"></tbody>
+          </table>
+        </div>
       </div>
+    </section>
+
+    <section class="page" id="page-history">
+      <h1>Trade-Verlauf</h1>
+      <div class="subtitle">Deine simulierten Käufe und Verkäufe.</div>
       <div class="card">
-        <h2>Preis-Alarm</h2>
-        <label for="alertPrice">Alarmkurs (EUR)</label><input id="alertPrice" type="number" min="0" placeholder="z. B. 67000">
-        <button id="setAlert" class="full">Alarm setzen</button>
-        <div class="small muted" id="alertInfo" style="margin-top:8px">Kein aktiver Alarm.</div>
+        <div class="toolbar" style="margin:0 0 12px">
+          <button id="exportCsv">CSV exportieren</button>
+          <button id="clearHistory">Verlauf löschen</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Zeit</th><th>Typ</th><th>Coin</th><th>Menge</th><th>Preis</th><th>Gebühr</th><th>Realisierter P/L</th></tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section class="page" id="page-markets">
-  <h1>Märkte</h1><div class="subtitle">Wähle einen Coin aus, um seinen Chart zu öffnen.</div>
-  <div id="coinList" class="coin-list"></div>
-</section>
+    <section class="page" id="page-journal">
+      <h1>Trading-Journal</h1>
+      <div class="subtitle">Notiere deine Idee, deine Regeln und was du gelernt hast.</div>
+      <div class="split">
+        <div class="card">
+          <h2>Eintrag erstellen</h2>
+          <label for="journalTitle">Titel</label>
+          <input id="journalTitle" placeholder="z. B. Trendlinie getestet">
+          <label for="journalMood">Marktgefühl</label>
+          <select id="journalMood">
+            <option>Neutral</option><option>Optimistisch</option><option>Vorsichtig</option><option>Unsicher</option>
+          </select>
+          <label for="journalText">Notizen</label>
+          <textarea id="journalText" rows="7" placeholder="Was war dein Plan? Was lief gut oder schlecht?"></textarea>
+          <button id="saveJournal" class="full">Eintrag speichern</button>
+        </div>
+        <div class="card">
+          <h2>Gespeicherte Einträge</h2>
+          <div id="journalEntries"></div>
+        </div>
+      </div>
+    </section>
 
-<section class="page" id="page-portfolio">
-  <h1>Portfolio</h1><div class="subtitle">Deine virtuellen Positionen und deren Entwicklung.</div>
-  <div class="grid stats">
-    <div class="card"><div class="small muted">Cash</div><div class="stat-value" id="portfolioCash">—</div></div>
-    <div class="card"><div class="small muted">Positionswert</div><div class="stat-value" id="holdingsValue">—</div></div>
-    <div class="card"><div class="small muted">Gesamtwert</div><div class="stat-value" id="portfolioTotal">—</div></div>
-    <div class="card"><div class="small muted">Realisierter P/L</div><div class="stat-value" id="portfolioRealized">—</div></div>
-  </div>
-  <div class="card"><h2>Offene Positionen</h2><div class="table-wrap"><table><thead><tr><th>Coin</th><th>Menge</th><th>Ø Einstieg</th><th>Aktueller Preis</th><th>Wert</th><th>Offener P/L</th><th>Aktion</th></tr></thead><tbody id="positionsBody"></tbody></table></div></div>
-</section>
+    <section class="page" id="page-learn">
+      <h1>Trading lernen</h1>
+      <div class="subtitle">Grundlagen zum Üben – keine Anlageberatung.</div>
+      <div class="card">
+        <details class="lesson" open>
+          <summary>1. Kerzen verstehen</summary>
+          <p>Der Kerzenkörper zeigt Eröffnungs- und Schlusskurs. Die Dochte zeigen Hoch und Tief innerhalb des dargestellten Zeitraums. Eine grüne Kerze bedeutet in diesem Simulator, dass der Schlusskurs über dem Eröffnungskurs liegt.</p>
+        </details>
+        <details class="lesson">
+          <summary>2. Trendlinien</summary>
+          <p>Verbinde relevante Hochs oder Tiefs, um mögliche Trendrichtungen zu untersuchen. Eine Linie allein sagt nicht voraus, was als Nächstes passiert.</p>
+        </details>
+        <details class="lesson">
+          <summary>3. Risiko und Positionsgröße</summary>
+          <p>Teste kleine virtuelle Beträge und überlege vor jedem Trade, was deine Idee widerlegen würde. Der Simulator ist kein echtes Konto.</p>
+        </details>
+        <details class="lesson">
+          <summary>4. Gleitender Durchschnitt</summary>
+          <p>Der gleitende Durchschnitt glättet vergangene Schlusskurse. Er reagiert verzögert und ist keine Garantie für zukünftige Bewegungen.</p>
+        </details>
+        <details class="lesson">
+          <summary>5. Übung</summary>
+          <p>Wähle einen Coin, verändere die Geschwindigkeit, zeichne eine Trendlinie und schreibe danach ins Journal, was du beobachtet hast.</p>
+        </details>
+      </div>
+    </section>
 
-<section class="page" id="page-history">
-  <h1>Trade-Verlauf</h1><div class="subtitle">Deine simulierten Käufe und Verkäufe.</div>
-  <div class="card"><div class="toolbar" style="margin:0 0 12px"><button id="exportCsv">CSV exportieren</button><button id="clearHistory">Verlauf löschen</button></div><div class="table-wrap"><table><thead><tr><th>Zeit</th><th>Typ</th><th>Coin</th><th>Menge</th><th>Preis</th><th>Gebühr</th><th>Realisierter P/L</th></tr></thead><tbody id="historyBody"></tbody></table></div></div>
-</section>
-
-<section class="page" id="page-journal">
-  <h1>Trading-Journal</h1><div class="subtitle">Notiere deine Idee, deine Regeln und was du gelernt hast.</div>
-  <div class="split"><div class="card"><h2>Eintrag erstellen</h2>
-    <label for="journalTitle">Titel</label><input id="journalTitle" placeholder="z. B. Trendlinie getestet">
-    <label for="journalMood">Marktgefühl</label><select id="journalMood"><option>Neutral</option><option>Optimistisch</option><option>Vorsichtig</option><option>Unsicher</option></select>
-    <label for="journalText">Notizen</label><textarea id="journalText" rows="7" placeholder="Was war dein Plan? Was lief gut oder schlecht?"></textarea>
-    <button id="saveJournal" class="full">Eintrag speichern</button>
-  </div><div class="card"><h2>Gespeicherte Einträge</h2><div id="journalEntries"></div></div></div>
-</section>
-
-<section class="page" id="page-learn">
-  <h1>Trading lernen</h1><div class="subtitle">Grundlagen zum Üben – keine Anlageberatung.</div>
-  <div class="card">
-    <details class="lesson" open><summary>1. Kerzen verstehen</summary><p>Der Kerzenkörper zeigt Eröffnungs- und Schlusskurs. Die Dochte zeigen Hoch und Tief innerhalb des dargestellten Zeitraums. Eine grüne Kerze bedeutet in diesem Simulator, dass der Schlusskurs über dem Eröffnungskurs liegt.</p></details>
-    <details class="lesson"><summary>2. Trendlinien</summary><p>Verbinde relevante Hochs oder Tiefs, um mögliche Trendrichtungen zu untersuchen. Eine Linie allein sagt nicht voraus, was als Nächstes passiert.</p></details>
-    <details class="lesson"><summary>3. Risiko und Positionsgröße</summary><p>Teste kleine virtuelle Beträge und überlege vor jedem Trade, was deine Idee widerlegen würde. Der Simulator ist kein echtes Konto.</p></details>
-    <details class="lesson"><summary>4. Gleitender Durchschnitt</summary><p>Der gleitende Durchschnitt glättet vergangene Schlusskurse. Er reagiert verzögert und ist keine Garantie für zukünftige Bewegungen.</p></details>
-    <details class="lesson"><summary>5. Übung</summary><p>Wähle einen Coin, verändere die Geschwindigkeit, zeichne eine Trendlinie und schreibe danach ins Journal, was du beobachtet hast.</p></details>
-  </div>
-</section>
-
-<footer>NEXYRON · Paper-Trading-Lernsimulator · Alle Kurse und Trades sind simuliert · Creator Yusuf</footer>
-</main>
+    <footer>
+      NEXYRON · Paper-Trading-Lernsimulator · Alle Kurse und Trades sind simuliert · Creator Yusuf
+    </footer>
+  </main>
 </div>
+
 <div id="toast" role="status"></div>
 
 <script>
 "use strict";
 
-/* NEU: Dokumentation schließen und Simulator öffnen */
-$("startSimulator").addEventListener("click",()=>{
- $("documentation").style.display="none";
-});
+/*
+  Teil 3 enthält die JavaScript-Logik:
+  - simulierte Marktpreise und Kerzen
+  - Chart-Zeichnungen und Zoom
+  - Kaufen/Verkaufen und Portfolio
+  - Verlauf, CSV-Export und Trading-Journal
+  - Navigation, Pause, Reset und Start-Button
+*/
+ const $ = id => document.getElementById(id);
 
-/* Bestehender Simulator-Code */
 const COINS = [
- {s:"BTC",n:"Bitcoin",p:65000,c:"#f7931a"},
- {s:"ETH",n:"Ethereum",p:3200,c:"#8c9eff"},
- {s:"SOL",n:"Solana",p:145,c:"#b68cff"},
- {s:"XRP",n:"XRP",p:0.58,c:"#9caec5"},
- {s:"BNB",n:"BNB",p:580,c:"#f3ba2f"},
- {s:"DOGE",n:"Dogecoin",p:0.14,c:"#c7ad62"},
- {s:"ADA",n:"Cardano",p:0.46,c:"#4d9bff"},
- {s:"AVAX",n:"Avalanche",p:36,c:"#ff6677"},
- {s:"LINK",n:"Chainlink",p:15,c:"#4f7cff"},
- {s:"DOT",n:"Polkadot",p:7.2,c:"#e76aa8"},
- {s:"LTC",n:"Litecoin",p:82,c:"#a8b6c8"},
- {s:"TRX",n:"TRON",p:0.12,c:"#ff5d6d"},
- {s:"BCH",n:"Bitcoin Cash",p:390,c:"#70c98b"},
- {s:"XLM",n:"Stellar",p:0.11,c:"#9bb6ca"},
- {s:"UNI",n:"Uniswap",p:9.5,c:"#ff75b5"},
- {s:"ATOM",n:"Cosmos",p:8.4,c:"#a8a9ff"},
- {s:"NEAR",n:"NEAR Protocol",p:5.7,c:"#b9c6d7"},
- {s:"ETC",n:"Ethereum Classic",p:25,c:"#4bc9a1"}
+  { id: "BTC", name: "Bitcoin", price: 65000, color: "#f7931a", vol: 0.012 },
+  { id: "ETH", name: "Ethereum", price: 3200, color: "#8b9cff", vol: 0.016 },
+  { id: "SOL", name: "Solana", price: 145, color: "#a78bfa", vol: 0.022 },
+  { id: "XRP", name: "XRP", price: 0.58, color: "#60a5fa", vol: 0.018 },
+  { id: "ADA", name: "Cardano", price: 0.45, color: "#38bdf8", vol: 0.019 },
+  { id: "DOGE", name: "Dogecoin", price: 0.15, color: "#facc15", vol: 0.025 }
 ];
-const $ = id => document.getElementById(id);
-const money = n => new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR",maximumFractionDigits:2}).format(Number.isFinite(n)?n:0);
-const qtyFmt = n => Number(n||0).toLocaleString("de-DE",{maximumFractionDigits:8});
-const pct = n => (n>=0?"+":"")+n.toFixed(2)+"%";
-const STORAGE = "nexyron_sim_v2";
 
-let saved;
-try { saved = JSON.parse(localStorage.getItem(STORAGE)||"null"); } catch { saved=null; }
-let cash = saved?.cash ?? 10000;
-let realized = saved?.realized ?? 0;
-let history = Array.isArray(saved?.history)?saved.history:[];
-let positions = saved?.positions || {};
-let journal = Array.isArray(saved?.journal)?saved.journal:[];
-let drawings = saved?.drawings || {};
-let activeCoin = saved?.activeCoin || "BTC";
-let speed = Number(saved?.speed)||5;
-let paused = false;
-let timeframe = saved?.timeframe || "1m";
-let visibleCount = 70;
-let tool = "cursor";
-let undoStack = [];
-let activeAlert = null;
-let lastAlertSide = "";
-let toastTimer = null;
-let lastTick = Date.now();
-let rafId = 0;
+const START_CASH = 10000;
+const FEE_RATE = 0.001;
+const MAX_CANDLES = 240;
 
-const TF = {"1m":1,"5m":5,"15m":15,"1h":60,"4h":240,"1d":1440,"1w":10080};
-const market = {};
-let globalIndex = 0;
+let cash = START_CASH;
+let realizedPL = 0;
+let selectedCoin = "BTC";
+let running = true;
+let speed = 5;
+let timer = null;
+let activeTool = "cursor";
+let timeframe = "1m";
+let zoom = 1;
+let candleOffset = 0;
+let alertPrice = null;
+let alertTriggered = false;
+let drawings = [];
+let currentDrawing = null;
+let mouseDown = false;
+let history = [];
+let journal = [];
+let positions = {};
+let candles = {};
+let lastPrice = {};
+let startPrices = {};
+let chart = $("chart");
+let ctx = chart.getContext("2d");
 
-function persist(){
- try{
-  localStorage.setItem(STORAGE,JSON.stringify({cash,realized,history,positions,journal,drawings,activeCoin,speed,timeframe}));
- }catch(e){console.warn("Speichern nicht möglich",e);}
-}
-function notify(msg){
- const el=$("toast");el.textContent=msg;el.style.display="block";
- clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.display="none",2600);
-}
-function coin(){return COINS.find(c=>c.s===activeCoin)||COINS[0];}
-function currentPrice(symbol=activeCoin){return market[symbol]?.price ?? COINS.find(c=>c.s===symbol).p;}
-function initMarket(){
- COINS.forEach(c=>{
-  if(!market[c.s]){
-   const candles=[];let p=c.p;
-   for(let i=0;i<260;i++){
-    const drift=(Math.random()-.49)*.012;
-    const close=Math.max(p*.15,p*(1+drift));
-    const spread=p*(.001+Math.random()*.004);
-    candles.push({t:i,o:p,h:Math.max(p,close)+Math.random()*spread,l:Math.min(p,close)-Math.random()*spread,c:close,v:Math.random()*100+10});
-    p=close;
-   }
-   market[c.s]={candles,price:p,base:p,seed:c.p};
-  }
- });
- globalIndex=market[activeCoin].candles.at(-1).t;
-}
-function saveDrawingUndo(){
- undoStack.push(JSON.stringify(drawings[activeCoin]||[]));
- if(undoStack.length>30)undoStack.shift();
-}
-function visibleCandles(){
- const raw=market[activeCoin].candles;
- const group=TF[timeframe]||1;
- const out=[];
- for(let i=0;i<raw.length;i+=group){
-  const chunk=raw.slice(i,Math.min(i+group,raw.length));
-  if(!chunk.length)continue;
-  out.push({t:chunk[0].t,t2:chunk.at(-1).t,o:chunk[0].o,c:chunk.at(-1).c,
-    h:Math.max(...chunk.map(x=>x.h)),l:Math.min(...chunk.map(x=>x.l)),
-    v:chunk.reduce((s,x)=>s+x.v,0)});
- }
- return out.slice(-visibleCount);
-}
-function movingAverage(data,period){
- return data.map((d,i)=>{
-  if(i+1<period)return null;
-  return data.slice(i-period+1,i+1).reduce((s,x)=>s+x.c,0)/period;
- });
-}
-function resizeCanvas(){
- const canvas=$("chart");if(!canvas)return;
- const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;
- const dpr=Math.min(window.devicePixelRatio||1,2);
- canvas.width=Math.round(rect.width*dpr);canvas.height=Math.round(rect.height*dpr);
- renderChart();
-}
-function renderChart(){
- const canvas=$("chart");if(!canvas)return;
- const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;
- const dpr=canvas.width/rect.width||1;
- const ctx=canvas.getContext("2d");
- ctx.setTransform(dpr,0,0,dpr,0,0);
- const W=rect.width,H=rect.height;
- ctx.clearRect(0,0,W,H);ctx.fillStyle="#0b1220";ctx.fillRect(0,0,W,H);
- const data=visibleCandles();if(!data.length)return;
- const left=10,right=68,top=16,bottom=$("volumeToggle").checked?55:25;
- const plotW=W-left-right,plotH=H-top-bottom;
- const highs=data.map(d=>d.h),lows=data.map(d=>d.l);
- let min=Math.min(...lows),max=Math.max(...highs);
- const pad=(max-min)*.08||1;min-=pad;max+=pad;
- const y=p=>top+(max-p)/(max-min)*plotH;
- const step=plotW/data.length,cw=Math.max(1,Math.min(12,step*.63));
- const xAt=i=>left+(i+.5)*step;
- const xForT=t=>{
-  let idx=data.findIndex(d=>t>=d.t&&t<=d.t2);
-  if(idx<0)idx=t<data[0].t?0:data.length-1;
-  return xAt(idx);
- };
- ctx.font="10px system-ui";ctx.textAlign="left";ctx.strokeStyle="#1b293c";ctx.fillStyle="#8495ab";ctx.lineWidth=1;
- for(let i=0;i<=5;i++){
-  const yy=top+plotH*i/5,price=max-(max-min)*i/5;
-  ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(W-right,yy);ctx.stroke();
-  ctx.fillText(price.toLocaleString("de-DE",{maximumFractionDigits:4}),W-right+5,yy+3);
- }
- if($("volumeToggle").checked){
-  const maxV=Math.max(...data.map(d=>d.v),1);
-  data.forEach((d,i)=>{
-   const bh=(d.v/maxV)*38;
-   ctx.fillStyle=d.c>=d.o?"#20d99a66":"#ff607766";
-   ctx.fillRect(xAt(i)-cw/2,H-43,cw,bh);
+const money = value =>
+  Number(value).toLocaleString("de-DE", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   });
- }
- data.forEach((d,i)=>{
-  const x=xAt(i),yo=y(d.o),yc=y(d.c),yh=y(d.h),yl=y(d.l);
-  ctx.strokeStyle=d.c>=d.o?"#20d99a":"#ff6077";ctx.fillStyle=ctx.strokeStyle;
-  ctx.beginPath();ctx.moveTo(x,yh);ctx.lineTo(x,yl);ctx.stroke();
-  const bh=Math.max(1,Math.abs(yc-yo));
-  ctx.fillRect(x-cw/2,Math.min(yo,yc),cw,bh);
- });
- if($("maToggle").checked){
-  [9,21].forEach((period,j)=>{
-   const ma=movingAverage(data,period);ctx.beginPath();ctx.strokeStyle=j===0?"#f4c76b":"#65a7ff";ctx.lineWidth=1.5;
-   let started=false;
-   ma.forEach((v,i)=>{if(v==null)return;const xx=xAt(i),yy=y(v);if(!started){ctx.moveTo(xx,yy);started=true;}else ctx.lineTo(xx,yy);});
-   ctx.stroke();
+
+const number = (value, digits = 6) =>
+  Number(value).toLocaleString("de-DE", {
+    maximumFractionDigits: digits
   });
- }
- const price=currentPrice(),py=y(price);
- ctx.setLineDash([4,4]);ctx.strokeStyle="#65a7ff";ctx.beginPath();ctx.moveTo(left,py);ctx.lineTo(W-right,py);ctx.stroke();ctx.setLineDash([]);
- ctx.fillStyle="#234d78";ctx.fillRect(W-right,py-9,right,18);ctx.fillStyle="#fff";ctx.fillText(price.toLocaleString("de-DE",{maximumFractionDigits:4}),W-right+4,py+3);
- ctx.fillStyle="#8190a6";ctx.textAlign="center";
- [0,Math.floor(data.length/3),Math.floor(data.length*2/3),data.length-1].forEach(i=>{
-  if(data[i])ctx.fillText("#"+data[i].t2,left+(i+.5)*step,H-8);
- });
- const anns=drawings[activeCoin]||[];
- anns.forEach(a=>drawAnnotation(ctx,a,xForT,y,W,H));
- if(pointerDrawing)drawAnnotation(ctx,pointerDrawing,xForT,y,W,H,true);
- chartGeometry={data,left,top,plotW,plotH,min,max,xAt,y,xForT,step};
-}
-let chartGeometry=null,pointerDrawing=null,pointerStart=null;
-function drawAnnotation(ctx,a,xForT,y,W,H,preview=false){
- if(!a||!a.points?.length)return;
- ctx.save();ctx.strokeStyle=a.color||"#f4c76b";ctx.fillStyle=a.color||"#f4c76b";
- ctx.lineWidth=2;ctx.lineCap="round";ctx.lineJoin="round";
- if(preview)ctx.globalAlpha=.8;
- const point=p=>({x:xForT(p.t),y:y(p.p)});
- if(a.type==="horizontal"){
-  const p=point(a.points[0]);ctx.setLineDash([6,4]);ctx.beginPath();ctx.moveTo(5,p.y);ctx.lineTo(W-60,p.y);ctx.stroke();ctx.setLineDash([]);
- }else if(a.type==="freehand"){
-  ctx.beginPath();a.points.forEach((p,i)=>{const q=point(p);if(i===0)ctx.moveTo(q.x,q.y);else ctx.lineTo(q.x,q.y);});ctx.stroke();
- }else{
-  const p1=point(a.points[0]),p2=point(a.points[1]||a.points[0]);
-  ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();
-  if(a.type==="arrow"){
-   const angle=Math.atan2(p2.y-p1.y,p2.x-p1.x),len=10;
-   ctx.beginPath();ctx.moveTo(p2.x,p2.y);ctx.lineTo(p2.x-len*Math.cos(angle-.5),p2.y-len*Math.sin(angle-.5));ctx.lineTo(p2.x-len*Math.cos(angle+.5),p2.y-len*Math.sin(angle+.5));ctx.closePath();ctx.fill();
-  }
- }
- ctx.restore();
-}
-function pointerToData(e){
- const r=$("chart").getBoundingClientRect(),g=chartGeometry;
- if(!g)return null;
- const x=e.clientX-r.left,y=e.clientY-r.top;
- const idx=Math.max(0,Math.min(g.data.length-1,Math.floor((x-g.left)/g.step)));
- const candle=g.data[idx];
- const price=g.max-(y-g.top)/g.plotH*(g.max-g.min);
- return {t:candle.t2,p:Math.max(g.min,Math.min(g.max,price))};
-}
-function hitAnnotation(point){
- const anns=drawings[activeCoin]||[];
- if(!chartGeometry)return -1;
- let best=-1,dist=Infinity;
- anns.forEach((a,i)=>{
-  a.points.forEach(p=>{
-   const dx=chartGeometry.xForT(p.t)-chartGeometry.xForT(point.t);
-   const dy=chartGeometry.y(p.p)-chartGeometry.y(point.p);
-   const d=Math.hypot(dx,dy);
-   if(d<dist){dist=d;best=i;}
-  });
- });
- return dist<24?best:-1;
-}
-function bindChartPointer(){
- const c=$("chart");
- c.addEventListener("pointerdown",e=>{
-  if(!chartGeometry)return;
-  const p=pointerToData(e);if(!p)return;
-  if(tool==="cursor")return;
-  e.preventDefault();c.setPointerCapture(e.pointerId);
-  if(tool==="erase"){
-   const idx=hitAnnotation(p);
-   if(idx>=0){saveDrawingUndo();drawings[activeCoin].splice(idx,1);persist();renderChart();}
-   return;
-  }
-  pointerStart=p;
-  pointerDrawing={type:tool,points:[p,{...p}],color:"#f4c76b"};
-  renderChart();
- });
- c.addEventListener("pointermove",e=>{
-  if(!pointerDrawing||!pointerStart)return;
-  const p=pointerToData(e);if(!p)return;
-  if(pointerDrawing.type==="freehand")pointerDrawing.points.push(p);
-  else pointerDrawing.points[1]=p;
-  renderChart();
- });
- const finish=e=>{
-  if(!pointerDrawing)return;
-  saveDrawingUndo();
-  if(!drawings[activeCoin])drawings[activeCoin]=[];
-  drawings[activeCoin].push(pointerDrawing);
-  pointerDrawing=null;pointerStart=null;persist();renderChart();
- };
- c.addEventListener("pointerup",finish);
- c.addEventListener("pointercancel",finish);
-}
-function setTool(next){
- tool=next;
- document.querySelectorAll("[data-tool]").forEach(b=>b.classList.toggle("active",b.dataset.tool===tool));
- $("chartStatus").textContent=tool==="cursor"?"Cursor aktiv – Chart läuft weiter":"Werkzeug: "+({freehand:"Freihand",trend:"Trendlinie",horizontal:"Horizontale Linie",arrow:"Pfeil",erase:"Radierer"}[tool]||tool);
-}
-function drawCoinList(){
- $("coinList").innerHTML=COINS.map(c=>`<button class="coin ${c.s===activeCoin?"selected":""}" data-coin="${c.s}">
-  <span class="coin-icon" style="color:${c.c}">${c.s.slice(0,1)}</span>
-  <span class="coin-text"><b>${c.n}</b><span>${c.s} · ${money(currentPrice(c.s))}</span></span>
- </button>`).join("");
-}
-function selectCoin(symbol){
- if(!market[symbol])return;
- activeCoin=symbol;
- if(!drawings[activeCoin])drawings[activeCoin]=[];
- $("chartCoinName").textContent=coin().n+" ("+coin().s+")";
- $("chartCoinSub").textContent=coin().s+" / EUR · Simulierter Markt";
- document.querySelectorAll("[data-coin]").forEach(b=>b.classList.toggle("selected",b.dataset.coin===symbol));
- updateUI();renderChart();persist();
-}
-function setPage(name){
- document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+name));
- document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
- if(name==="markets")drawCoinList();
- if(name==="portfolio")renderPortfolio();
- if(name==="history")renderHistory();
- if(name==="journal")renderJournal();
- if(name==="dashboard")requestAnimationFrame(resizeCanvas);
-}
-function getPosition(symbol){return positions[symbol]||(positions[symbol]={qty:0,avg:0});}
-function executeTrade(type,amountOverride=null){
- const price=currentPrice(),symbol=activeCoin,pos=getPosition(symbol);
- const amount=amountOverride==null?Number($("tradeAmount").value):amountOverride;
- if(!Number.isFinite(amount)||amount<=0){notify("Bitte einen gültigen Betrag eingeben.");return;}
- const feeRate=.001,fee=amount*feeRate;
- let qty=0,realizedTrade=0;
- if(type==="BUY"){
-  if(amount+fee>cash+1e-8){notify("Nicht genug virtuelles Guthaben.");return;}
-  qty=amount/price;
-  const oldCost=pos.qty*pos.avg;
-  pos.qty+=qty;pos.avg=(oldCost+amount+fee)/pos.qty;
-  cash-=amount+fee;
- }else{
-  qty=amountOverride==null?amount/price:amountOverride;
-  if(qty>pos.qty+1e-10){notify("Du besitzt nicht genug von diesem Coin.");return;}
-  const proceeds=qty*price, sellFee=proceeds*feeRate;
-  realizedTrade=proceeds-sellFee-qty*pos.avg;
-  cash+=proceeds-sellFee;realized+=realizedTrade;
-  pos.qty-=qty;
-  if(pos.qty<1e-10){pos.qty=0;pos.avg=0;}
-  history.unshift({time:new Date().toISOString(),type:"SELL",symbol,qty,price,fee:sellFee,realized:realizedTrade});
-  persist();updateUI();notify("Virtuell verkauft · P/L "+money(realizedTrade));return;
- }
- history.unshift({time:new Date().toISOString(),type:"BUY",symbol,qty,price,fee,realized:0});
- persist();updateUI();notify("Virtuell gekauft · "+qtyFmt(qty)+" "+symbol);
-}
-function sellAll(){
- const p=getPosition(activeCoin);
- if(p.qty<=0){notify("Keine offene Position für "+activeCoin+".");return;}
- executeTrade("SELL",p.qty);
-}
-function portfolioNumbers(){
- let holdings=0,unreal=0;
- COINS.forEach(c=>{
-  const p=getPosition(c.s);holdings+=p.qty*currentPrice(c.s);
-  unreal+=p.qty*(currentPrice(c.s)-p.avg);
- });
- return {holdings,unreal,total:cash+holdings};
-}
-function updateUI(){
- const c=coin(),price=currentPrice(),m=market[activeCoin];
- const first=m.candles[Math.max(0,m.candles.length-60)].c;
- const change=(price/first-1)*100;
- $("chartPrice").textContent=money(price);
- $("chartChange").textContent=pct(change);
- $("chartChange").className="small "+(change>=0?"up":"down");
- $("cashBalance").textContent=money(cash);$("sideCash").textContent=money(cash);
- const p=getPosition(activeCoin);
- $("positionInfo").textContent=p.qty>0?`Position: ${qtyFmt(p.qty)} ${activeCoin} · Ø ${money(p.avg)} · P/L ${money(p.qty*(price-p.avg))}`:"Keine offene Position in diesem Coin.";
- $("estimatedQty").textContent="Geschätzte Menge: "+qtyFmt(Math.max(0,Number($("tradeAmount").value)||0)/price)+" "+activeCoin+" (ohne Gebühr)";
- const n=portfolioNumbers();
- $("totalValue").textContent=money(n.total);$("unrealized").textContent=money(n.unreal);$("realized").textContent=money(realized);
- $("unrealized").className="stat-value "+(n.unreal>=0?"up":"down");
- $("realized").className="stat-value "+(realized>=0?"up":"down");
- $("speedLabel").textContent=speed+"×";$("runLabel").textContent=paused?"Pausiert":"Läuft";
- $("pauseBtn").textContent=paused?"▶ Weiter":"Ⅱ Pause";
- $("pauseBtn").classList.toggle("active",paused);
- if(activeAlert){
-  const crossed=activeAlert.side==="above"?price>=activeAlert.price:price<=activeAlert.price;
-  $("alertInfo").textContent=`Alarm ${activeAlert.side==="above"?"über":"unter"} ${money(activeAlert.price)} aktiv`;
-  if(crossed&&lastAlertSide!==activeAlert.side){
-   notify("Preis-Alarm: "+activeCoin+" bei "+money(price));lastAlertSide=activeAlert.side;activeAlert=null;
-  }
- }else if(!$("alertInfo").textContent.startsWith("Alarm ausgelöst"))$("alertInfo").textContent="Kein aktiver Alarm.";
-}
-function renderPortfolio(){
- const n=portfolioNumbers();
- $("portfolioCash").textContent=money(cash);$("holdingsValue").textContent=money(n.holdings);
- $("portfolioTotal").textContent=money(n.total);$("portfolioRealized").textContent=money(realized);
- const rows=COINS.filter(c=>getPosition(c.s).qty>0).map(c=>{
-  const p=getPosition(c.s),price=currentPrice(c.s),pl=p.qty*(price-p.avg);
-  return `<tr><td><b>${c.s}</b> · ${c.n}</td><td>${qtyFmt(p.qty)}</td><td>${money(p.avg)}</td><td>${money(price)}</td><td>${money(p.qty*price)}</td><td class="${pl>=0?"up":"down"}">${money(pl)}</td><td><button data-sell-symbol="${c.s}">Alles verkaufen</button></td></tr>`;
- }).join("");
- $("positionsBody").innerHTML=rows||'<tr><td colspan="7" class="empty">Noch keine offenen Positionen.</td></tr>';
-}
-function renderHistory(){
- $("historyBody").innerHTML=history.map(h=>`<tr><td>${new Date(h.time).toLocaleString("de-DE")}</td><td class="${h.type==="BUY"?"up":"down"}">${h.type==="BUY"?"Kauf":"Verkauf"}</td><td>${h.symbol}</td><td>${qtyFmt(h.qty)}</td><td>${money(h.price)}</td><td>${money(h.fee)}</td><td class="${h.realized>=0?"up":"down"}">${h.type==="SELL"?money(h.realized):"—"}</td></tr>`).join("")||'<tr><td colspan="7" class="empty">Noch keine Trades.</td></tr>';
-}
-function renderJournal(){
- $("journalEntries").innerHTML=journal.map((j,i)=>`<details class="lesson"><summary>${escapeHtml(j.title||"Journal-Eintrag")} <span class="muted tiny">· ${new Date(j.time).toLocaleDateString("de-DE")}</span></summary><p><b>Marktgefühl:</b> ${escapeHtml(j.mood)}</p><p>${escapeHtml(j.text).replace(/\n/g,"<br>")}</p><button data-delete-journal="${i}">Eintrag löschen</button></details>`).join("")||'<div class="empty">Noch keine Einträge.</div>';
-}
-function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
-function renderAll(){
- updateUI();renderChart();
- if($("page-markets").classList.contains("active"))drawCoinList();
- if($("page-portfolio").classList.contains("active"))renderPortfolio();
- if($("page-history").classList.contains("active"))renderHistory();
- if($("page-journal").classList.contains("active"))renderJournal();
-}
-function tick(){
- if(!paused){
-  const steps=speed;
-  for(let s=0;s<steps;s++){
-   globalIndex++;
-   COINS.forEach(c=>{
-    const m=market[c.s],prev=m.price;
-    const shock=Math.random()<.035?(Math.random()-.5)*.025:0;
-    const move=(Math.random()-.505)*.0045+shock;
-    const next=Math.max(m.seed*.05,prev*(1+move));
-    const high=Math.max(prev,next)*(1+Math.random()*.0018);
-    const low=Math.min(prev,next)*(1-Math.random()*.0018);
-    m.price=next;
-    m.candles.push({t:globalIndex,o:prev,h:high,l:low,c:next,v:10+Math.random()*100});
-    if(m.candles.length>3000)m.candles.splice(0,m.candles.length-3000);
-   });
-  }
- }
- renderAll();
- persist();
-}
-function exportCSV(){
- const rows=[["Zeit","Typ","Coin","Menge","Preis EUR","Gebühr EUR","Realisierter P/L EUR"],...history.map(h=>[h.time,h.type,h.symbol,h.qty,h.price,h.fee,h.realized])];
- const csv=rows.map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(";")).join("\r\n");
- const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
- const url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="nexyron-trades.csv";a.click();URL.revokeObjectURL(url);
- notify("CSV-Export wurde erstellt.");
+
+const currentCoin = () => COINS.find(c => c.id === selectedCoin);
+
+function makeCandle(price) {
+  const volatility = currentCoin().vol;
+  const open = price;
+  const change = (Math.random() - 0.49) * volatility;
+  const close = Math.max(0.000001, open * (1 + change));
+  const high = Math.max(open, close) * (1 + Math.random() * volatility * 0.45);
+  const low = Math.min(open, close) * (1 - Math.random() * volatility * 0.45);
+
+  return {
+    open,
+    close,
+    high,
+    low,
+    volume: Math.random() * 100 + 5,
+    time: Date.now()
+  };
 }
 
-// Navigation
-document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>setPage(b.dataset.page)));
-document.querySelectorAll("[data-coin]").forEach(b=>b.addEventListener("click",()=>selectCoin(b.dataset.coin)));
-$("coinList").addEventListener("click",e=>{const b=e.target.closest("[data-coin]");if(b){selectCoin(b.dataset.coin);setPage("dashboard");}});
-$("positionsBody").addEventListener("click",e=>{
- const b=e.target.closest("[data-sell-symbol]");if(!b)return;
- selectCoin(b.dataset.sellSymbol);sellAll();
-});
-document.querySelectorAll("[data-tf]").forEach(b=>b.addEventListener("click",()=>{
- timeframe=b.dataset.tf;visibleCount=70;
- document.querySelectorAll("[data-tf]").forEach(x=>x.classList.toggle("active",x===b));
- persist();renderChart();
-}));
-document.querySelectorAll("[data-tool]").forEach(b=>b.addEventListener("click",()=>setTool(b.dataset.tool)));
-$("speedSelect").value=String(speed);
-$("speedSelect").addEventListener("change",e=>{
- speed=Number(e.target.value)||1;persist();updateUI();notify("Simulation läuft jetzt mit "+speed+"×.");
-});
-$("pauseBtn").addEventListener("click",()=>{paused=!paused;updateUI();notify(paused?"Simulation pausiert.":"Simulation fortgesetzt.");});
-$("buyBtn").addEventListener("click",()=>executeTrade("BUY"));
-$("sellBtn").addEventListener("click",()=>executeTrade("SELL"));
-$("sellAllBtn").addEventListener("click",sellAll);
-$("tradeAmount").addEventListener("input",updateUI);
-$("zoomIn").addEventListener("click",()=>{visibleCount=Math.max(15,Math.round(visibleCount/1.25));renderChart();});
-$("zoomOut").addEventListener("click",()=>{visibleCount=Math.min(500,Math.round(visibleCount*1.25));renderChart();});
-$("resetZoom").addEventListener("click",()=>{visibleCount=70;renderChart();notify("Chart-Ansicht zurückgesetzt.");});
-$("maToggle").addEventListener("change",renderChart);
-$("volumeToggle").addEventListener("change",renderChart);
-$("undoBtn").addEventListener("click",()=>{
- if(!undoStack.length){notify("Nichts zum Rückgängigmachen.");return;}
- drawings[activeCoin]=JSON.parse(undoStack.pop());persist();renderChart();notify("Letzte Zeichnungsänderung rückgängig gemacht.");
-});
-$("clearDrawings").addEventListener("click",()=>{
- if(!(drawings[activeCoin]||[]).length){notify("Keine Zeichnungen vorhanden.");return;}
- saveDrawingUndo();drawings[activeCoin]=[];persist();renderChart();notify("Zeichnungen gelöscht.");
-});
-$("setAlert").addEventListener("click",()=>{
- const price=Number($("alertPrice").value);
- if(!Number.isFinite(price)||price<=0){notify("Bitte einen gültigen Alarmkurs eingeben.");return;}
- const now=currentPrice();
- activeAlert={price,side:price>=now?"above":"below"};lastAlertSide="";
- $("alertInfo").textContent=`Alarm ${activeAlert.side==="above"?"über":"unter"} ${money(price)} aktiv`;
- notify("Preis-Alarm für "+activeCoin+" gesetzt.");
-});
-$("saveJournal").addEventListener("click",()=>{
- const title=$("journalTitle").value.trim(),text=$("journalText").value.trim(),mood=$("journalMood").value;
- if(!title&&!text){notify("Bitte Titel oder Notizen eingeben.");return;}
- journal.unshift({title,text,mood,time:new Date().toISOString()});
- $("journalTitle").value="";$("journalText").value="";
- persist();renderJournal();notify("Journal-Eintrag gespeichert.");
-});
-$("journalEntries").addEventListener("click",e=>{
- const b=e.target.closest("[data-delete-journal]");if(!b)return;
- journal.splice(Number(b.dataset.deleteJournal),1);persist();renderJournal();notify("Eintrag gelöscht.");
-});
-$("exportCsv").addEventListener("click",exportCSV);
-$("clearHistory").addEventListener("click",()=>{
- if(!history.length){notify("Der Verlauf ist bereits leer.");return;}
- if(confirm("Den gesamten Trade-Verlauf löschen?")){history=[];persist();renderHistory();notify("Trade-Verlauf gelöscht.");}
-});
-$("resetBtn").addEventListener("click",()=>{
- if(!confirm("Simulation wirklich zurücksetzen? Guthaben, Positionen, Trades, Zeichnungen und Journal werden zurückgesetzt."))return;
- cash=10000;realized=0;history=[];positions={};journal=[];drawings={};activeCoin="BTC";speed=5;paused=false;timeframe="1m";visibleCount=70;
- localStorage.removeItem(STORAGE);
- $("speedSelect").value="5";selectCoin("BTC");setPage("dashboard");updateUI();renderAll();notify("Simulation zurückgesetzt.");
-});
-window.addEventListener("resize",resizeCanvas);
-document.addEventListener("visibilitychange",()=>{lastTick=Date.now();});
+function initializeMarket() {
+  COINS.forEach(coin => {
+    lastPrice[coin.id] = coin.price;
+    startPrices[coin.id] = coin.price;
+    candles[coin.id] = [];
 
-// Boot
-initMarket();
-if(!drawings[activeCoin])drawings[activeCoin]=[];
-document.querySelectorAll("[data-tf]").forEach(b=>b.classList.toggle("active",b.dataset.tf===timeframe));
-bindChartPointer();
-setTool("cursor");
-selectCoin(activeCoin);
-setPage("dashboard");
+    let price = coin.price;
+    for (let i = 0; i < MAX_CANDLES; i++) {
+      const c = makeCandle(price);
+      candles[coin.id].push(c);
+      price = c.close;
+    }
+
+    lastPrice[coin.id] = price;
+    positions[coin.id] = {
+      qty: 0,
+      cost: 0
+    };
+  });
+}
+
+function setPage(page) {
+  document.querySelectorAll(".page").forEach(el => {
+    el.classList.toggle("active", el.id === "page-" + page);
+  });
+
+  document.querySelectorAll(".nav").forEach(el => {
+    el.classList.toggle("active", el.dataset.page === page);
+  });
+
+  if (page === "dashboard") {
+    requestAnimationFrame(() => {
+      resizeCanvas();
+      drawChart();
+    });
+  }
+
+  renderAll();
+}
+
+document.querySelectorAll(".nav").forEach(button => {
+  button.addEventListener("click", () => setPage(button.dataset.page));
+});
+
+/* Start-Button: erst nach der Definition von $ registrieren */
+const startButton = $("startSimulator");
+
+if (startButton) {
+  startButton.addEventListener("click", () => {
+    const documentation = $("documentation");
+    if (documentation) documentation.style.display = "none";
+
+    document.body.style.overflow = "";
+    setPage("dashboard");
+
+    requestAnimationFrame(() => {
+      resizeCanvas();
+      drawChart();
+    });
+
+    startSimulation();
+  });
+}
+
+function startSimulation() {
+  if (timer) clearInterval(timer);
+
+  running = true;
+  updateRunState();
+
+  timer = setInterval(() => {
+    if (!running) return;
+
+    updateMarkets();
+    renderAll();
+    drawChart();
+  }, Math.max(100, 1000 / speed));
+}
+
+function updateRunState() {
+  const pauseBtn = $("pauseBtn");
+  const runLabel = $("runLabel");
+  const chartStatus = $("chartStatus");
+
+  if (pauseBtn) pauseBtn.textContent = running ? "Ⅱ Pause" : "▶ Weiter";
+  if (runLabel) runLabel.textContent = running ? "Läuft" : "Pausiert";
+  if (chartStatus) chartStatus.textContent = running ? "Simulation läuft" : "Simulation pausiert";
+}
+
+function updateMarkets() {
+  COINS.forEach(coin => {
+    const oldPrice = lastPrice[coin.id];
+    const change = (Math.random() - 0.49) * coin.vol;
+    const newPrice = Math.max(0.000001, oldPrice * (1 + change));
+
+    lastPrice[coin.id] = newPrice;
+
+    const list = candles[coin.id];
+    list.push({
+      open: oldPrice,
+      close: newPrice,
+      high: Math.max(oldPrice, newPrice) * (1 + Math.random() * coin.vol * 0.3),
+      low: Math.min(oldPrice, newPrice) * (1 - Math.random() * coin.vol * 0.3),
+      volume: Math.random() * 100 + 5,
+      time: Date.now()
+    });
+
+    if (list.length > MAX_CANDLES) list.shift();
+  });
+
+  if (alertPrice !== null && !alertTriggered) {
+    if (lastPrice[selectedCoin] >= alertPrice) {
+      alertTriggered = true;
+      showToast("Preis-Alarm: " + currentCoin().name + " hat " + money(alertPrice) + " erreicht.");
+    }
+  }
+}
+
+function resizeCanvas() {
+  if (!chart) return;
+
+  const rect = chart.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+
+  chart.width = Math.max(1, Math.floor(rect.width * dpr));
+  chart.height = Math.max(1, Math.floor(rect.height * dpr));
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  drawChart();
+}
+
+function drawChart() {
+  if (!chart || !ctx) return;
+
+  const rect = chart.getBoundingClientRect();
+  const width = rect.width;
+  const height = rect.height;
+
+  if (width < 10 || height < 10) return;
+
+  ctx.clearRect(0, 0, width, height);
+
+  ctx.fillStyle = "#0b1220";
+  ctx.fillRect(0, 0, width, height);
+
+  const data = candles[selectedCoin] || [];
+  if (data.length < 2) return;
+
+  const rightPadding = 65;
+  const topPadding = 18;
+  const bottomPadding = $("volumeToggle")?.checked ? 55 : 25;
+  const chartHeight = height - topPadding - bottomPadding;
+  const chartWidth = width - rightPadding - 10;
+
+  const visibleCount = Math.max(12, Math.min(data.length, Math.floor(70 / zoom)));
+  const end = Math.max(1, data.length - candleOffset);
+  const start = Math.max(0, end - visibleCount);
+  const visible = data.slice(start, end);
+
+  if (!visible.length) return;
+
+  const minPrice = Math.min(...visible.map(c => c.low));
+  const maxPrice = Math.max(...visible.map(c => c.high));
+  const priceRange = Math.max(maxPrice - minPrice, maxPrice * 0.001);
+
+  const y = price =>
+    topPadding + ((maxPrice - price) / priceRange) * chartHeight;
+
+  const step = chartWidth / visible.length;
+  const candleWidth = Math.max(2, Math.min(12, step * 0.65));
+
+  ctx.strokeStyle = "#1e293b";
+  ctx.lineWidth = 1;
+  ctx.font = "11px sans-serif";
+  ctx.fillStyle = "#94a3b8";
+
+  for (let i = 0; i <= 5; i++) {
+    const gy = topPadding + (chartHeight / 5) * i;
+
+    ctx.beginPath();
+    ctx.moveTo(0, gy);
+    ctx.lineTo(width - rightPadding, gy);
+    ctx.stroke();
+
+    const price = maxPrice - (priceRange / 5) * i;
+    ctx.fillText(number(price, 4), width - rightPadding + 5, gy + 4);
+  }
+
+  visible.forEach((candle, i) => {
+    const x = i * step + step / 2;
+    const rising = candle.close >= candle.open;
+    const color = rising ? "#22c55e" : "#ef4444";
+    const openY = y(candle.open);
+    const closeY = y(candle.close);
+    const highY = y(candle.high);
+    const lowY = y(candle.low);
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x, highY);
+    ctx.lineTo(x, lowY);
+    ctx.stroke();
+
+    ctx.fillStyle = color;
+    ctx.fillRect(
+      x - candleWidth / 2,
+      Math.min(openY, closeY),
+      candleWidth,
+      Math.max(1, Math.abs(closeY - openY))
+    );
+  });
+
+  if ($("maToggle")?.checked) {
+    const closes = visible.map(c => c.close);
+    ctx.strokeStyle = "#fbbf24";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+
+    closes.forEach((_, i) => {
+      const from = Math.max(0, i - 9);
+      const avg = closes.slice(from, i + 1).reduce((a, b) => a + b, 0) / (i - from + 1);
+      const x = i * step + step / 2;
+      const py = y(avg);
+
+      if (i === 0) ctx.moveTo(x, py);
+      else ctx.lineTo(x, py);
+    });
+
+    ctx.stroke();
+  }
+
+  if ($("volumeToggle")?.checked) {
+    const volumeTop = height - bottomPadding + 8;
+    const volumeHeight = bottomPadding - 15;
+    const maxVolume = Math.max(...visible.map(c => c.volume), 1);
+
+    visible.forEach((candle, i) => {
+      const x = i * step + step / 2;
+      const barHeight = (candle.volume / maxVolume) * volumeHeight;
+
+      ctx.fillStyle = candle.close >= candle.open
+        ? "rgba(34,197,94,.45)"
+        : "rgba(239,68,68,.45)";
+
+      ctx.fillRect(
+        x - candleWidth / 2,
+        volumeTop + volumeHeight - barHeight,
+        candleWidth,
+        barHeight
+      );
+    });
+  }
+
+  drawAnnotations(visible, start, step, y, topPadding, chartHeight);
+
+  const price = lastPrice[selectedCoin];
+  const py = y(price);
+
+  ctx.strokeStyle = "#60a5fa";
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.moveTo(0, py);
+  ctx.lineTo(width - rightPadding, py);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.fillStyle = "#2563eb";
+  ctx.fillRect(width - rightPadding + 1, py - 10, rightPadding - 2, 20);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillText(number(price, 4), width - rightPadding + 5, py + 4);
+}
+
+function drawAnnotations(visible, start, step, y, topPadding, chartHeight) {
+  drawings.forEach(d => {
+    ctx.strokeStyle = d.color || "#facc15";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+
+    if (d.type === "horizontal") {
+      ctx.moveTo(0, d.y1);
+      ctx.lineTo(chart.width, d.y1);
+    } else {
+      ctx.moveTo(d.x1, d.y1);
+      ctx.lineTo(d.x2, d.y2);
+    }
+
+    if (d.type === "arrow") {
+      const angle = Math.atan2(d.y2 - d.y1, d.x2 - d.x1);
+      const size = 10;
+
+      ctx.moveTo(d.x2, d.y2);
+      ctx.lineTo(
+        d.x2 - size * Math.cos(angle - Math.PI / 6),
+        d.y2 - size * Math.sin(angle - Math.PI / 6)
+      );
+
+      ctx.moveTo(d.x2, d.y2);
+      ctx.lineTo(
+        d.x2 - size * Math.cos(angle + Math.PI / 6),
+        d.y2 - size * Math.sin(angle + Math.PI / 6)
+      );
+    }
+
+    ctx.stroke();
+  });
+
+  if (currentDrawing) {
+    ctx.strokeStyle = "#facc15";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(currentDrawing.x1, currentDrawing.y1);
+    ctx.lineTo(currentDrawing.x2, currentDrawing.y2);
+    ctx.stroke();
+  }
+}
+
+function showToast(message) {
+  const toast = $("toast");
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(showToast.timeout);
+  showToast.timeout = setTimeout(() => toast.classList.remove("show"), 2800);
+}
+
+function renderAll() {
+  renderBalances();
+  renderCoinList();
+  renderPortfolio();
+  renderHistory();
+  renderJournal();
+  renderTradeInfo();
+  renderChartHeader();
+}
+
+function renderBalances() {
+  const holdings = COINS.reduce((sum, coin) => {
+    return sum + positions[coin.id].qty * lastPrice[coin.id];
+  }, 0);
+
+  const total = cash + holdings;
+  const openPL = COINS.reduce((sum, coin) => {
+    const p = positions[coin.id];
+    return sum + p.qty * lastPrice[coin.id] - p.cost;
+  }, 0);
+
+  $("sideCash").textContent = money(cash);
+  $("cashBalance").textContent = money(cash);
+  $("totalValue").textContent = money(total);
+  $("unrealized").textContent = money(openPL);
+  $("realized").textContent = money(realizedPL);
+
+  $("portfolioCash").textContent = money(cash);
+  $("holdingsValue").textContent = money(holdings);
+  $("portfolioTotal").textContent = money(total);
+  $("portfolioRealized").textContent = money(realizedPL);
+
+  $("speedLabel").textContent = speed + "×";
+
+  $("unrealized").className = "stat-value " + (openPL >= 0 ? "up" : "down");
+  $("realized").className = "stat-value " + (realizedPL >= 0 ? "up" : "down");
+}
+
+function renderChartHeader() {
+  const coin = currentCoin();
+  const price = lastPrice[coin.id];
+  const change = ((price / startPrices[coin.id]) - 1) * 100;
+
+  $("chartCoinName").textContent = `${coin.name} (${coin.id})`;
+  $("chartCoinSub").textContent = `${coin.id} / EUR · Simulierter Markt`;
+  $("chartPrice").textContent = money(price);
+  $("chartChange").textContent = `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`;
+  $("chartChange").className = "small " + (change >= 0 ? "up" : "down");
+}
+
+function renderCoinList() {
+  const container = $("coinList");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  COINS.forEach(coin => {
+    const price = lastPrice[coin.id];
+    const change = ((price / startPrices[coin.id]) - 1) * 100;
+
+    const button = document.createElement("button");
+    button.className = "coin-row" + (coin.id === selectedCoin ? " selected" : "");
+    button.innerHTML = `
+      <span class="coin-icon" style="background:${coin.color}">${coin.id.slice(0,1)}</span>
+      <span class="coin-row-name">
+        <strong>${coin.name}</strong>
+        <small>${coin.id}/EUR</small>
+      </span>
+      <span class="coin-row-price">
+        <strong>${money(price)}</strong>
+        <small class="${change >= 0 ? "up" : "down"}">${change >= 0 ? "+" : ""}${change.toFixed(2)}%</small>
+      </span>
+    `;
+
+    button.addEventListener("click", () => selectCoin(coin.id));
+    container.appendChild(button);
+  });
+}
+
+function selectCoin(id) {
+  selectedCoin = id;
+  alertPrice = null;
+  alertTriggered = false;
+  $("alertInfo").textContent = "Kein aktiver Alarm.";
+  renderAll();
+  drawChart();
+}
+
+function renderTradeInfo() {
+  const p = positions[selectedCoin];
+  const price = lastPrice[selectedCoin];
+  const amount = Math.max(0, Number($("tradeAmount").value) || 0);
+  const estimatedQty = amount / price;
+
+  $("estimatedQty").textContent = `Geschätzte Menge: ${number(estimatedQty, 8)} ${selectedCoin}`;
+
+  if (p.qty > 0) {
+    const average = p.cost / p.qty;
+    const pl = p.qty * price - p.cost;
+
+    $("positionInfo").textContent =
+      `Menge: ${number(p.qty, 8)} ${selectedCoin} · Ø Einstieg: ${money(average)} · Offener P/L: ${money(pl)}`;
+  } else {
+    $("positionInfo").textContent = "Keine offene Position in diesem Coin.";
+  }
+}
+
+function executeBuy() {
+  const amount = Number($("tradeAmount").value);
+  const price = lastPrice[selectedCoin];
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    showToast("Bitte gib einen gültigen Betrag ein.");
+    return;
+  }
+
+  const fee = amount * FEE_RATE;
+  const totalCost = amount + fee;
+
+  if (totalCost > cash) {
+    showToast("Nicht genügend virtuelles Guthaben.");
+    return;
+  }
+
+  const qty = amount / price;
+  const p = positions[selectedCoin];
+
+  cash -= totalCost;
+  p.qty += qty;
+  p.cost += totalCost;
+
+  history.unshift({
+    time: new Date().toLocaleString("de-DE"),
+    type: "Kauf",
+    coin: selectedCoin,
+    qty,
+    price,
+    fee,
+    pl: 0
+  });
+
+  renderAll();
+  showToast(`${selectedCoin} virtuell gekauft.`);
+}
+
+function executeSell(all = false) {
+  const p = positions[selectedCoin];
+
+  if (p.qty <= 0) {
+    showToast("Du hast keine offene Position in diesem Coin.");
+    return;
+  }
+
+  const price = lastPrice[selectedCoin];
+  const requestedAmount = Number($("tradeAmount").value);
+  let qty = all ? p.qty : Math.max(0, requestedAmount / price);
+
+  qty = Math.min(qty, p.qty);
+
+  if (!Number.isFinite(qty) || qty <= 0) {
+    showToast("Bitte gib einen gültigen Verkaufsbetrag ein.");
+    return;
+  }
+
+  const averageCost = p.cost / p.qty;
+  const gross = qty * price;
+  const fee = gross * FEE_RATE;
+  const proceeds = gross - fee;
+  const costBasis = averageCost * qty;
+  const pl = proceeds - costBasis;
+
+  cash += proceeds;
+  realizedPL += pl;
+
+  p.qty -= qty;
+  p.cost -= costBasis;
+
+  if (p.qty < 1e-10) {
+    p.qty = 0;
+    p.cost = 0;
+  }
+
+  history.unshift({
+    time: new Date().toLocaleString("de-DE"),
+    type: "Verkauf",
+    coin: selectedCoin,
+    qty,
+    price,
+    fee,
+    pl
+  });
+
+  renderAll();
+  showToast(`${selectedCoin} virtuell verkauft. Ergebnis: ${money(pl)}`);
+}
+
+function renderPortfolio() {
+  const body = $("positionsBody");
+  if (!body) return;
+
+  body.innerHTML = "";
+
+  COINS.forEach(coin => {
+    const p = positions[coin.id];
+    if (p.qty <= 0) return;
+
+    const price = lastPrice[coin.id];
+    const value = p.qty * price;
+    const pl = value - p.cost;
+    const average = p.cost / p.qty;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${coin.name} (${coin.id})</td>
+      <td>${number(p.qty, 8)}</td>
+      <td>${money(average)}</td>
+      <td>${money(price)}</td>
+      <td>${money(value)}</td>
+      <td class="${pl >= 0 ? "up" : "down"}">${money(pl)}</td>
+      <td><button data-sell="${coin.id}">Verkaufen</button></td>
+    `;
+
+    tr.querySelector("button").addEventListener("click", () => {
+      selectedCoin = coin.id;
+      executeSell(true);
+    });
+
+    body.appendChild(tr);
+  });
+
+  if (!body.children.length) {
+    body.innerHTML = '<tr><td colspan="7" class="muted">Noch keine offenen Positionen.</td></tr>';
+  }
+}
+
+function renderHistory() {
+  const body = $("historyBody");
+  if (!body) return;
+
+  body.innerHTML = "";
+
+  history.forEach(item => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${item.time}</td>
+      <td>${item.type}</td>
+      <td>${item.coin}</td>
+      <td>${number(item.qty, 8)}</td>
+      <td>${money(item.price)}</td>
+      <td>${money(item.fee)}</td>
+      <td class="${item.pl >= 0 ? "up" : "down"}">${money(item.pl)}</td>
+    `;
+    body.appendChild(tr);
+  });
+
+  if (!body.children.length) {
+    body.innerHTML = '<tr><td colspan="7" class="muted">Noch keine Trades vorhanden.</td></tr>';
+  }
+}
+
+function renderJournal() {
+  const container = $("journalEntries");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  journal.forEach(entry => {
+    const card = document.createElement("div");
+    card.className = "journal-entry";
+
+    const title = document.createElement("h3");
+    title.textContent = entry.title;
+
+    const meta = document.createElement("div");
+    meta.className = "small muted";
+    meta.textContent = `${entry.time} · ${entry.mood}`;
+
+    const text = document.createElement("p");
+    text.textContent = entry.text;
+
+    card.append(title, meta, text);
+    container.appendChild(card);
+  });
+
+  if (!journal.length) {
+    container.innerHTML = '<p class="muted">Noch keine Journal-Einträge.</p>';
+  }
+}
+
+$("buyBtn").addEventListener("click", executeBuy);
+$("sellBtn").addEventListener("click", () => executeSell(false));
+$("sellAllBtn").addEventListener("click", () => executeSell(true));
+
+$("pauseBtn").addEventListener("click", () => {
+  running = !running;
+  updateRunState();
+});
+
+$("speedSelect").addEventListener("change", event => {
+  speed = Number(event.target.value) || 5;
+  startSimulation();
+});
+
+$("tradeAmount").addEventListener("input", renderTradeInfo);
+
+$("setAlert").addEventListener("click", () => {
+  const value = Number($("alertPrice").value);
+
+  if (!Number.isFinite(value) || value <= 0) {
+    showToast("Bitte gib einen gültigen Alarmkurs ein.");
+    return;
+  }
+
+  alertPrice = value;
+  alertTriggered = false;
+  $("alertInfo").textContent = `${currentCoin().name}: Alarm bei ${money(value)}`;
+  showToast("Preis-Alarm gesetzt.");
+});
+
+$("timeframes").querySelectorAll("button").forEach(button => {
+  button.addEventListener("click", () => {
+    timeframe = button.dataset.tf;
+    $("timeframes").querySelectorAll("button").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+    drawChart();
+  });
+});
+
+$("drawingTools").querySelectorAll("[data-tool]").forEach(button => {
+  button.addEventListener("click", () => {
+    activeTool = button.dataset.tool;
+    $("drawingTools").querySelectorAll("[data-tool]").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+  });
+});
+
+$("zoomIn").addEventListener("click", () => {
+  zoom = Math.min(4, zoom * 1.25);
+  drawChart();
+});
+
+$("zoomOut").addEventListener("click", () => {
+  zoom = Math.max(0.5, zoom / 1.25);
+  drawChart();
+});
+
+$("resetZoom").addEventListener("click", () => {
+  zoom = 1;
+  candleOffset = 0;
+  drawChart();
+});
+
+$("maToggle").addEventListener("change", drawChart);
+$("volumeToggle").addEventListener("change", drawChart);
+
+$("undoBtn").addEventListener("click", () => {
+  drawings.pop();
+  drawChart();
+});
+
+$("clearDrawings").addEventListener("click", () => {
+  drawings = [];
+  currentDrawing = null;
+  drawChart();
+});
+
+function canvasPoint(event) {
+  const rect = chart.getBoundingClientRect();
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
+}
+
+chart.addEventListener("pointerdown", event => {
+  const point = canvasPoint(event);
+
+  if (activeTool === "cursor") {
+    mouseDown = true;
+    return;
+  }
+
+  if (activeTool === "erase") {
+    if (drawings.length) drawings.pop();
+    drawChart();
+    return;
+  }
+
+  mouseDown = true;
+  currentDrawing = {
+    type: activeTool,
+    x1: point.x,
+    y1: point.y,
+    x2: point.x,
+    y2: point.y,
+    color: "#facc15"
+  };
+
+  chart.setPointerCapture(event.pointerId);
+});
+
+chart.addEventListener("pointermove", event => {
+  if (!mouseDown) return;
+
+  const point = canvasPoint(event);
+
+  if (activeTool === "cursor") {
+    candleOffset = Math.max(0, candleOffset + (event.movementX > 0 ? 1 : -1));
+    drawChart();
+    return;
+  }
+
+  if (currentDrawing) {
+    currentDrawing.x2 = point.x;
+    currentDrawing.y2 = point.y;
+
+    if (currentDrawing.type === "horizontal") {
+      currentDrawing.y2 = currentDrawing.y1;
+    }
+
+    drawChart();
+  }
+});
+
+function finishDrawing() {
+  if (currentDrawing) {
+    drawings.push(currentDrawing);
+    currentDrawing = null;
+  }
+
+  mouseDown = false;
+  drawChart();
+}
+
+chart.addEventListener("pointerup", finishDrawing);
+chart.addEventListener("pointercancel", finishDrawing);
+window.addEventListener("resize", resizeCanvas);
+
+$("saveJournal").addEventListener("click", () => {
+  const title = $("journalTitle").value.trim();
+  const text = $("journalText").value.trim();
+  const mood = $("journalMood").value;
+
+  if (!title || !text) {
+    showToast("Bitte gib einen Titel und Notizen ein.");
+    return;
+  }
+
+  journal.unshift({
+    title,
+    text,
+    mood,
+    time: new Date().toLocaleString("de-DE")
+  });
+
+  $("journalTitle").value = "";
+  $("journalText").value = "";
+
+  renderJournal();
+  showToast("Journal-Eintrag gespeichert.");
+});
+
+$("exportCsv").addEventListener("click", () => {
+  if (!history.length) {
+    showToast("Noch keine Trades zum Exportieren.");
+    return;
+  }
+
+  const rows = [
+    ["Zeit", "Typ", "Coin", "Menge", "Preis", "Gebühr", "Realisierter P/L"],
+    ...history.map(item => [
+      item.time,
+      item.type,
+      item.coin,
+      item.qty,
+      item.price,
+      item.fee,
+      item.pl
+    ])
+  ];
+
+  const csv = rows
+    .map(row => row.map(value => `"${String(value).replaceAll('"', '""')}"`).join(";"))
+    .join("\r\n");
+
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "nexyron-trades.csv";
+  link.click();
+
+  URL.revokeObjectURL(url);
+});
+
+$("clearHistory").addEventListener("click", () => {
+  if (!confirm("Möchtest du den Trade-Verlauf wirklich löschen?")) return;
+
+  history = [];
+  renderHistory();
+  showToast("Trade-Verlauf gelöscht.");
+});
+
+$("resetBtn").addEventListener("click", resetSimulator);
+
+function resetSimulator() {
+  if (!confirm("Simulation zurücksetzen? Guthaben und Verlauf werden zurückgesetzt.")) return;
+
+  cash = START_CASH;
+  realizedPL = 0;
+  history = [];
+  journal = [];
+  drawings = [];
+  currentDrawing = null;
+  zoom = 1;
+  candleOffset = 0;
+  alertPrice = null;
+  alertTriggered = false;
+
+  COINS.forEach(coin => {
+    positions[coin.id] = { qty: 0, cost: 0 };
+    lastPrice[coin.id] = coin.price;
+    startPrices[coin.id] = coin.price;
+    candles[coin.id] = [];
+
+    let price = coin.price;
+
+    for (let i = 0; i < MAX_CANDLES; i++) {
+      const candle = makeCandle(price);
+      candles[coin.id].push(candle);
+      price = candle.close;
+    }
+
+    lastPrice[coin.id] = price;
+  });
+
+  selectedCoin = "BTC";
+  $("alertPrice").value = "";
+  $("alertInfo").textContent = "Kein aktiver Alarm.";
+
+  renderAll();
+  drawChart();
+  showToast("Simulation zurückgesetzt.");
+}
+
+initializeMarket();
+
+document.querySelectorAll("#timeframes button").forEach(button => {
+  if (button.dataset.tf === timeframe) button.classList.add("active");
+});
+
 renderAll();
 resizeCanvas();
-setInterval(tick,650);
-</script>
+startSimulation();
+ </script>
 </body>
-</html> 
+</html>
