@@ -1696,6 +1696,135 @@ document.querySelectorAll("#timeframes button").forEach(button => {
 renderAll();
 resizeCanvas();
 startSimulation();
+ 
+<!-- Sprachauswahl: Deutsch, Englisch, Tadschikisch (kyrillisch), Tadschikisch (lateinisch) -->
+<div id="language-switcher" style="position:fixed;bottom:14px;right:14px;z-index:99999;background:#101a2e;color:#fff;border:1px solid #3b82f6;border-radius:12px;padding:8px;font-family:sans-serif">
+  <select id="language-select" style="background:#16233c;color:#fff;border:1px solid #3b82f6;border-radius:8px;padding:6px">
+    <option value="de">Deutsch</option>
+    <option value="en">English</option>
+    <option value="tg-cy">Тоҷикӣ (Кириллӣ)</option>
+    <option value="tg-la">Tojikī (Lotinī)</option>
+  </select>
+</div>
+
+<script>
+(function () {
+  const translations = {
+    en: {
+      "Spielen": "Play",
+      "Start": "Start",
+      "Einstellungen": "Settings",
+      "Shop": "Shop",
+      "Inventar": "Inventory",
+      "Geld": "Money",
+      "Speed": "Speed",
+      "Zurück": "Back",
+      "Schließen": "Close",
+      "Anmelden": "Sign in",
+      "Registrieren": "Sign up",
+      "Abmelden": "Sign out",
+      "Profil": "Profile",
+      "Basis": "Base",
+      "Roboter": "Robots",
+      "Ei": "Egg",
+      "Eier": "Eggs",
+      "Öffnen": "Open",
+      "Platzieren": "Place",
+      "Verkaufen": "Sell",
+      "Sammeln": "Collect",
+      "Raum": "Room",
+      "Mehrspieler": "Multiplayer"
+    },
+    "tg-cy": {
+      "Spielen": "Бозӣ кардан",
+      "Start": "Оғоз",
+      "Einstellungen": "Танзимот",
+      "Shop": "Дукон",
+      "Inventar": "Ҷузвдон",
+      "Geld": "Пул",
+      "Speed": "Суръат",
+      "Zurück": "Бозгашт",
+      "Schließen": "Пӯшидан",
+      "Anmelden": "Даромадан",
+      "Registrieren": "Сабти ном",
+      "Abmelden": "Баромадан",
+      "Profil": "Профил",
+      "Basis": "Пойгоҳ",
+      "Roboter": "Роботҳо",
+      "Ei": "Тухм",
+      "Eier": "Тухмҳо",
+      "Öffnen": "Кушодан",
+      "Platzieren": "Ҷойгир кардан",
+      "Verkaufen": "Фурӯхтан",
+      "Sammeln": "Ҷамъ кардан",
+      "Raum": "Хона",
+      "Mehrspieler": "Бисёрбозигар"
+    },
+    "tg-la": {
+      "Spielen": "Bozī kardan",
+      "Start": "Oғoz",
+      "Einstellungen": "Tanzimot",
+      "Shop": "Dukon",
+      "Inventar": "Juzvd",
+      "Geld": "Pul",
+      "Speed": "Surʼat",
+      "Zurück": "Bozgašt",
+      "Schließen": "Pūšidan",
+      "Anmelden": "Daromad",
+      "Registrieren": "Sabti nom",
+      "Abmelden": "Baromad",
+      "Profil": "Profil",
+      "Basis": "Pojgoh",
+      "Roboter": "Robotҳо",
+      "Ei": "Tuхм",
+      "Eier": "Tuхмҳо",
+      "Öffnen": "Kušodan",
+      "Platzieren": "Ҷойгир кардан",
+      "Verkaufen": "Furūхтан",
+      "Sammeln": "Ҷамъ кардан",
+      "Raum": "Xona",
+      "Mehrspieler": "Bisjorbozigar"
+    }
+  };
+
+  const select = document.getElementById("language-select");
+  const saved = localStorage.getItem("zynx-language") || "de";
+  select.value = saved;
+
+  function translate(language) {
+    const dictionary = translations[language];
+    if (!dictionary) return;
+
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      null
+    );
+
+    let node;
+
+    while ((node = walker.nextNode())) {
+      const original = node.textContent.trim();
+      const translation = dictionary[original];
+
+      if (translation) {
+        node.textContent = translation;
+      }
+    }
+  }
+
+  select.addEventListener("change", () => {
+    const language = select.value;
+    localStorage.setItem("zynx-language", language);
+    translate(language);
+  });
+
+  if (saved !== "de") {
+    translate(saved);
+  }
+})();
+</script>
+
  </script>
 </body>
 </html>
