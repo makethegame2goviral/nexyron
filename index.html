@@ -195,7 +195,7 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
  <div class="auth-card">
   <div class="brand">NEXY<span>RON</span></div>
   <h1 id="authTitle">Willkommen zurück</h1>
-  <p id="authSubtitle">Melde dich an, damit dein Spielstand und deine Spielzeit gespeichert werden.</p>
+  <p id="authSubtitle">Melde dich mit deinem Spielername, deiner E-Mail und deinem Passwort an, damit dein Spielstand gespeichert wird.</p>
   <form id="authForm">
    <label for="authUsername">Spielername</label><input id="authUsername" autocomplete="username" minlength="3" maxlength="20" required placeholder="Dein Name">
    <div id="authEmailWrap"><label for="authEmail">E-Mail-Adresse</label><input id="authEmail" type="email" autocomplete="email" placeholder="name@example.com"></div>
@@ -461,11 +461,11 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
    <section class="doc-card">
     <span class="doc-tag">14 · Speichern</span>
     <h2>Speicherung und Zurücksetzen</h2>
-    <p>Der Simulator verwendet den lokalen Browserspeicher (<code>localStorage</code>), um unter anderem Guthaben, Positionen, Trade-Verlauf, Journal, Zeichnungen, ausgewählten Coin, Geschwindigkeit und Zeitraum zu speichern.</p>
+    <p>Mit deinem Konto werden Guthaben, Positionen, Trade-Verlauf, Journal, Zeichnungen, ausgewählter Coin, Geschwindigkeit und Zeitraum in deinem Online-Profil gespeichert.</p>
     <ul>
      <li>Gespeicherte Daten bleiben normalerweise bei einem Neuladen im selben Browser erhalten.</li>
-     <li>Die Daten werden nicht automatisch mit anderen Geräten synchronisiert.</li>
-     <li>Der Browser darf die lokalen Daten nicht zwischenzeitlich löschen oder blockieren.</li>
+     <li>Dein Spielstand wird nach der Anmeldung auch auf anderen Geräten geladen.</li>
+     <li>Deine Spielzeit wird während der Nutzung automatisch gezählt und gespeichert.</li>
      <li><b>Zurücksetzen:</b> Setzt Guthaben, Positionen, Verlauf, Zeichnungen und Journal zurück und stellt die Startwerte wieder her.</li>
     </ul>
     <p>Ein Zurücksetzen kann nicht rückgängig gemacht werden.</p>
@@ -1741,16 +1741,16 @@ function nxAuthMessage(message, isError=true){nxEl("authError").textContent=mess
 function nxSetMode(register){
  nxRegisterMode=register;
  nxEl("authTitle").textContent=register?"Konto erstellen":"Willkommen zurück";
- nxEl("authSubtitle").textContent=register?"Erstelle dein Konto, damit dein Spielstand auf allen Geräten gespeichert bleibt.":"Melde dich an, um deinen gespeicherten Spielstand fortzusetzen.";
+ nxEl("authSubtitle").textContent=register?"Erstelle dein Konto, damit dein Spielstand auf allen Geräten gespeichert bleibt.":"Melde dich mit E-Mail und Passwort an und gib deinen Spielernamen zur Bestätigung ein.";
  nxEl("authSubmit").textContent=register?"Registrieren":"Anmelden";
  nxEl("authMode").textContent=register?"Zum Login":"Konto erstellen";
- nxEl("authEmailWrap").style.display=register?"block":"none";
- nxEl("authEmail").required=register;
+ nxEl("authEmailWrap").style.display="block";
+ nxEl("authEmail").required=true;
  nxEl("authPassword").autocomplete=register?"new-password":"current-password";
  nxAuthMessage("");
 }
 function nxState(){
- return {cash,realizedPL,selectedCoin,speed,timeframe,history,journal,positions,drawings};
+ return {cash,realizedPL,selectedCoin,speed,timeframe,history,journal,positions,drawings,lastPrice};
 }
 function nxTotalValue(){
  const holdings=COINS.reduce((sum,c)=>sum+(positions[c.id]?.qty||0)*(lastPrice[c.id]||c.price),0);
@@ -1773,6 +1773,7 @@ async function nxLoad(){
   if(Number.isFinite(st.cash))cash=st.cash;
   if(Number.isFinite(st.realizedPL))realizedPL=st.realizedPL;
   if(st.positions&&typeof st.positions==="object")COINS.forEach(c=>{if(st.positions[c.id])positions[c.id]=st.positions[c.id];});
+  if(st.lastPrice&&typeof st.lastPrice==="object")COINS.forEach(c=>{if(Number.isFinite(st.lastPrice[c.id]))lastPrice[c.id]=st.lastPrice[c.id];});
   if(Array.isArray(st.history))history=st.history;
   if(Array.isArray(st.journal))journal=st.journal;
   if(Array.isArray(st.drawings))drawings=st.drawings;
