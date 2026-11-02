@@ -1849,16 +1849,15 @@ async function nxLoadAdminPlayers(){
  const message=nxEl("adminMessage"),body=nxEl("adminPlayers");
  if(!currentUser||nxEl("adminNav").style.display==="none")return;
  message.textContent="Spielerliste wird geladen …";
- const [{data:players,error},{data:roles,error:rolesError}]=await Promise.all([
-  nxSupabase.from("player_profiles").select("user_id,username,total_value,total_play_seconds,game_state,is_banned").order("total_value",{ascending:false}),
-  nxSupabase.rpc("nx_admin_list_roles")
- ]);
- if(error||rolesError){
-  const detail=error?.message||rolesError?.message||"Unbekannter Fehler";
-  message.textContent="Fehler beim Laden: "+detail;
-  body.innerHTML='<tr><td colspan="5" class="empty">Spielerliste oder Admin-Status konnte nicht geladen werden.</td></tr>';return;
+ const {data:players,error}=await nxSupabase.from("player_profiles").select("user_id,username,total_value,total_play_seconds,game_state,is_banned").order("total_value",{ascending:false});
+ if(error){
+  message.textContent="Spielerliste konnte nicht geladen werden: "+error.message;
+  body.innerHTML='<tr><td colspan="5" class="empty">Spielerliste konnte nicht geladen werden. Bitte Datenbankrechte prüfen.</td></tr>';return;
  }
+ // Die Spielerliste bleibt sichtbar, auch wenn der separate Rollen-RPC einmal fehlschlägt.
+ const {data:roles,error:rolesError}=await nxSupabase.rpc("nx_admin_list_roles");
  const adminIds=new Set((roles||[]).filter(r=>r.role==="admin").map(r=>r.user_id));
+ if(rolesError) console.warn("Admin-Rollen konnten nicht geladen werden:",rolesError.message);
  const allPlayers=players||[];
  nxEl("adminPlayerCount").textContent=String(allPlayers.length);
  nxEl("adminBannedCount").textContent=String(allPlayers.filter(p=>p.is_banned).length);
@@ -1871,15 +1870,23 @@ async function nxLoadAdminPlayers(){
    '<td>'+Number(p.total_value||0).toLocaleString("de-DE",{style:"currency",currency:"EUR"})+'</td>'+
    '<td>'+nxFormatTime(Number(p.total_play_seconds||0))+'</td>'+
    '<td><div class="admin-actions">'+
+   '<button type="button" data-admin-action="open-player" data-user-id="'+nxEscape(p.user_id)+'" data-user-name="'+name+'" data-user-value="'+Number(p.total_value||0)+'" data-user-time="'+Number(p.total_play_seconds||0)+'" data-user-status="'+(banned?"GESPERRT":"AKTIV")+'" data-user-role="'+(isAdmin?"ADMIN":"SPIELER")+'">Spieler öffnen</button>'+
    '<button type="button" class="'+(banned?"admin-unban":"admin-ban")+'" data-admin-action="'+(banned?"unban":"ban")+'" data-user-id="'+nxEscape(p.user_id)+'">'+(banned?"Entsperren":"Sperren")+'</button>'+
    '<button type="button" class="admin-money" data-admin-action="cash" data-user-id="'+nxEscape(p.user_id)+'" data-user-name="'+name+'">Cash ändern</button>'+
    '<button type="button" data-admin-action="'+(isAdmin?"remove-admin":"make-admin")+'" data-user-id="'+nxEscape(p.user_id)+'" data-user-name="'+name+'">'+(isAdmin?"Admin entziehen":"Admin machen")+'</button>'+
    '</div></td></tr>';
  }).join(""):'<tr><td colspan="5" class="empty">Keine Spieler gefunden.</td></tr>';
- message.textContent=shown.length+" von "+allPlayers.length+" Spielern angezeigt. Namen oben suchen, dann Rolle ändern.";
+ message.textContent=shown.length+" von "+allPlayers.length+" Spielern angezeigt. „Spieler öffnen“ zeigt die Kontodetails; die Aktionen stehen direkt daneben."+(rolesError?" Rollenstatus derzeit nicht abrufbar.":"");
 }
 async function nxAdminAction(action,userId,userName){
  if(!currentUser||!userId)return;
+ if(action==="open-player"){
+  const button=document.querySelector('button[data-admin-action="open-player"][data-user-id="'+CSS.escape(userId)+'"]');
+  if(!button)return;
+  const details="Spieler: "+(userName||"Spieler")+"\\nStatus: "+button.dataset.userStatus+"\\nRolle: "+button.dataset.userRole+"\\nVermögen: "+Number(button.dataset.userValue||0).toLocaleString("de-DE",{style:"currency",currency:"EUR"})+"\\nSpielzeit: "+nxFormatTime(Number(button.dataset.userTime||0))+"\\nID: "+userId;
+  showToast(details);
+  return;
+ }
  if(userId===currentUser.id&&(action==="ban"||action==="remove-admin")){showToast("Diese Aktion ist für dein eigenes Admin-Konto gesperrt.");return;}
  const {data:roles,error:roleError}=await nxSupabase.from("user_roles").select("role").eq("user_id",currentUser.id);
  if(roleError||!(roles||[]).some(row=>row.role==="admin")){showToast("Keine Admin-Berechtigung.");return;}
