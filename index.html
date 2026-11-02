@@ -466,7 +466,7 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
    und keine Anlageberatung.
   </div>
 
-  <button id="startSimulator" class="doc-start">
+  <button id="startSimulator" type="button" class="doc-start" onclick="document.getElementById('documentation').style.display='none';document.body.style.overflow='';document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-dashboard'));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.page==='dashboard'));">
    ✓ Alles verstanden – Simulator öffnen
   </button>
 
