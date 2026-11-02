@@ -1846,6 +1846,7 @@ nxEl("authForm").addEventListener("submit",async e=>{
  finally{nxEl("authSubmit").disabled=false;}
 });
 nxEl("logoutBtn").addEventListener("click",async()=>{
+ nxPlaytime+=Math.max(0,Math.round((Date.now()-nxLastTick)/1000));nxLastTick=Date.now();
  await nxSave();
  if(nxSaveTimer)clearInterval(nxSaveTimer);
  await nxSupabase.auth.signOut();
