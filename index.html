@@ -1884,7 +1884,7 @@ async function nxAdminAction(action,userId,userName){
   const button=document.querySelector('button[data-admin-action="open-player"][data-user-id="'+CSS.escape(userId)+'"]');
   if(!button)return;
   const details="Spieler: "+(userName||"Spieler")+"\\nStatus: "+button.dataset.userStatus+"\\nRolle: "+button.dataset.userRole+"\\nVermögen: "+Number(button.dataset.userValue||0).toLocaleString("de-DE",{style:"currency",currency:"EUR"})+"\\nSpielzeit: "+nxFormatTime(Number(button.dataset.userTime||0))+"\\nID: "+userId;
-  showToast(details);
+  alert(details);
   return;
  }
  if(userId===currentUser.id&&(action==="ban"||action==="remove-admin")){showToast("Diese Aktion ist für dein eigenes Admin-Konto gesperrt.");return;}
