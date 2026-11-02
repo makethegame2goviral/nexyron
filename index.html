@@ -188,6 +188,19 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
 .leader-table{width:100%;border-collapse:collapse}.leader-table th,.leader-table td{text-align:left;padding:10px 8px;border-bottom:1px solid #263449;font-size:13px}.leader-table th{color:#8797ad;font-weight:600}
 @media(max-width:700px){.leader-grid{grid-template-columns:1fr}.topbar{padding:0 10px}.status{display:none}.account-chip{font-size:11px}}
 
+
+/* Admin-Bereich */
+.admin-toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.admin-toolbar input{max-width:320px}
+.admin-status{font-size:12px;color:var(--muted);margin:8px 0}
+.admin-table td{vertical-align:middle}
+.admin-actions{display:flex;gap:6px;flex-wrap:wrap}
+.admin-actions button{padding:6px 9px;font-size:11px}
+.admin-ban{border-color:#a73b54;background:#762c40}
+.admin-unban{border-color:#1b9b73;background:#126d53}
+.admin-money{border-color:#8a713d;background:#44371d}
+.admin-tag{display:inline-block;padding:3px 7px;border-radius:6px;background:#1b2c41;font-size:11px}
+@media(max-width:700px){.admin-toolbar input{max-width:none}.admin-table{min-width:720px}}
 </style>
 </head>
 <body>
@@ -519,6 +532,7 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
     <button class="nav" data-page="journal">✎ &nbsp; Trading-Journal</button>
     <button class="nav" data-page="learn">▣ &nbsp; Lernen</button>
     <button class="nav" data-page="leaderboard">🏆 &nbsp; Rangliste</button>
+    <button class="nav" data-page="admin" id="adminNav" style="display:none">🛡️ &nbsp; Admin</button>
 
     <div class="side-card">
       <div class="small muted">Virtuelles Guthaben</div>
@@ -534,6 +548,30 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
        <div class="card"><h2>🏆 Top Verdiener</h2><div class="small muted">Sortiert nach virtuellem Gesamtvermögen</div><table class="leader-table"><thead><tr><th>#</th><th>Spieler</th><th>Vermögen</th></tr></thead><tbody id="wealthLeaderboard"><tr><td colspan="3">Lade Rangliste …</td></tr></tbody></table></div>
        <div class="card"><h2>⏱️ Top Spielzeit</h2><div class="small muted">Wer insgesamt am längsten gespielt hat</div><table class="leader-table"><thead><tr><th>#</th><th>Spieler</th><th>Spielzeit</th></tr></thead><tbody id="timeLeaderboard"><tr><td colspan="3">Lade Rangliste …</td></tr></tbody></table></div>
       </div>
+    </section>
+    <section class="page" id="page-admin">
+      <h1>Admin Center</h1>
+      <div class="subtitle">Spielerverwaltung für NEXYRON. Änderungen betreffen ausschließlich virtuelle Spielstände.</div>
+      <div class="grid stats">
+        <div class="card"><div class="small muted">Spieler insgesamt</div><div class="stat-value" id="adminPlayerCount">—</div></div>
+        <div class="card"><div class="small muted">Gesperrte Spieler</div><div class="stat-value" id="adminBannedCount">—</div></div>
+        <div class="card"><div class="small muted">Admin-Konto</div><div class="stat-value" style="font-size:18px" id="adminCurrentName">—</div></div>
+        <div class="card"><div class="small muted">Berechtigung</div><div class="stat-value up">ADMIN</div></div>
+      </div>
+      <div class="card">
+        <div class="admin-toolbar">
+          <input id="adminPlayerSearch" placeholder="Spielername suchen …" autocomplete="off">
+          <button id="adminRefresh" type="button">↻ Aktualisieren</button>
+        </div>
+        <div class="admin-status" id="adminMessage">Spielerliste wird geladen …</div>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Spieler</th><th>Status</th><th>Virtuelles Vermögen</th><th>Spielzeit</th><th>Aktionen</th></tr></thead>
+            <tbody id="adminPlayers"><tr><td colspan="5" class="empty">Lade Spieler …</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="notice" style="margin-top:14px">Hinweis: Geldbearbeitung ändert nur das virtuelle Cash im Paper-Trading-Spiel. Es werden keine echten Zahlungen oder Konten verändert.</div>
     </section>
     <section class="page active" id="page-dashboard">
       <h1>Trading Dashboard</h1>
@@ -887,6 +925,7 @@ function setPage(page) {
     });
   }
 
+  if(page === "admin" && typeof nxLoadAdminPlayers==="function") nxLoadAdminPlayers();
   renderAll();
 }
 
@@ -1806,9 +1845,89 @@ async function nxLoadLeaderboards(){
  nxEl("timeLeaderboard").innerHTML=timeError?'<tr><td colspan="3">Rangliste nicht verfügbar</td></tr>':(times.length?times.map((p,i)=>'<tr><td>'+(i+1)+'</td><td>'+nxEscape(p.username)+'</td><td>'+nxFormatTime(Number(p.total_play_seconds))+'</td></tr>').join(""):'<tr><td colspan="3">Noch keine Spieler</td></tr>');
 }
 function nxEscape(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+async function nxLoadAdminPlayers(){
+ const message=nxEl("adminMessage"),body=nxEl("adminPlayers");
+ if(!currentUser||nxEl("adminNav").style.display==="none")return;
+ message.textContent="Spielerliste wird geladen …";
+ const {data,error}=await nxSupabase.from("player_profiles")
+  .select("user_id,username,total_value,total_play_seconds,game_state,is_banned")
+  .order("total_value",{ascending:false});
+ if(error){message.textContent="Fehler beim Laden: "+error.message;body.innerHTML='<tr><td colspan="5" class="empty">Spielerliste konnte nicht geladen werden.</td></tr>';return;}
+ const players=data||[];
+ nxEl("adminPlayerCount").textContent=String(players.length);
+ nxEl("adminBannedCount").textContent=String(players.filter(p=>p.is_banned).length);
+ const search=(nxEl("adminPlayerSearch").value||"").trim().toLowerCase();
+ const shown=players.filter(p=>(p.username||"").toLowerCase().includes(search));
+ body.innerHTML=shown.length?shown.map(p=>{
+  const name=nxEscape(p.username||"Unbekannt"),banned=!!p.is_banned;
+  return '<tr><td><b>'+name+'</b><div class="tiny muted">'+nxEscape(p.user_id)+'</div></td>'+
+   '<td><span class="admin-tag">'+(banned?'<span class="down">GESPERRT</span>':'<span class="up">AKTIV</span>')+'</span></td>'+
+   '<td>'+Number(p.total_value||0).toLocaleString("de-DE",{style:"currency",currency:"EUR"})+'</td>'+
+   '<td>'+nxFormatTime(Number(p.total_play_seconds||0))+'</td>'+
+   '<td><div class="admin-actions">'+
+   '<button type="button" class="'+(banned?"admin-unban":"admin-ban")+'" data-admin-action="'+(banned?"unban":"ban")+'" data-user-id="'+nxEscape(p.user_id)+'">'+(banned?"Entsperren":"Sperren")+'</button>'+
+   '<button type="button" class="admin-money" data-admin-action="cash" data-user-id="'+nxEscape(p.user_id)+'" data-user-name="'+name+'">Cash ändern</button>'+
+   '</div></td></tr>';
+ }).join(""):'<tr><td colspan="5" class="empty">Keine Spieler gefunden.</td></tr>';
+ message.textContent=shown.length+" von "+players.length+" Spielern angezeigt.";
+}
+async function nxAdminAction(action,userId,userName){
+ if(!currentUser||!userId)return;
+ if(userId===currentUser.id&&action==="ban"){showToast("Du kannst dein eigenes Admin-Konto hier nicht sperren.");return;}
+ const {data:roles,error:roleError}=await nxSupabase.from("user_roles").select("role").eq("user_id",currentUser.id);
+ if(roleError||!(roles||[]).some(row=>row.role==="admin")){showToast("Keine Admin-Berechtigung.");return;}
+ if(action==="ban"||action==="unban"){
+  const banned=action==="ban";
+  if(!confirm(userName+(banned?" wirklich sperren?":" wieder entsperren?")))return;
+  const {error}=await nxSupabase.from("player_profiles").update({is_banned:banned,updated_at:new Date().toISOString()}).eq("user_id",userId);
+  if(error){showToast("Aktion fehlgeschlagen: "+error.message);return;}
+  showToast(banned?"Spieler wurde gesperrt.":"Spieler wurde entsperrt.");
+  await nxLoadAdminPlayers();return;
+ }
+ if(action==="cash"){
+  const raw=prompt("Neues virtuelles Cash für "+userName+" in EUR eingeben (0 bis 1.000.000.000.000):");
+  if(raw===null)return;
+  const amount=Number(raw.replace(",","."));
+  if(!Number.isFinite(amount)||amount<0||amount>1e12){showToast("Bitte einen gültigen Betrag eingeben.");return;}
+  const {data:player,error:readError}=await nxSupabase.from("player_profiles").select("game_state").eq("user_id",userId).maybeSingle();
+  if(readError||!player){showToast("Spielerprofil konnte nicht gelesen werden.");return;}
+  const state=player.game_state&&typeof player.game_state==="object"?{...player.game_state}:{};
+  state.cash=amount;
+  const positions=state.positions&&typeof state.positions==="object"?state.positions:{};
+  const prices=state.lastPrice&&typeof state.lastPrice==="object"?state.lastPrice:{};
+  const holdings=Object.entries(positions).reduce((sum,[coin,pos])=>sum+Math.max(0,Number(pos?.qty||0))*Math.max(0,Number(prices[coin]||0)),0);
+  const {error}=await nxSupabase.from("player_profiles").update({
+   game_state:state,total_value:Number((amount+holdings).toFixed(2)),updated_at:new Date().toISOString()
+  }).eq("user_id",userId);
+  if(error){showToast("Cash konnte nicht geändert werden: "+error.message);return;}
+  showToast("Virtuelles Cash wurde aktualisiert.");
+  await nxLoadAdminPlayers();
+ }
+}
+nxEl("adminRefresh").addEventListener("click",nxLoadAdminPlayers);
+nxEl("adminPlayerSearch").addEventListener("input",nxLoadAdminPlayers);
+nxEl("adminPlayers").addEventListener("click",event=>{
+ const button=event.target.closest("button[data-admin-action]");
+ if(button)nxAdminAction(button.dataset.adminAction,button.dataset.userId,button.dataset.userName||"Spieler");
+});
 async function nxEnter(user){
  currentUser=user;
  nxEl("accountName").textContent=user.user_metadata?.username||user.email;
+ const {data:profileCheck,error:profileCheckError}=await nxSupabase.from("player_profiles").select("is_banned").eq("user_id",user.id).maybeSingle();
+ if(profileCheckError)throw profileCheckError;
+ if(profileCheck?.is_banned){
+  await nxSupabase.auth.signOut();
+  currentUser=null;
+  nxSetMode(false);
+  nxAuthMessage("Dein Spieler-Konto wurde gesperrt. Bitte wende dich an den NEXYRON-Administrator.");
+  nxEl("authOverlay").style.display="grid";
+  return;
+ }
+ const {data:roleRows,error:roleError}=await nxSupabase.from("user_roles").select("role").eq("user_id",user.id);
+ if(roleError)throw roleError;
+ const isAdmin=(roleRows||[]).some(row=>row.role==="admin");
+ nxEl("adminNav").style.display=isAdmin?"block":"none";
+ if(isAdmin)nxEl("adminCurrentName").textContent=user.user_metadata?.username||user.email;
  await nxLoad();
  nxEl("authOverlay").style.display="none";
  nxLastTick=Date.now();
@@ -1818,6 +1937,7 @@ async function nxEnter(user){
   if(document.visibilityState==="visible"){nxPlaytime+=Math.max(1,Math.round((Date.now()-nxLastTick)/1000));nxLastTick=Date.now();}
   await nxSave();
   if(document.querySelector('[data-page="leaderboard"]').classList.contains("active"))nxLoadLeaderboards();
+  if(document.querySelector('[data-page="admin"]')?.classList.contains("active"))nxLoadAdminPlayers();
  },15000);
 }
 nxEl("authMode").addEventListener("click",()=>nxSetMode(!nxRegisterMode));
