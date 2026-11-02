@@ -1849,33 +1849,48 @@ async function nxLoadAdminPlayers(){
  const message=nxEl("adminMessage"),body=nxEl("adminPlayers");
  if(!currentUser||nxEl("adminNav").style.display==="none")return;
  message.textContent="Spielerliste wird geladen …";
- const {data,error}=await nxSupabase.from("player_profiles")
-  .select("user_id,username,total_value,total_play_seconds,game_state,is_banned")
-  .order("total_value",{ascending:false});
- if(error){message.textContent="Fehler beim Laden: "+error.message;body.innerHTML='<tr><td colspan="5" class="empty">Spielerliste konnte nicht geladen werden.</td></tr>';return;}
- const players=data||[];
- nxEl("adminPlayerCount").textContent=String(players.length);
- nxEl("adminBannedCount").textContent=String(players.filter(p=>p.is_banned).length);
+ const [{data:players,error},{data:roles,error:rolesError}]=await Promise.all([
+  nxSupabase.from("player_profiles").select("user_id,username,total_value,total_play_seconds,game_state,is_banned").order("total_value",{ascending:false}),
+  nxSupabase.rpc("nx_admin_list_roles")
+ ]);
+ if(error||rolesError){
+  const detail=error?.message||rolesError?.message||"Unbekannter Fehler";
+  message.textContent="Fehler beim Laden: "+detail;
+  body.innerHTML='<tr><td colspan="5" class="empty">Spielerliste oder Admin-Status konnte nicht geladen werden.</td></tr>';return;
+ }
+ const adminIds=new Set((roles||[]).filter(r=>r.role==="admin").map(r=>r.user_id));
+ const allPlayers=players||[];
+ nxEl("adminPlayerCount").textContent=String(allPlayers.length);
+ nxEl("adminBannedCount").textContent=String(allPlayers.filter(p=>p.is_banned).length);
  const search=(nxEl("adminPlayerSearch").value||"").trim().toLowerCase();
- const shown=players.filter(p=>(p.username||"").toLowerCase().includes(search));
+ const shown=allPlayers.filter(p=>(p.username||"").toLowerCase().includes(search));
  body.innerHTML=shown.length?shown.map(p=>{
-  const name=nxEscape(p.username||"Unbekannt"),banned=!!p.is_banned;
+  const name=nxEscape(p.username||"Unbekannt"),banned=!!p.is_banned,isAdmin=adminIds.has(p.user_id);
   return '<tr><td><b>'+name+'</b><div class="tiny muted">'+nxEscape(p.user_id)+'</div></td>'+
-   '<td><span class="admin-tag">'+(banned?'<span class="down">GESPERRT</span>':'<span class="up">AKTIV</span>')+'</span></td>'+
+   '<td><span class="admin-tag">'+(banned?'<span class="down">GESPERRT</span>':'<span class="up">AKTIV</span>')+'</span><div class="tiny muted">'+(isAdmin?"🛡️ ADMIN":"Spieler")+'</div></td>'+
    '<td>'+Number(p.total_value||0).toLocaleString("de-DE",{style:"currency",currency:"EUR"})+'</td>'+
    '<td>'+nxFormatTime(Number(p.total_play_seconds||0))+'</td>'+
    '<td><div class="admin-actions">'+
    '<button type="button" class="'+(banned?"admin-unban":"admin-ban")+'" data-admin-action="'+(banned?"unban":"ban")+'" data-user-id="'+nxEscape(p.user_id)+'">'+(banned?"Entsperren":"Sperren")+'</button>'+
    '<button type="button" class="admin-money" data-admin-action="cash" data-user-id="'+nxEscape(p.user_id)+'" data-user-name="'+name+'">Cash ändern</button>'+
+   '<button type="button" data-admin-action="'+(isAdmin?"remove-admin":"make-admin")+'" data-user-id="'+nxEscape(p.user_id)+'" data-user-name="'+name+'">'+(isAdmin?"Admin entziehen":"Admin machen")+'</button>'+
    '</div></td></tr>';
  }).join(""):'<tr><td colspan="5" class="empty">Keine Spieler gefunden.</td></tr>';
- message.textContent=shown.length+" von "+players.length+" Spielern angezeigt.";
+ message.textContent=shown.length+" von "+allPlayers.length+" Spielern angezeigt. Namen oben suchen, dann Rolle ändern.";
 }
 async function nxAdminAction(action,userId,userName){
  if(!currentUser||!userId)return;
- if(userId===currentUser.id&&action==="ban"){showToast("Du kannst dein eigenes Admin-Konto hier nicht sperren.");return;}
+ if(userId===currentUser.id&&(action==="ban"||action==="remove-admin")){showToast("Diese Aktion ist für dein eigenes Admin-Konto gesperrt.");return;}
  const {data:roles,error:roleError}=await nxSupabase.from("user_roles").select("role").eq("user_id",currentUser.id);
  if(roleError||!(roles||[]).some(row=>row.role==="admin")){showToast("Keine Admin-Berechtigung.");return;}
+ if(action==="make-admin"||action==="remove-admin"){
+  const makeAdmin=action==="make-admin";
+  if(!confirm((makeAdmin?"Soll "+userName+" wirklich Admin werden?":"Sollen "+userName+" die Adminrechte entzogen werden?")))return;
+  const {error}=await nxSupabase.rpc("nx_admin_set_role",{p_user_id:userId,p_make_admin:makeAdmin});
+  if(error){showToast("Admin-Rolle konnte nicht geändert werden: "+error.message);return;}
+  showToast(makeAdmin?userName+" ist jetzt Admin.":userName+" ist kein Admin mehr.");
+  await nxLoadAdminPlayers();return;
+ }
  if(action==="ban"||action==="unban"){
   const banned=action==="ban";
   if(!confirm(userName+(banned?" wirklich sperren?":" wieder entsperren?")))return;
@@ -1896,9 +1911,7 @@ async function nxAdminAction(action,userId,userName){
   const positions=state.positions&&typeof state.positions==="object"?state.positions:{};
   const prices=state.lastPrice&&typeof state.lastPrice==="object"?state.lastPrice:{};
   const holdings=Object.entries(positions).reduce((sum,[coin,pos])=>sum+Math.max(0,Number(pos?.qty||0))*Math.max(0,Number(prices[coin]||0)),0);
-  const {error}=await nxSupabase.from("player_profiles").update({
-   game_state:state,total_value:Number((amount+holdings).toFixed(2)),updated_at:new Date().toISOString()
-  }).eq("user_id",userId);
+  const {error}=await nxSupabase.from("player_profiles").update({game_state:state,total_value:Number((amount+holdings).toFixed(2)),updated_at:new Date().toISOString()}).eq("user_id",userId);
   if(error){showToast("Cash konnte nicht geändert werden: "+error.message);return;}
   if(userId===currentUser.id){cash=amount;renderAll();}
   showToast("Virtuelles Cash wurde aktualisiert. Der betroffene Spieler sollte den Simulator neu laden.");
