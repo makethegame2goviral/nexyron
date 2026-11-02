@@ -180,7 +180,7 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
 .auth-overlay{position:fixed;inset:0;z-index:100000;background:rgba(4,9,18,.96);display:grid;place-items:center;padding:20px}
 .auth-card{width:min(430px,100%);background:#101827;border:1px solid #304158;border-radius:18px;padding:26px;box-shadow:0 24px 80px #0009}
 .auth-card h1{margin:0 0 8px;font-size:25px}.auth-card p{color:#9aabc2;margin:0 0 18px}
-.auth-card .auth-actions{display:flex;gap:9px;margin-top:16px}.auth-card .auth-actions button{flex:1}
+.auth-card .auth-actions{display:flex;gap:9px;margin-top:16px}.auth-card .auth-actions button{flex:1}.auth-card .auth-actions button[type="submit"]{background:#126d53;border-color:#1b9b73;font-weight:800}.auth-card .auth-actions button[type="button"]{background:#22324a;border-color:#405775}
 .auth-error{color:#ff8293;min-height:20px;margin-top:12px;font-size:13px}
 .account-chip{display:flex;align-items:center;gap:9px;font-size:12px;color:#c9d7ea}
 .account-chip button{padding:6px 9px}
@@ -195,8 +195,8 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
  <div class="auth-card">
   <div class="brand">NEXY<span>RON</span></div>
   <h1 id="authTitle">Willkommen zurück</h1>
-  <p id="authSubtitle">Melde dich mit deinem Spielername, deiner E-Mail und deinem Passwort an, damit dein Spielstand gespeichert wird.</p>
-  <form id="authForm">
+  <p id="authSubtitle">Erstelle zuerst dein Konto mit Spielernamen, E-Mail-Adresse und Passwort. Danach kannst du dich jederzeit anmelden.</p>
+  <form id="authForm" novalidate>
    <label for="authUsername">Spielername</label><input id="authUsername" autocomplete="username" minlength="3" maxlength="20" required placeholder="Dein Name">
    <div id="authEmailWrap"><label for="authEmail">E-Mail-Adresse</label><input id="authEmail" type="email" autocomplete="email" placeholder="name@example.com"></div>
    <label for="authPassword">Passwort</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" required placeholder="Mindestens 8 Zeichen">
@@ -1828,10 +1828,10 @@ nxEl("authForm").addEventListener("submit",async e=>{
  const email=nxEl("authEmail").value.trim();
  if(!/^[a-zA-Z0-9_-]{3,20}$/.test(username)){nxAuthMessage("Der Spielername muss 3–20 Zeichen haben (Buchstaben, Zahlen, _ oder -).");return;}
  if(password.length<8){nxAuthMessage("Das Passwort muss mindestens 8 Zeichen lang sein.");return;}
+ if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){nxAuthMessage("Bitte gib eine gültige E-Mail-Adresse ein.");return;}
  nxEl("authSubmit").disabled=true;
  try{
   if(nxRegisterMode){
-   if(!email){nxAuthMessage("Bitte gib eine E-Mail-Adresse ein.");return;}
    const {data,error}=await nxSupabase.auth.signUp({email,password,options:{data:{username}}});
    if(error)throw error;
    if(data.session)await nxEnter(data.user);
@@ -1856,7 +1856,7 @@ window.addEventListener("beforeunload",()=>{if(currentUser){nxPlaytime+=Math.max
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)nxLastTick=Date.now();});
 (async()=>{
  const {data:{session}}=await nxSupabase.auth.getSession();
- if(session)await nxEnter(session.user);else nxSetMode(false);
+ if(session)await nxEnter(session.user);else nxSetMode(true);
 })();
 </script>
 
