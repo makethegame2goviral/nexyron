@@ -176,9 +176,36 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
  .trade-flow{gap:4px}
  .trade-step{padding:8px 2px;font-size:10px}
 }
+
+.auth-overlay{position:fixed;inset:0;z-index:100000;background:rgba(4,9,18,.96);display:grid;place-items:center;padding:20px}
+.auth-card{width:min(430px,100%);background:#101827;border:1px solid #304158;border-radius:18px;padding:26px;box-shadow:0 24px 80px #0009}
+.auth-card h1{margin:0 0 8px;font-size:25px}.auth-card p{color:#9aabc2;margin:0 0 18px}
+.auth-card .auth-actions{display:flex;gap:9px;margin-top:16px}.auth-card .auth-actions button{flex:1}
+.auth-error{color:#ff8293;min-height:20px;margin-top:12px;font-size:13px}
+.account-chip{display:flex;align-items:center;gap:9px;font-size:12px;color:#c9d7ea}
+.account-chip button{padding:6px 9px}
+.leader-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.leader-table{width:100%;border-collapse:collapse}.leader-table th,.leader-table td{text-align:left;padding:10px 8px;border-bottom:1px solid #263449;font-size:13px}.leader-table th{color:#8797ad;font-weight:600}
+@media(max-width:700px){.leader-grid{grid-template-columns:1fr}.topbar{padding:0 10px}.status{display:none}.account-chip{font-size:11px}}
+
 </style>
 </head>
 <body>
+<div id="authOverlay" class="auth-overlay">
+ <div class="auth-card">
+  <div class="brand">NEXY<span>RON</span></div>
+  <h1 id="authTitle">Willkommen zurück</h1>
+  <p id="authSubtitle">Melde dich an, damit dein Spielstand und deine Spielzeit gespeichert werden.</p>
+  <form id="authForm">
+   <label for="authUsername">Spielername</label><input id="authUsername" autocomplete="username" minlength="3" maxlength="20" required placeholder="Dein Name">
+   <div id="authEmailWrap"><label for="authEmail">E-Mail-Adresse</label><input id="authEmail" type="email" autocomplete="email" placeholder="name@example.com"></div>
+   <label for="authPassword">Passwort</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" required placeholder="Mindestens 8 Zeichen">
+   <div class="auth-actions"><button type="submit" id="authSubmit">Anmelden</button><button type="button" id="authMode">Konto erstellen</button></div>
+  </form>
+  <div id="authError" class="auth-error" role="status"></div>
+  <div class="small muted">Dein Passwort wird sicher von Supabase Auth verwaltet und nicht im Klartext gespeichert.</div>
+ </div>
+</div>
 
 <!-- Dokumentation wird beim Öffnen zuerst angezeigt -->
 <div id="documentation">
@@ -478,6 +505,7 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
  <header class="topbar">
   <div class="brand">NEXY<span>RON</span></div>
   <div class="status"><i class="dot"></i> SIMULATION AKTIV</div>
+  <div class="account-chip"><span id="accountName">Nicht angemeldet</span><button id="logoutBtn" type="button">Abmelden</button></div>
   <button id="resetBtn" title="Simulation zurücksetzen">Zurücksetzen</button>
 </header>
 
@@ -490,6 +518,7 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
     <button class="nav" data-page="history">↻ &nbsp; Trade-Verlauf</button>
     <button class="nav" data-page="journal">✎ &nbsp; Trading-Journal</button>
     <button class="nav" data-page="learn">▣ &nbsp; Lernen</button>
+    <button class="nav" data-page="leaderboard">🏆 &nbsp; Rangliste</button>
 
     <div class="side-card">
       <div class="small muted">Virtuelles Guthaben</div>
@@ -777,6 +806,7 @@ let positions = {};
 let candles = {};
 let lastPrice = {};
 let startPrices = {};
+let currentUser = null;
 let chart = $("chart");
 let ctx = chart.getContext("2d");
 
@@ -884,7 +914,7 @@ function startSimulation() {
   updateRunState();
 
   timer = setInterval(() => {
-    if (!running) return;
+    if (!running || !currentUser || document.hidden) return;
 
     updateMarkets();
     renderAll();
@@ -1697,6 +1727,130 @@ renderAll();
 resizeCanvas();
 startSimulation();
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+"use strict";
+const nxSupabase = window.supabase.createClient("https://xbefkwirfijxglgoogrn.supabase.co","sb_publishable_3hsQ2uEpBBYOQ2rh44J2BQ_6mt9md6T");
+let nxRegisterMode = false;
+let nxPlaytime = 0;
+let nxLastTick = Date.now();
+let nxSaveTimer = null;
+const nxEl = id => document.getElementById(id);
+function nxAuthMessage(message, isError=true){nxEl("authError").textContent=message;nxEl("authError").style.color=isError?"#ff8293":"#20d99a";}
+function nxSetMode(register){
+ nxRegisterMode=register;
+ nxEl("authTitle").textContent=register?"Konto erstellen":"Willkommen zurück";
+ nxEl("authSubtitle").textContent=register?"Erstelle dein Konto, damit dein Spielstand auf allen Geräten gespeichert bleibt.":"Melde dich an, um deinen gespeicherten Spielstand fortzusetzen.";
+ nxEl("authSubmit").textContent=register?"Registrieren":"Anmelden";
+ nxEl("authMode").textContent=register?"Zum Login":"Konto erstellen";
+ nxEl("authEmailWrap").style.display=register?"block":"none";
+ nxEl("authEmail").required=register;
+ nxEl("authPassword").autocomplete=register?"new-password":"current-password";
+ nxAuthMessage("");
+}
+function nxState(){
+ return {cash,realizedPL,selectedCoin,speed,timeframe,history,journal,positions,drawings};
+}
+function nxTotalValue(){
+ const holdings=COINS.reduce((sum,c)=>sum+(positions[c.id]?.qty||0)*(lastPrice[c.id]||c.price),0);
+ return Math.max(0,Number(cash||0)+holdings);
+}
+async function nxSave(){
+ if(!currentUser)return;
+ const {error}=await nxSupabase.from("player_profiles").upsert({
+  user_id:currentUser.id,username:currentUser.user_metadata?.username||nxEl("accountName").textContent,
+  total_play_seconds:nxPlaytime,game_state:nxState(),total_value:Number(nxTotalValue().toFixed(2)),updated_at:new Date().toISOString()
+ },{onConflict:"user_id"});
+ if(error) nxAuthMessage("Speichern fehlgeschlagen: "+error.message);
+}
+async function nxLoad(){
+ const {data,error}=await nxSupabase.from("player_profiles").select("*").eq("user_id",currentUser.id).maybeSingle();
+ if(error){nxAuthMessage("Spielstand konnte nicht geladen werden: "+error.message);return;}
+ if(data){
+  nxPlaytime=Number(data.total_play_seconds||0);
+  const st=data.game_state||{};
+  if(Number.isFinite(st.cash))cash=st.cash;
+  if(Number.isFinite(st.realizedPL))realizedPL=st.realizedPL;
+  if(st.positions&&typeof st.positions==="object")COINS.forEach(c=>{if(st.positions[c.id])positions[c.id]=st.positions[c.id];});
+  if(Array.isArray(st.history))history=st.history;
+  if(Array.isArray(st.journal))journal=st.journal;
+  if(Array.isArray(st.drawings))drawings=st.drawings;
+  if(COINS.some(c=>c.id===st.selectedCoin))selectedCoin=st.selectedCoin;
+  if(Number.isFinite(st.speed))speed=Math.max(1,Math.min(20,st.speed));
+  if(typeof st.timeframe==="string")timeframe=st.timeframe;
+  renderAll();drawChart();
+ } else {
+  const username=currentUser.user_metadata?.username||nxEl("authUsername").value.trim();
+  const {error:insertError}=await nxSupabase.from("player_profiles").insert({user_id:currentUser.id,username,total_play_seconds:0,game_state:nxState(),total_value:10000});
+  if(insertError)nxAuthMessage("Profil konnte nicht erstellt werden: "+insertError.message);
+ }
+}
+function nxFormatTime(seconds){
+ const h=Math.floor(seconds/3600),m=Math.floor((seconds%3600)/60);
+ return h+" Std. "+m+" Min.";
+}
+async function nxLoadLeaderboards(){
+ const {data,error}=await nxSupabase.from("player_profiles").select("username,total_value,total_play_seconds").order("total_value",{ascending:false}).limit(10);
+ if(error){nxEl("wealthLeaderboard").innerHTML='<tr><td colspan="3">Rangliste nicht verfügbar</td></tr>';return;}
+ nxEl("wealthLeaderboard").innerHTML=data.length?data.map((p,i)=>'<tr><td>'+(i+1)+'</td><td>'+nxEscape(p.username)+'</td><td>'+Number(p.total_value).toLocaleString("de-DE",{style:"currency",currency:"EUR"})+'</td></tr>').join(""):'<tr><td colspan="3">Noch keine Spieler</td></tr>';
+ const {data:times,error:timeError}=await nxSupabase.from("player_profiles").select("username,total_play_seconds").order("total_play_seconds",{ascending:false}).limit(10);
+ nxEl("timeLeaderboard").innerHTML=timeError?'<tr><td colspan="3">Rangliste nicht verfügbar</td></tr>':(times.length?times.map((p,i)=>'<tr><td>'+(i+1)+'</td><td>'+nxEscape(p.username)+'</td><td>'+nxFormatTime(Number(p.total_play_seconds))+'</td></tr>').join(""):'<tr><td colspan="3">Noch keine Spieler</td></tr>');
+}
+function nxEscape(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+async function nxEnter(user){
+ currentUser=user;
+ nxEl("accountName").textContent=user.user_metadata?.username||user.email;
+ await nxLoad();
+ nxEl("authOverlay").style.display="none";
+ nxLastTick=Date.now();
+ nxLoadLeaderboards();
+ if(nxSaveTimer)clearInterval(nxSaveTimer);
+ nxSaveTimer=setInterval(async()=>{
+  if(document.visibilityState==="visible"){nxPlaytime+=Math.max(1,Math.round((Date.now()-nxLastTick)/1000));nxLastTick=Date.now();}
+  await nxSave();
+  if(document.querySelector('[data-page="leaderboard"]').classList.contains("active"))nxLoadLeaderboards();
+ },15000);
+}
+nxEl("authMode").addEventListener("click",()=>nxSetMode(!nxRegisterMode));
+nxEl("authForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const username=nxEl("authUsername").value.trim();
+ const password=nxEl("authPassword").value;
+ const email=nxEl("authEmail").value.trim();
+ if(!/^[a-zA-Z0-9_-]{3,20}$/.test(username)){nxAuthMessage("Der Spielername muss 3–20 Zeichen haben (Buchstaben, Zahlen, _ oder -).");return;}
+ if(password.length<8){nxAuthMessage("Das Passwort muss mindestens 8 Zeichen lang sein.");return;}
+ nxEl("authSubmit").disabled=true;
+ try{
+  if(nxRegisterMode){
+   if(!email){nxAuthMessage("Bitte gib eine E-Mail-Adresse ein.");return;}
+   const {data,error}=await nxSupabase.auth.signUp({email,password,options:{data:{username}}});
+   if(error)throw error;
+   if(data.session)await nxEnter(data.user);
+   else nxAuthMessage("Konto erstellt. Bitte bestätige deine E-Mail-Adresse und melde dich danach an.",false);
+  }else{
+   const {data,error}=await nxSupabase.auth.signInWithPassword({email,password});
+   if(error)throw error;
+   if((data.user.user_metadata?.username||"").toLowerCase()!==username.toLowerCase())throw new Error("Spielername und E-Mail passen nicht zusammen.");
+   await nxEnter(data.user);
+  }
+ }catch(err){nxAuthMessage(err.message||"Anmeldung fehlgeschlagen.");}
+ finally{nxEl("authSubmit").disabled=false;}
+});
+nxEl("logoutBtn").addEventListener("click",async()=>{
+ await nxSave();
+ if(nxSaveTimer)clearInterval(nxSaveTimer);
+ await nxSupabase.auth.signOut();
+ currentUser=null;nxPlaytime=0;nxSetMode(false);nxEl("authOverlay").style.display="grid";
+});
+window.addEventListener("beforeunload",()=>{if(currentUser){nxPlaytime+=Math.max(0,Math.round((Date.now()-nxLastTick)/1000));nxSave();}});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)nxLastTick=Date.now();});
+(async()=>{
+ const {data:{session}}=await nxSupabase.auth.getSession();
+ if(session)await nxEnter(session.user);else nxSetMode(false);
+})();
+</script>
+
  
 <!-- Sprachauswahl: Deutsch, Englisch, Tadschikisch (kyrillisch), Tadschikisch (lateinisch) -->
 <div id="language-switcher" style="position:fixed;bottom:14px;right:14px;z-index:99999;background:#101a2e;color:#fff;border:1px solid #3b82f6;border-radius:12px;padding:8px;font-family:sans-serif">
