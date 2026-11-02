@@ -1900,7 +1900,8 @@ async function nxAdminAction(action,userId,userName){
    game_state:state,total_value:Number((amount+holdings).toFixed(2)),updated_at:new Date().toISOString()
   }).eq("user_id",userId);
   if(error){showToast("Cash konnte nicht geändert werden: "+error.message);return;}
-  showToast("Virtuelles Cash wurde aktualisiert.");
+  if(userId===currentUser.id){cash=amount;renderAll();}
+  showToast("Virtuelles Cash wurde aktualisiert. Der betroffene Spieler sollte den Simulator neu laden.");
   await nxLoadAdminPlayers();
  }
 }
