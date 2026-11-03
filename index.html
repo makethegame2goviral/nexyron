@@ -211,7 +211,7 @@ footer{padding:25px;text-align:center;color:#61718a;font-size:11px}
   <p id="authSubtitle">Erstelle zuerst dein Konto mit Spielernamen, E-Mail-Adresse und Passwort. Danach kannst du dich jederzeit anmelden.</p>
   <form id="authForm" novalidate>
    <label for="authUsername">Spielername</label><input id="authUsername" autocomplete="username" minlength="3" maxlength="20" required placeholder="Dein Name">
-   <div id="authEmailWrap"><label for="authEmail">E-Mail-Adresse</label><input id="authEmail" type="email" autocomplete="email" placeholder="name@example.com"></div>
+   <div id="authEmailWrap"><label for="authEmail">Gmail-Name</label><input id="authEmail" type="text" autocomplete="username" placeholder="DeinName (ohne @gmail.com)"></div>
    <label for="authPassword">Passwort</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" required placeholder="Mindestens 8 Zeichen">
    <div class="auth-actions"><button type="submit" id="authSubmit">Anmelden</button><button type="button" id="authMode">Konto erstellen</button></div>
   </form>
@@ -1966,10 +1966,11 @@ nxEl("authForm").addEventListener("submit",async e=>{
  e.preventDefault();
  const username=nxEl("authUsername").value.trim();
  const password=nxEl("authPassword").value;
- const email=nxEl("authEmail").value.trim();
+ const emailInput=nxEl("authEmail").value.trim().toLowerCase();
+ const email=emailInput.includes("@")?emailInput:emailInput+"@gmail.com";
  if(!/^[a-zA-Z0-9_-]{3,20}$/.test(username)){nxAuthMessage("Der Spielername muss 3–20 Zeichen haben (Buchstaben, Zahlen, _ oder -).");return;}
  if(password.length<8){nxAuthMessage("Das Passwort muss mindestens 8 Zeichen lang sein.");return;}
- if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){nxAuthMessage("Bitte gib eine gültige E-Mail-Adresse ein.");return;}
+ if(!/^[a-z0-9._%+-]+@gmail\.com$/.test(email)){nxAuthMessage("Gib einen Namen vor @gmail.com ein.");return;}
  nxEl("authSubmit").disabled=true;
  try{
   if(nxRegisterMode){
